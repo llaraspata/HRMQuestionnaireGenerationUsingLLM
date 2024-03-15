@@ -2,7 +2,6 @@
 This module contains functions for visualizing data.
 """
 import pandas as pd
-import os
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
