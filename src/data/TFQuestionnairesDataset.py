@@ -32,3 +32,10 @@ class TFQuestionnairesDataset:
         self.questions = pd.read_csv(questions_path, encoding='latin1')
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
         self.answers = pd.read_csv(answer_path, encoding='latin1')
+
+
+    # ------------
+    # Questions' types
+    # ------------
+    def get_question_types(self):
+        return self.question_types[self.ESSENTIAL_COLUMNS_QUESTION_TYPES]
