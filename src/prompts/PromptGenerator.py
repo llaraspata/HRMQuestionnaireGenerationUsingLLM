@@ -1,9 +1,9 @@
 """
 This class is used for the generation of prompts w.r.t. to roles.
 """
-import system_conf as sys_conf
-import user_conf as usr_conf
-import assistant_conf as as_conf
+import src.prompts.system_conf as sys_conf
+import src.prompts.user_conf as usr_conf
+import src.prompts.assistant_conf as as_conf
 
 class PromptGenerator:
     # ------------
@@ -65,6 +65,8 @@ class PromptGenerator:
             self.prompt += sys_conf.INPUT_FORMAT_DEFINITION_WITH_ONLY_TOPIC
 
         self.prompt += sys_conf.QUESTION_TYPES_DESCRIPTION % (self._format_question_types(question_types_data))
+        self.prompt += sys_conf.TASK_DEFINITION
+        self.prompt += sys_conf.OUTPUT_FORMAT_DEFINITION
         
 
     def _generate_user_prompt(self, has_full_params, topic, question_type, question_nuber):

@@ -18,7 +18,7 @@ The admited question's types are the following:
 %s
 """
 
-SINGLE_QUESTION_TYPE_DESCRIPTION = """  - ID: %d, CODE: %s, DESCRIPTION: %s \n"""
+SINGLE_QUESTION_TYPE_DESCRIPTION = """  - ID: %d, CODE: %s, NAME: %s, DESCRIPTION: %s \n"""
 
 TASK_DEFINITION = """You must generate a questionnaire according to the user specified characteristics."""
 
