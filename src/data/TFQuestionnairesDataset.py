@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 import os
 
@@ -43,7 +44,14 @@ class TFQuestionnairesDataset:
         self.questions = pd.read_csv(questions_path, encoding='latin1')
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
         self.answers = pd.read_csv(answer_path, encoding='latin1')
-   
+
+
+    def load_question_types(self):
+        project_root = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+        data_dir_path = os.path.join(project_root, "data", "raw", "starter")
+        question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
+        self.question_types = pd.read_csv(question_types_path, encoding='latin1')
+
     
     def get_sample_questionnaire_data(self):
         sample_instance = TFQuestionnairesDataset()
@@ -58,3 +66,42 @@ class TFQuestionnairesDataset:
 
     def get_question_types(self):
         return self.question_types[self.ESSENTIAL_COLUMNS_QUESTION_TYPES]
+    
+
+    def to_json(self, questionnaire_id):
+        questionnaire = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]
+        questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
+        answers = self.answers[self.answers["QUESTION_ID"].isin(questions["ID"])]
+
+        questionnaire_json = questionnaire[self.ESSENTIAL_COLUMNS_QUESTIONNAIRES].to_dict(orient="records")
+        questions_json = questions[self.ESSENTIAL_COLUMNS_QUESTIONS].to_dict(orient="records")
+        answers_json = answers[self.ESSENTIAL_COLUMNS_ANSWERS].to_dict(orient="records")
+
+        data = {
+            "data": {
+                "TF_QUESTIONNAIRES": questionnaire_json,
+            }
+        }
+
+        for question in questions_json:
+            question["_TF_ANSWERS"] = [answer for answer in answers_json if answer["QUESTION_ID"] == question["ID"]]
+        
+        data["data"]["TF_QUESTIONNAIRES"][0]["_TF_QUESTIONS"] = questions_json
+
+        return json.dumps(data)
+    
+
+    def from_json(json_data):
+        result = TFQuestionnairesDataset()
+        data = json.loads(json_data)["data"]
+
+        questionnaire = data["TF_QUESTIONNAIRES"]
+        questions = questionnaire[0]["_TF_QUESTIONS"]
+        answers = [question["_TF_ANSWERS"] for question in questions]
+
+        result.questionnaires = pd.DataFrame(questionnaire)
+        result.questions = pd.DataFrame(questions)
+        result.answers = pd.DataFrame(answers)
+        result.question_types = result.load_question_types()
+
+        return result
