@@ -55,7 +55,14 @@ class PromptGenerator:
 
     def _generate_system_prompt(self, has_full_params, question_types_data):
         """
-            TODO
+            Generate the system's prompt.
+
+            Parameters:
+                - has_full_params (bool): Whether the prompts includes all the questionnaire parameters.
+                - question_types_data (DataFrame): The possible types of questions.
+
+            Returns:
+                - str: The formatted prompt.
         """
         self.prompt = sys_conf.ROLE_DEFINITION
         
@@ -71,7 +78,16 @@ class PromptGenerator:
 
     def _generate_user_prompt(self, has_full_params, topic, question_type, question_nuber):
         """
-            TODO
+            Generate the user's prompt.
+
+            Parameters:
+                - has_full_params (bool): Whether the prompts includes all the questionnaire parameters.
+                - topic (str): The questionnaire topic.
+                - question_type (str): The type of the questions to be generated.
+                - question_nuber (int): The number of questions the questionnaire must to have.
+
+            Returns:
+                - str: The formatted prompt.
         """
         if has_full_params:
             self.prompt += usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_type, question_nuber)
@@ -81,14 +97,26 @@ class PromptGenerator:
 
     def _generate_assistant_prompt(self, json):
         """
-            TODO
+            Generate the assistant's prompt.
+
+            Parameters:
+                - json (str): The JSON string containing the questionnaire.
+
+            Returns:
+                - str: The formatted prompt.
         """
         self.prompt = as_conf.RESPONSE % (json)
 
 
     def _format_question_types(self, df):
         """
-            TODO
+            Format the question types DataFrame into a string.
+
+            Parameters:
+                - df (DataFrame): The DataFrame containing the question types.
+
+            Returns:
+                - str: The formatted string.
         """
         result = ""
 

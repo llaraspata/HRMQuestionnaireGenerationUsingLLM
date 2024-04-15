@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import os
+import itertools
 
 class TFQuestionnairesDataset:
     # ------------
@@ -12,9 +13,13 @@ class TFQuestionnairesDataset:
     ANSWERS_FILENAME = "TF_QST_ANSWERS.csv"
 
     ESSENTIAL_COLUMNS_QUESTIONNAIRES = ["ID", "CODE", "NAME", "DESCRIPTION"]
-    ESSENTIAL_COLUMNS_QUESTIONS = ["ID", "TYPE_ID", "QUESTIONNAIRE_ID", "CODE", "NAME"]
+    ESSENTIAL_COLUMNS_QUESTIONS = ["ID", "TYPE_ID", "QUESTIONNAIRE_ID", "CODE", "NAME", "DISPLAY_ORDER"]
     ESSENTIAL_COLUMNS_QUESTION_TYPES = ["ID", "CODE", "NAME", "DESCRIPTION"]
-    ESSENTIAL_COLUMNS_ANSWERS = ["ID", "QUESTION_ID", "ANSWER", "SCORE"]
+    ESSENTIAL_COLUMNS_ANSWERS = ["ID", "QUESTION_ID", "ANSWER"]
+
+    QUESTIONNAIRES_PROMPT_COLUMNS = ["CODE", "NAME"]
+    QUESTIONS_PROMPT_COLUMNS = ["CODE", "NAME", "TYPE_ID", "DISPLAY_ORDER"]
+    ANSWERS_PROMPT_COLUMNS = ["ANSWER"]
 
 
     # ------------
@@ -73,9 +78,9 @@ class TFQuestionnairesDataset:
         questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
         answers = self.answers[self.answers["QUESTION_ID"].isin(questions["ID"])]
 
-        questionnaire_json = questionnaire[self.ESSENTIAL_COLUMNS_QUESTIONNAIRES].to_dict(orient="records")
-        questions_json = questions[self.ESSENTIAL_COLUMNS_QUESTIONS].to_dict(orient="records")
-        answers_json = answers[self.ESSENTIAL_COLUMNS_ANSWERS].to_dict(orient="records")
+        questionnaire_json = questionnaire[self.QUESTIONNAIRES_PROMPT_COLUMNS].to_dict(orient="records")
+        questions_json = questions[self.QUESTIONS_PROMPT_COLUMNS].to_dict(orient="records")
+        answers_json = answers[self.ANSWERS_PROMPT_COLUMNS].to_dict(orient="records")
 
         data = {
             "data": {
@@ -84,7 +89,7 @@ class TFQuestionnairesDataset:
         }
 
         for question in questions_json:
-            question["_TF_ANSWERS"] = [answer for answer in answers_json if answer["QUESTION_ID"] == question["ID"]]
+            question["_TF_ANSWERS"] = [answer for answer in answers_json]
         
         data["data"]["TF_QUESTIONNAIRES"][0]["_TF_QUESTIONS"] = questions_json
 
@@ -98,10 +103,11 @@ class TFQuestionnairesDataset:
         questionnaire = data["TF_QUESTIONNAIRES"]
         questions = questionnaire[0]["_TF_QUESTIONS"]
         answers = [question["_TF_ANSWERS"] for question in questions]
+        answers_flat = list(itertools.chain.from_iterable(answers))
 
-        result.questionnaires = pd.DataFrame(questionnaire)
-        result.questions = pd.DataFrame(questions)
-        result.answers = pd.DataFrame(answers)
+        result.questionnaires = pd.DataFrame(questionnaire)[result.QUESTIONNAIRES_PROMPT_COLUMNS]
+        result.questions = pd.DataFrame(questions)[result.QUESTIONS_PROMPT_COLUMNS]
+        result.answers = pd.DataFrame(answers_flat)[result.ANSWERS_PROMPT_COLUMNS]
         result.question_types = result.load_question_types()
 
         return result
