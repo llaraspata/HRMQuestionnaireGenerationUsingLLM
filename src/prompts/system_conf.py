@@ -22,6 +22,19 @@ SINGLE_QUESTION_TYPE_DESCRIPTION = """  - ID: %d, CODE: %s, NAME: %s, DESCRIPTIO
 
 TASK_DEFINITION = """You must generate a questionnaire according to the user specified characteristics."""
 
-OUTPUT_FORMAT_DEFINITION = """Your output must respect the following format:
-#TODO
+OUTPUT_FORMAT_DEFINITION = """Your output must be a JSON which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
+    - Each questionnaire object has the following properties:
+        - 'CODE': A string representing the code of the questionnaire.
+        - 'NAME': A string representing the name of the questionnaire.
+        - '_TF_QUESTIONS': An array of objects, each representing a question in the questionnaire.
+    - Each question object in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': A string representing the code of the question.
+        - 'NAME': A string representing the content of the question.
+        - 'TYPE_ID': A number representing the type of the question.
+        - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
 """

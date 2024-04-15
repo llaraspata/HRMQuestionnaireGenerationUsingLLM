@@ -2,6 +2,7 @@ import json
 import pandas as pd
 import os
 import itertools
+import random
 
 class TFQuestionnairesDataset:
     # ------------
@@ -111,3 +112,33 @@ class TFQuestionnairesDataset:
         result.question_types = result.load_question_types()
 
         return result
+
+
+    def get_questionnaire_topic(self, questionnaire_id):
+        return self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"]
+
+
+    def get_questionnaire_question_type(self, questionnaire_id):
+        return self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]["TYPE_ID"].values[0]
+    
+
+    def get_questionnaire_question_number(self, questionnaire_id):
+        questions_ids = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]["ID"]
+
+        return questions_ids.count()
+    
+
+    def get_sample_questionnaire_id(self, sample_questionnaire_ids, current_questionnaire_id):
+        """
+            Gets a random questionnaire id from, excluding those in the sample questionnaire ids list.
+        """
+        n_questionnaires = len(self.questionnaires["ID"])
+        random_index = current_questionnaire_id
+
+        while random_index == current_questionnaire_id:
+            random_index = random.randint(0, n_questionnaires - 1)
+
+            if self.questionnaires["ID"][random_index] in sample_questionnaire_ids:
+                random_index = current_questionnaire_id
+
+        return self.questionnaires["ID"][random_index]

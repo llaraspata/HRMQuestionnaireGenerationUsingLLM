@@ -1,0 +1,190 @@
+
+=================================================================
+1-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[SAMPLE] QUESTIONNAIRE_ID: 1146002
+     - Topic: 15    Performance of a sales professional
+Name: TOPIC, dtype: object
+     - Question type: 1
+     - Question number: 2
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1146002
+     - Topic: 0    Work stress
+Name: TOPIC, dtype: object
+     - Question type: 3
+     - Question number: 7
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+    - topic
+    - number of questions
+    - type of questions
+
+The admited question's types are the following:
+  - ID: 1, CODE: SingleChoice, NAME: Single choice, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, CODE: MultiChoice, NAME: Multi choice, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, CODE: RatingScale, NAME: Rating scale, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, CODE: Comment, NAME: Comment, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, CODE: ReorderItems, NAME: Reorder items, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, CODE: SumDistribution, NAME: Sum distribution, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, CODE: Template, NAME: Template, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, CODE: DateInput, NAME: Date Input, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+
+You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
+    - Each questionnaire object has the following properties:
+        - 'CODE': A string representing the code of the questionnaire.
+        - 'NAME': A string representing the name of the questionnaire.
+        - '_TF_QUESTIONS': An array of objects, each representing a question in the questionnaire.
+    - Each question object in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': A string representing the code of the question.
+        - 'NAME': A string representing the content of the question.
+        - 'TYPE_ID': A number representing the type of the question.
+        - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+
+     - Sample users: 
+[['Generate me a questionnaire on 15    Performance of a sales professional\nName: TOPIC, dtype: object with 1 2 questions']]
+     - Assistant: 
+[['Questionnaire: \n{"data": {"TF_QUESTIONNAIRES": [{"CODE": "SAL", "NAME": "Sales Professional Questionnaire", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "Sell in This Year", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "< 10.000 \\u0080"}, {"ANSWER": "<20.000 \\u0080"}, {"ANSWER": ">20.000 \\u0080"}, {"ANSWER": "Ferrovie"}, {"ANSWER": "Brico Center"}, {"ANSWER": "Ferrari"}, {"ANSWER": "Gucci"}, {"ANSWER": "Not enlisted"}]}, {"CODE": "2", "NAME": "Select Big Customers followed", "TYPE_ID": 2, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "< 10.000 \\u0080"}, {"ANSWER": "<20.000 \\u0080"}, {"ANSWER": ">20.000 \\u0080"}, {"ANSWER": "Ferrovie"}, {"ANSWER": "Brico Center"}, {"ANSWER": "Ferrari"}, {"ANSWER": "Gucci"}, {"ANSWER": "Not enlisted"}]}]}]}}\n']]
+     - User: 
+Generate me a questionnaire on 15    Performance of a sales professional
+Name: TOPIC, dtype: object with 1 2 questionsGenerate me a questionnaire on 0    Work stress
+Name: TOPIC, dtype: object with 3 7 questions
+-------------------
+=================================================================
+1-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[SAMPLE] QUESTIONNAIRE_ID: 1146004
+     - Topic: 4    Onboarding
+Name: TOPIC, dtype: object
+     - Question type: 1
+     - Question number: 6
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1146004
+     - Topic: 1    Working mood
+Name: TOPIC, dtype: object
+     - Question type: 2
+     - Question number: 7
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+    - topic
+    - number of questions
+    - type of questions
+
+The admited question's types are the following:
+  - ID: 1, CODE: SingleChoice, NAME: Single choice, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, CODE: MultiChoice, NAME: Multi choice, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, CODE: RatingScale, NAME: Rating scale, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, CODE: Comment, NAME: Comment, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, CODE: ReorderItems, NAME: Reorder items, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, CODE: SumDistribution, NAME: Sum distribution, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, CODE: Template, NAME: Template, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, CODE: DateInput, NAME: Date Input, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+
+You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
+    - Each questionnaire object has the following properties:
+        - 'CODE': A string representing the code of the questionnaire.
+        - 'NAME': A string representing the name of the questionnaire.
+        - '_TF_QUESTIONS': An array of objects, each representing a question in the questionnaire.
+    - Each question object in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': A string representing the code of the question.
+        - 'NAME': A string representing the content of the question.
+        - 'TYPE_ID': A number representing the type of the question.
+        - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+
+     - Sample users: 
+[['Generate me a questionnaire on 15    Performance of a sales professional\nName: TOPIC, dtype: object with 1 2 questionsGenerate me a questionnaire on 0    Work stress\nName: TOPIC, dtype: object with 3 7 questionsGenerate me a questionnaire on 4    Onboarding\nName: TOPIC, dtype: object with 1 6 questions']]
+     - Assistant: 
+[['Questionnaire: \n{"data": {"TF_QUESTIONNAIRES": [{"CODE": "OQ", "NAME": "Onboarding Questionnaire", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "Were you introduced to colleagues from your team or other departments?", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}, {"CODE": "2", "NAME": "Did you receive all your equipments on time?", "TYPE_ID": 1, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}, {"CODE": "3", "NAME": "Is your workplace/office is comfortable and adeguate to your needs and assigned tasks.", "TYPE_ID": 1, "DISPLAY_ORDER": 3, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}, {"CODE": "4", "NAME": "Did you receive an adeguate Training?", "TYPE_ID": 1, "DISPLAY_ORDER": 4, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}, {"CODE": "5", "NAME": "Would you recommend joining our company to other colleagues?", "TYPE_ID": 3, "DISPLAY_ORDER": 5, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}, {"CODE": "6", "NAME": "Would you like to add any additional comment for us to improve our onboarding program?", "TYPE_ID": 4, "DISPLAY_ORDER": 6, "_TF_ANSWERS": [{"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Yes"}, {"ANSWER": "No"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Not at all likely"}, {"ANSWER": "1"}, {"ANSWER": "2"}, {"ANSWER": "3"}, {"ANSWER": "4"}, {"ANSWER": "5"}, {"ANSWER": "6"}, {"ANSWER": "7"}, {"ANSWER": "8"}, {"ANSWER": "9"}, {"ANSWER": "Extremely likely"}]}]}]}}\n']]
+     - User: 
+Generate me a questionnaire on 15    Performance of a sales professional
+Name: TOPIC, dtype: object with 1 2 questionsGenerate me a questionnaire on 0    Work stress
+Name: TOPIC, dtype: object with 3 7 questionsGenerate me a questionnaire on 4    Onboarding
+Name: TOPIC, dtype: object with 1 6 questionsGenerate me a questionnaire on 1    Working mood
+Name: TOPIC, dtype: object with 2 7 questions
+-------------------
+=================================================================
+1-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[SAMPLE] QUESTIONNAIRE_ID: 1173001
+     - Topic: 16    Cource feedback
+Name: TOPIC, dtype: object
+     - Question type: 1
+     - Question number: 5
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173001
+     - Topic: 2    Remote working experience
+Name: TOPIC, dtype: object
+     - Question type: 1
+     - Question number: 10
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+    - topic
+    - number of questions
+    - type of questions
+
+The admited question's types are the following:
+  - ID: 1, CODE: SingleChoice, NAME: Single choice, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, CODE: MultiChoice, NAME: Multi choice, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, CODE: RatingScale, NAME: Rating scale, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, CODE: Comment, NAME: Comment, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, CODE: ReorderItems, NAME: Reorder items, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, CODE: SumDistribution, NAME: Sum distribution, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, CODE: Template, NAME: Template, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, CODE: DateInput, NAME: Date Input, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+
+You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
+    - Each questionnaire object has the following properties:
+        - 'CODE': A string representing the code of the questionnaire.
+        - 'NAME': A string representing the name of the questionnaire.
+        - '_TF_QUESTIONS': An array of objects, each representing a question in the questionnaire.
+    - Each question object in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': A string representing the code of the question.
+        - 'NAME': A string representing the content of the question.
+        - 'TYPE_ID': A number representing the type of the question.
+        - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+
+     - Sample users: 
+[['Generate me a questionnaire on 15    Performance of a sales professional\nName: TOPIC, dtype: object with 1 2 questionsGenerate me a questionnaire on 0    Work stress\nName: TOPIC, dtype: object with 3 7 questionsGenerate me a questionnaire on 4    Onboarding\nName: TOPIC, dtype: object with 1 6 questionsGenerate me a questionnaire on 1    Working mood\nName: TOPIC, dtype: object with 2 7 questionsGenerate me a questionnaire on 16    Cource feedback\nName: TOPIC, dtype: object with 1 5 questions']]
+     - Assistant: 
+[['Questionnaire: \n{"data": {"TF_QUESTIONNAIRES": [{"CODE": "SE", "NAME": "Survey employee", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "How do you rate this course?", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "2", "NAME": "What\'s your preferred device?", "TYPE_ID": 2, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "3", "NAME": "Send us feedback", "TYPE_ID": 4, "DISPLAY_ORDER": 3, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "4", "NAME": "What\'s important for you", "TYPE_ID": 5, "DISPLAY_ORDER": 4, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "5", "NAME": "How do you split the welfare amount?", "TYPE_ID": 6, "DISPLAY_ORDER": 5, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}]}]}}\n']]
+     - User: 
+Generate me a questionnaire on 15    Performance of a sales professional
+Name: TOPIC, dtype: object with 1 2 questionsGenerate me a questionnaire on 0    Work stress
+Name: TOPIC, dtype: object with 3 7 questionsGenerate me a questionnaire on 4    Onboarding
+Name: TOPIC, dtype: object with 1 6 questionsGenerate me a questionnaire on 1    Working mood
+Name: TOPIC, dtype: object with 2 7 questionsGenerate me a questionnaire on 16    Cource feedback
+Name: TOPIC, dtype: object with 1 5 questionsGenerate me a questionnaire on 2    Remote working experience
+Name: TOPIC, dtype: object with 1 10 questions
+-------------------

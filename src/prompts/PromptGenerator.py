@@ -18,7 +18,7 @@ class PromptGenerator:
     # Prompt generation
     # ------------
     def generate_prompt(self,
-                        has_full_params=True, topic="", question_type="", question_nuber=5,
+                        has_full_params=True, topic="", question_type="", question_number=5,
                         question_types_data=[],
                         json=""):
         """
@@ -45,7 +45,7 @@ class PromptGenerator:
             self._generate_system_prompt(has_full_params, question_types_data)
 
         elif self.role == "user":
-            self._generate_user_prompt(has_full_params, topic, question_type, question_nuber)
+            self._generate_user_prompt(has_full_params, topic, question_type, question_number)
 
         elif self.role == "assistant":
             self._generate_assistant_prompt(json)
