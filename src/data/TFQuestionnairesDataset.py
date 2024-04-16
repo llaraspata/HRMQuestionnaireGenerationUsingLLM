@@ -36,9 +36,7 @@ class TFQuestionnairesDataset:
     # ------------
     # Methos
     # ------------
-    def load_data(self):
-        project_root = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-
+    def load_data(self, project_root):
         data_dir_path = os.path.join(project_root, "data", "raw", "starter")
 
         questionnaires_path = os.path.join(data_dir_path, self.QUESTIONNAIRES_FILENAME)
@@ -115,7 +113,7 @@ class TFQuestionnairesDataset:
 
 
     def get_questionnaire_topic(self, questionnaire_id):
-        return self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"]
+        return self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"].values[0]
 
 
     def get_questionnaire_question_type(self, questionnaire_id):
