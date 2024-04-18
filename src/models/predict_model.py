@@ -4,7 +4,7 @@ import time
 import json
 import os
 from tqdm import tqdm
-import openai
+from openai import AzureOpenAI
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
@@ -20,12 +20,18 @@ PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "GROUND_TRUTH_JSON", "PREDICTED_JSON",
                       "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
                       "CONVERSION_ERROR"]
 
-openai.api_key = os.getenv('OPEN_AI_TOKEN')
 
 # -----------------
 # Main function
 # -----------------
 def main():
+
+    client = AzureOpenAI(
+        azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
+        api_key=os.getenv("AZURE_OPENAI_KEY"),  
+        api_version="2024-02-15-preview"
+    )
+
     # Load data
     dataset = TFQuestionnairesDataset()
     dataset.load_data(project_root=PROJECT_ROOT)
@@ -47,7 +53,7 @@ def main():
         log_filename = "log.txt"
     
         # Run the experiment        
-        result_df = _run_experiment(dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
+        result_df = _run_experiment(client=client, dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
         
         # Save the results
         _save_df_to_folder(result_df, run_dir, predictions_filename)
@@ -57,7 +63,7 @@ def main():
 # -----------------
 # Helper functions
 # -----------------
-def _run_experiment(dataset, conf, run_dir, log_filename):
+def _run_experiment(client, dataset, conf, run_dir, log_filename):
 
     print("================================================")
     print(f"Running experiment: {conf['id']}")
@@ -94,7 +100,7 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
 
                 # Build messages and get LLM's response
                 messages = _build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
-                response = openai.ChatCompletion.create(
+                response = client.chat.completions.create(
                     model = conf["model"],
                     messages=messages,
                     temperature=conf["temperature"],
