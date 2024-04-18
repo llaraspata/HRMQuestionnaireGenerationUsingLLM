@@ -117,7 +117,7 @@ class TFQuestionnairesDataset:
 
 
     def get_questionnaire_question_type(self, questionnaire_id):
-        return self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]["TYPE_ID"].values[0]
+        return self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]["NAME"].values[0]
     
 
     def get_questionnaire_question_number(self, questionnaire_id):
