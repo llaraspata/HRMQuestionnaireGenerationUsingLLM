@@ -100,6 +100,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
 
                 # Build messages and get LLM's response
                 messages = _build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
+
                 response = client.chat.completions.create(
                     model = conf["model"],
                     messages=messages,
@@ -112,7 +113,11 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 end_time = time.time()
 
                 ground_truth = dataset.to_json(questionnaire_id)
-                prediction = response.choices[0]["message"]["content"]
+                prediction = response.choices[0].message.content
+
+                prompt_tokens = response.usage.prompt_tokens
+                completition_tokens = response.usage.completion_tokens
+                total_tokens = prompt_tokens + completition_tokens
 
                 log_file.write("\n-------------------")
                 log_file.write("\n[LLM ANSWER]\n")
@@ -123,7 +128,8 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 time_spent = end_time - start_time
                 spent_secs_per_request.append(time_spent)
 
-                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, response=response)
+                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
+                                                 prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
     
                 time.sleep(2)  # sleep for 2 seconds to avoid exceeding the OpenAI API rate limit or other kind of errors
                     
@@ -175,20 +181,20 @@ def _build_messages(k, system_prompt, sample_user_prompts, assistant_prompts, us
     return messages
 
 
-def _add_prediction(df, questionnaire_id, ground_truth="", prediction="", spent_time=0, response="", reported_exception=""):
+def _add_prediction(df, questionnaire_id, ground_truth="", prediction="", spent_time=0, 
+                    prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):
     """
         Adds a prediction to the DataFrame.
     """
-    print(response)
     new_row = pd.DataFrame({
         "QUESTIONNAIRE_ID": [questionnaire_id],
         "GROUND_TRUTH_JSON": [ground_truth],
         "PREDICTED_JSON": [prediction],
         "REPORTED_EXCEPTION": [reported_exception],
         "RESPONSE_TIME": [spent_time],
-        "PROMPT_TOKENS": [response.usage["prompt_tokens"]],
-        "COMPLETITION_TOKENS": [response.usage["completion_tokens"]],
-        "TOTAL_TOKENS": [response.usage["total_tokens"]],
+        "PROMPT_TOKENS": [prompt_tokens],
+        "COMPLETITION_TOKENS": [completition_tokens],
+        "TOTAL_TOKENS": [total_tokens],
         "CONVERSION_ERROR": [""],
     })
 
