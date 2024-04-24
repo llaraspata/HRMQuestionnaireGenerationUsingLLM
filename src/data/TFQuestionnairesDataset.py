@@ -37,7 +37,7 @@ class TFQuestionnairesDataset:
     # Methos
     # ------------
     def load_data(self, project_root):
-        data_dir_path = os.path.join(project_root, "data", "raw", "starter")
+        data_dir_path = os.path.join(project_root, "data", "raw")
 
         questionnaires_path = os.path.join(data_dir_path, self.QUESTIONNAIRES_FILENAME)
         questions_path = os.path.join(data_dir_path, self.QUESTIONS_FILENAME)
@@ -52,7 +52,7 @@ class TFQuestionnairesDataset:
 
     def load_question_types(self):
         project_root = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-        data_dir_path = os.path.join(project_root, "data", "raw", "starter")
+        data_dir_path = os.path.join(project_root, "data", "raw")
         question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
 
