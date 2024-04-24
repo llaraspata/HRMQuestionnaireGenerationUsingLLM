@@ -71,10 +71,13 @@ class PromptGenerator:
         else:
             self.prompt += sys_conf.INPUT_FORMAT_DEFINITION_WITH_ONLY_TOPIC
 
-        self.prompt += sys_conf.QUESTION_TYPES_DESCRIPTION % (self._format_question_types(question_types_data))
+        self.prompt += sys_conf.ERROR_MESSAGE
         self.prompt += sys_conf.TASK_DEFINITION
         self.prompt += sys_conf.OUTPUT_FORMAT_DEFINITION
-        
+
+        self.prompt += sys_conf.QUESTION_TYPES_DESCRIPTION % (self._format_question_types(question_types_data))
+        self.prompt += sys_conf.IMPERATIVE_COMMAND
+
 
     def _generate_user_prompt(self, has_full_params, topic, question_type, question_nuber):
         """

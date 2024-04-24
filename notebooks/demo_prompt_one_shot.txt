@@ -18,22 +18,11 @@ With FULL questionnaire parameters
 -------------------
 [PROMPTS]
      - System: 
-You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+You are a Questionnaire Generator and you work in the Human Resources Management field.The user will ask you to generate a questionnaire specifying:
     - topic
     - number of questions
     - type of questions
-
-The admitted question's types are the following:
-  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
-  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
-  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
-  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
-  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
-  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
-  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
-  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
-
-You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+If the user does not specify a valid topic, reply with "Sorry I cant help you".If the topic is valid, reply with only a JSON, which must respect the following format:Your output must be a JSON which must respect the following format:
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
@@ -47,8 +36,15 @@ You must generate a questionnaire according to the user specified characteristic
         - 'TYPE_ID': A number representing the type of the question.
         - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
         - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
-    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
-
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.The admitted question's types are the following:   - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+DON'T BE CONVERSATIONAL!
      - Sample users: 
 [['Generate me a questionnaire on Employee experience with 16 Single choice questions']]
      - Assistant: 
@@ -63,7 +59,7 @@ With FULL questionnaire parameters
 
 -------------------
 [SAMPLE] QUESTIONNAIRE_ID: 1146004
-     - Topic: Agile PM learning path
+     - Topic: Performance of a sales professional
      - Question type: Single choice
      - Question number: 2
 
@@ -75,22 +71,11 @@ With FULL questionnaire parameters
 -------------------
 [PROMPTS]
      - System: 
-You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+You are a Questionnaire Generator and you work in the Human Resources Management field.The user will ask you to generate a questionnaire specifying:
     - topic
     - number of questions
     - type of questions
-
-The admitted question's types are the following:
-  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
-  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
-  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
-  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
-  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
-  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
-  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
-  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
-
-You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+If the user does not specify a valid topic, reply with "Sorry I cant help you".If the topic is valid, reply with only a JSON, which must respect the following format:Your output must be a JSON which must respect the following format:
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
@@ -104,14 +89,21 @@ You must generate a questionnaire according to the user specified characteristic
         - 'TYPE_ID': A number representing the type of the question.
         - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
         - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
-    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
-
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.The admitted question's types are the following:   - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+DON'T BE CONVERSATIONAL!
      - Sample users: 
-[['Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Agile PM learning path with 2 Single choice questions']]
+[['Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Performance of a sales professional with 2 Single choice questions']]
      - Assistant: 
-[['{"data": {"TF_QUESTIONNAIRES": [{"CODE": "APM Test", "NAME": "Agile PM test", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "Question 1", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}]}, {"CODE": "2", "NAME": "Question 2", "TYPE_ID": 1, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}, {"ANSWER": "Strongly agree"}, {"ANSWER": "Agree"}, {"ANSWER": "Neither agree nor disagree"}, {"ANSWER": "Somewhat disagree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Strongly disagree"}]}]}]}}']]
+[['{"data": {"TF_QUESTIONNAIRES": [{"CODE": "SAL", "NAME": "Sales Professional Questionnaire", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "Sell in This Year", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "< 10.000 \\u0080"}, {"ANSWER": "<20.000 \\u0080"}, {"ANSWER": ">20.000 \\u0080"}, {"ANSWER": "Ferrovie"}, {"ANSWER": "Brico Center"}, {"ANSWER": "Ferrari"}, {"ANSWER": "Gucci"}, {"ANSWER": "Not enlisted"}]}, {"CODE": "2", "NAME": "Select Big Customers followed", "TYPE_ID": 2, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "< 10.000 \\u0080"}, {"ANSWER": "<20.000 \\u0080"}, {"ANSWER": ">20.000 \\u0080"}, {"ANSWER": "Ferrovie"}, {"ANSWER": "Brico Center"}, {"ANSWER": "Ferrari"}, {"ANSWER": "Gucci"}, {"ANSWER": "Not enlisted"}]}]}]}}']]
      - User: 
-Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Agile PM learning path with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questions
+Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Performance of a sales professional with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questions
 -------------------
 =================================================================
 1-SHOT
@@ -120,9 +112,9 @@ With FULL questionnaire parameters
 
 -------------------
 [SAMPLE] QUESTIONNAIRE_ID: 1173001
-     - Topic: Cource feedback
+     - Topic: Employee experience
      - Question type: Single choice
-     - Question number: 5
+     - Question number: 16
 
 -------------------
 [TEST] QUESTIONNAIRE_ID: 1173001
@@ -132,22 +124,11 @@ With FULL questionnaire parameters
 -------------------
 [PROMPTS]
      - System: 
-You are a Questionnaire Generator and you work in the Human Resources Management field. The user will ask you generate surveys mostly.The user has to specify the following elements in the request:
+You are a Questionnaire Generator and you work in the Human Resources Management field.The user will ask you to generate a questionnaire specifying:
     - topic
     - number of questions
     - type of questions
-
-The admitted question's types are the following:
-  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
-  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
-  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
-  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
-  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
-  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
-  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
-  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
-
-You must generate a questionnaire according to the user specified characteristics.Your output must be a JSON which must respect the following format:
+If the user does not specify a valid topic, reply with "Sorry I cant help you".If the topic is valid, reply with only a JSON, which must respect the following format:Your output must be a JSON which must respect the following format:
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of objects, each representing a questionnaire. 
@@ -161,12 +142,19 @@ You must generate a questionnaire according to the user specified characteristic
         - 'TYPE_ID': A number representing the type of the question.
         - 'DISPLAY_ORDER': A number representing the order in which the question is displayed in the questionnaire.
         - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
-    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
-
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.The admitted question's types are the following:   - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list. 
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list. 
+  - ID: 3, DESCRIPTION: Use this type of question to rate something. 
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback. 
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items. 
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options. 
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template. 
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time. 
+DON'T BE CONVERSATIONAL!
      - Sample users: 
-[['Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Agile PM learning path with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questionsGenerate me a questionnaire on Cource feedback with 5 Single choice questions']]
+[['Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Performance of a sales professional with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questionsGenerate me a questionnaire on Employee experience with 16 Single choice questions']]
      - Assistant: 
-[['{"data": {"TF_QUESTIONNAIRES": [{"CODE": "SE", "NAME": "Survey employee", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "How do you rate this course?", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "2", "NAME": "What\'s your preferred device?", "TYPE_ID": 2, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "3", "NAME": "Send us feedback", "TYPE_ID": 4, "DISPLAY_ORDER": 3, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "4", "NAME": "What\'s important for you", "TYPE_ID": 5, "DISPLAY_ORDER": 4, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}, {"CODE": "5", "NAME": "How do you split the welfare amount?", "TYPE_ID": 6, "DISPLAY_ORDER": 5, "_TF_ANSWERS": [{"ANSWER": "Excellent"}, {"ANSWER": "Good"}, {"ANSWER": "Bad"}, {"ANSWER": "Worst. If yes why?"}, {"ANSWER": "Laptop"}, {"ANSWER": "Tablet"}, {"ANSWER": "Smartphone"}, {"ANSWER": "Monitor"}, {"ANSWER": "Keyboard"}, {"ANSWER": "Project"}, {"ANSWER": "Boss"}, {"ANSWER": "Teamwork"}, {"ANSWER": "Salary"}, {"ANSWER": "Assets"}, {"ANSWER": "Working hours"}, {"ANSWER": "Health insurance"}, {"ANSWER": "Travel"}, {"ANSWER": "Training"}, {"ANSWER": "Amazon"}]}]}]}}']]
+[['{"data": {"TF_QUESTIONNAIRES": [{"CODE": "INT", "NAME": "Interview to Employee", "_TF_QUESTIONS": [{"CODE": "1", "NAME": "I am satisfied with my opportunities for professional growth.", "TYPE_ID": 1, "DISPLAY_ORDER": 1, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "2", "NAME": "My organization is dedicated to my professional development.", "TYPE_ID": 1, "DISPLAY_ORDER": 2, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "3", "NAME": "I am satisfied with the job-related training my organization offers.", "TYPE_ID": 1, "DISPLAY_ORDER": 3, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "4", "NAME": "\\u00a0I am satisfied with the investment my organization makes in training and education.", "TYPE_ID": 1, "DISPLAY_ORDER": 4, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "5", "NAME": "I am inspired to meet my goals at work.", "TYPE_ID": 1, "DISPLAY_ORDER": 5, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "6", "NAME": "\\u00a0I feel completely involved in my work.", "TYPE_ID": 1, "DISPLAY_ORDER": 6, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "7", "NAME": "\\u00a0I get excited about going to work.", "TYPE_ID": 1, "DISPLAY_ORDER": 7, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "8", "NAME": "I am often so involved in my work that the day goes by very quickly.", "TYPE_ID": 1, "DISPLAY_ORDER": 8, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "9", "NAME": "Communication between senior leaders and employees is good in my organization.", "TYPE_ID": 1, "DISPLAY_ORDER": 9, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "10", "NAME": "I am able to make decisions affecting my work.", "TYPE_ID": 1, "DISPLAY_ORDER": 10, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "11", "NAME": "Management within my organization recognizes strong job performance.", "TYPE_ID": 1, "DISPLAY_ORDER": 11, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "12", "NAME": "\\u00a0I am satisfied with my overall compensation.", "TYPE_ID": 1, "DISPLAY_ORDER": 12, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "13", "NAME": "I am compensated fairly relative to my local market.", "TYPE_ID": 1, "DISPLAY_ORDER": 13, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "14", "NAME": "\\u00a0I am satisfied with my total benefits package.", "TYPE_ID": 1, "DISPLAY_ORDER": 14, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "15", "NAME": "I am satisfied with the workplace flexibility offered by my organization.", "TYPE_ID": 1, "DISPLAY_ORDER": 15, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}, {"CODE": "COMMENT", "NAME": "Final Comments", "TYPE_ID": 4, "DISPLAY_ORDER": 16, "_TF_ANSWERS": [{"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}, {"ANSWER": "Agree"}, {"ANSWER": "Disagree"}]}]}]}}']]
      - User: 
-Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Agile PM learning path with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questionsGenerate me a questionnaire on Cource feedback with 5 Single choice questionsGenerate me a questionnaire on Remote working experience with 10 Single choice questions
+Generate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Work stress with 7 Rating scale questionsGenerate me a questionnaire on Performance of a sales professional with 2 Single choice questionsGenerate me a questionnaire on Working mood with 7 Multi choice questionsGenerate me a questionnaire on Employee experience with 16 Single choice questionsGenerate me a questionnaire on Remote working experience with 10 Single choice questions
 -------------------
