@@ -4,6 +4,7 @@ import time
 import json
 import os
 from tqdm import tqdm
+import argparse
 from openai import AzureOpenAI
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
@@ -24,7 +25,9 @@ PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "GROUND_TRUTH_JSON", "PREDICTED_JSON",
 # -----------------
 # Main function
 # -----------------
-def main():
+def main(args):
+
+    experiment_id = args.experiment_id
 
     client = AzureOpenAI(
         azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
@@ -43,6 +46,9 @@ def main():
     f.close()
 
     for conf in experiment_confs["configs"]:
+        if experiment_id is not None and conf["id"] != experiment_id:
+            continue
+
         # Create the experiment run directory
         run_dir = os.path.join(PROJECT_ROOT, "models", conf["id"])
         if not os.path.exists(run_dir):
@@ -217,4 +223,7 @@ def _save_df_to_folder(df, folder_path, file_name):
 
 
 if __name__ == '__main__':
-    main()
+    aparser = argparse.ArgumentParser()
+    aparser.add_argument('--experiment-id', type=str, help='Name of the experiment to run')
+    
+    main(aparser.parse_args())
