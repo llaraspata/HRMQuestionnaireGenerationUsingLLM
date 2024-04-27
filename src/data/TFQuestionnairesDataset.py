@@ -13,7 +13,7 @@ class TFQuestionnairesDataset:
     QUESTION_TYPES_FILENAME = "TF_QST_QUESTION_TYPES.csv"
     ANSWERS_FILENAME = "TF_QST_ANSWERS.csv"
 
-    ESSENTIAL_COLUMNS_QUESTIONNAIRES = ["ID", "CODE", "NAME", "DESCRIPTION"]
+    ESSENTIAL_COLUMNS_QUESTIONNAIRES = ["ID", "CODE", "NAME"]
     ESSENTIAL_COLUMNS_QUESTIONS = ["ID", "TYPE_ID", "QUESTIONNAIRE_ID", "CODE", "NAME", "DISPLAY_ORDER"]
     ESSENTIAL_COLUMNS_QUESTION_TYPES = ["ID", "CODE", "NAME", "DESCRIPTION"]
     ESSENTIAL_COLUMNS_ANSWERS = ["ID", "QUESTION_ID", "ANSWER"]
@@ -95,18 +95,31 @@ class TFQuestionnairesDataset:
         return json.dumps(data)
     
 
-    def from_json(json_data):
+    def from_json(json_data, questionnaire_id):
         result = TFQuestionnairesDataset()
         data = json.loads(json_data)["data"]
 
         questionnaire = data["TF_QUESTIONNAIRES"]
+        questionnaire[0]["ID"] = questionnaire_id
         questions = questionnaire[0]["_TF_QUESTIONS"]
-        answers = [question["_TF_ANSWERS"] for question in questions]
+        
+        # Generate dummy IDs for questions
+        for i, question in enumerate(questions):
+            question["ID"] = i
+            question["QUESTIONNAIRE_ID"] = questionnaire_id
+
+        answers = []
+        for question in questions:
+            asw = question["_TF_ANSWERS"]
+            for i, a in enumerate(asw):
+                a["ID"] = i
+                a["QUESTION_ID"] = question["ID"]
+            answers.append(asw)
         answers_flat = list(itertools.chain.from_iterable(answers))
 
-        result.questionnaires = pd.DataFrame(questionnaire)[result.QUESTIONNAIRES_PROMPT_COLUMNS]
-        result.questions = pd.DataFrame(questions)[result.QUESTIONS_PROMPT_COLUMNS]
-        result.answers = pd.DataFrame(answers_flat)[result.ANSWERS_PROMPT_COLUMNS]
+        result.questionnaires = pd.DataFrame(questionnaire)[result.ESSENTIAL_COLUMNS_QUESTIONNAIRES]
+        result.questions = pd.DataFrame(questions)[result.ESSENTIAL_COLUMNS_QUESTIONS]
+        result.answers = pd.DataFrame(answers_flat)[result.ESSENTIAL_COLUMNS_ANSWERS]
         result.question_types = result.load_question_types()
 
         return result
