@@ -34,7 +34,7 @@ OUTPUT_FORMAT_DEFINITION = """Your output must be a JSON which must respect the 
 
 
 QUESTION_TYPES_DESCRIPTION = """The admitted question's types are the following: %s"""
-SINGLE_QUESTION_TYPE_DESCRIPTION = """  - ID: %d, DESCRIPTION: %s \n"""
+SINGLE_QUESTION_TYPE_DESCRIPTION = """\n  - ID: %d, DESCRIPTION: %s"""
 
 
 IMPERATIVE_COMMAND = """DON'T BE CONVERSATIONAL!"""

@@ -93,9 +93,9 @@ class PromptGenerator:
                 - str: The formatted prompt.
         """
         if has_full_params:
-            self.prompt += usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber, question_type)
+            self.prompt = usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber, question_type)
         else:
-            self.prompt += usr_conf.STANDARD_USER_WITH_ONLY_TOPIC % (topic)
+            self.prompt = usr_conf.STANDARD_USER_WITH_ONLY_TOPIC % (topic)
 
 
     def _generate_assistant_prompt(self, json):

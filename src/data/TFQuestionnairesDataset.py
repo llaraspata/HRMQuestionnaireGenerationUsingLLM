@@ -37,7 +37,7 @@ class TFQuestionnairesDataset:
     # Methos
     # ------------
     def load_data(self, project_root):
-        data_dir_path = os.path.join(project_root, "data", "raw")
+        data_dir_path = os.path.join(project_root, "data", "processed")
 
         questionnaires_path = os.path.join(data_dir_path, self.QUESTIONNAIRES_FILENAME)
         questions_path = os.path.join(data_dir_path, self.QUESTIONS_FILENAME)
@@ -52,7 +52,7 @@ class TFQuestionnairesDataset:
 
     def load_question_types(self):
         project_root = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-        data_dir_path = os.path.join(project_root, "data", "raw")
+        data_dir_path = os.path.join(project_root, "data", "processed")
         question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
 
@@ -117,7 +117,7 @@ class TFQuestionnairesDataset:
 
 
     def get_questionnaire_question_type(self, questionnaire_id):
-        type_id = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]["TYPE_ID"].values[0]
+        type_id = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["QUESTION_TYPE"].values[0]
 
         return self.question_types[self.question_types["ID"] == type_id]["NAME"].values[0] 
     
