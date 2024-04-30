@@ -90,9 +90,6 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
         
         for i in tqdm(range(n_questionnaires)):
             try:
-                # Record the start time
-                start_time = time.time()
-    
                 # Generate prompts
                 questionnaire_id = dataset.questionnaires["ID"][i]
                 system_prompt, sample_user_prompts, assistant_prompts, user_prompt = scenario.generate_scenario(log_file=log_file,
@@ -106,6 +103,9 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
 
                 # Build messages and get LLM's response
                 messages = _build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
+
+                # Record the start time
+                start_time = time.time()
 
                 response = client.chat.completions.create(
                     model = conf["model"],
