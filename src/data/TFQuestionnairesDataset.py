@@ -88,17 +88,10 @@ class TFQuestionnairesDataset:
         questions_json = []
         for question in questions.iterrows():
             qst_id = question[1]["ID"]
-
             qst_json = questions[questions["ID"] == qst_id][self.QUESTIONS_PROMPT_COLUMNS].to_dict(orient="records")
-
-            print(qst_json)
-
             qst_answers = answers[answers["QUESTION_ID"] == qst_id]
             answers_json = qst_answers[self.ANSWERS_PROMPT_COLUMNS].to_dict(orient="records")
-            
-
             qst_json[0]["_TF_ANSWERS"] = [answer for answer in answers_json]
-
             questions_json.append(qst_json[0])
         
         data["data"]["TF_QUESTIONNAIRES"][0]["_TF_QUESTIONS"] = questions_json
