@@ -78,8 +78,6 @@ class TFQuestionnairesDataset:
         answers = self.answers[self.answers["QUESTION_ID"].isin(questions["ID"])]
 
         questionnaire_json = questionnaire[self.QUESTIONNAIRES_PROMPT_COLUMNS].to_dict(orient="records")
-        questions_json = questions[self.QUESTIONS_PROMPT_COLUMNS].to_dict(orient="records")
-        answers_json = answers[self.ANSWERS_PROMPT_COLUMNS].to_dict(orient="records")
 
         data = {
             "data": {
@@ -87,8 +85,21 @@ class TFQuestionnairesDataset:
             }
         }
 
-        for question in questions_json:
-            question["_TF_ANSWERS"] = [answer for answer in answers_json]
+        questions_json = []
+        for question in questions.iterrows():
+            qst_id = question[1]["ID"]
+
+            qst_json = questions[questions["ID"] == qst_id][self.QUESTIONS_PROMPT_COLUMNS].to_dict(orient="records")
+
+            print(qst_json)
+
+            qst_answers = answers[answers["QUESTION_ID"] == qst_id]
+            answers_json = qst_answers[self.ANSWERS_PROMPT_COLUMNS].to_dict(orient="records")
+            
+
+            qst_json[0]["_TF_ANSWERS"] = [answer for answer in answers_json]
+
+            questions_json.append(qst_json[0])
         
         data["data"]["TF_QUESTIONNAIRES"][0]["_TF_QUESTIONS"] = questions_json
 
@@ -140,6 +151,13 @@ class TFQuestionnairesDataset:
 
         return questions_ids.count()
     
+
+    def get_average_answer_number(self, questionnaire_id):
+        questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
+        answers = self.answers[self.answers["QUESTION_ID"].isin(questions["ID"])]
+
+        return len(answers) / len(questions)
+
 
     def get_sample_questionnaire_id(self, sample_questionnaire_ids, current_questionnaire_id):
         """
