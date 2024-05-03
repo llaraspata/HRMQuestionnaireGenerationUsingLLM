@@ -11,10 +11,17 @@ class Results:
                       "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
                       "CONVERSION_ERROR"]
     
+    STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
+                          "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
+
     BLEU_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
 
     PREDICTIONS_FILENAME = "predictions.pkl"
     LOG_FILENAME = "log.txt"
+
+    STATISTICS_FILENAME = "statistics.csv"
+    QUESTION_BLEU_FILENAME = "question_bleu_scores.csv"
+    ANSWER_BLEU_FILENAME = "answer_bleu_scores.csv"
 
     N_GRAMS_WEIGHTS = (0.25, 0.25, 0.25, 0.25)
 
@@ -31,6 +38,7 @@ class Results:
         self.question_number_deviation = 0
         self.avg_generated_answer_number = 0
         self.avg_answer_number_deviation = 0
+        self.statistics = pd.DataFrame(columns=self.STATISTICS_COLUMNS)
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
@@ -64,18 +72,26 @@ class Results:
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
 
-    def print_current_results(self):
-        print("===========================================")
-        print(f"    QUESTIONNAIRE {self.questionnaire_id}")
-        print("===========================================")
-        print("Generated Question Number: ", self.generated_question_number)
-        print("Question Number Deviation: ", self.question_number_deviation)
-        print("Average Generated Answer Number: ", self.avg_generated_answer_number)
-        print("Average Answer Number Deviation: ", self.avg_answer_number_deviation)
-        print("===========================================")
+    def compute_statistics(self, results_dir):
+        for i, _ in enumerate(self.predictions):
+            id = self.predictions["QUESTIONNAIRE_ID"].values[i]
+            self.set_questionnaire_id(id)
+            self._compute_deviations()
+            
+            self.statistics = pd.concat([self.statistics, pd.DataFrame({
+                "QUESTIONNAIRE_ID": [id],
+                "GENERATED_QUESTION_NUMBER": [self.generated_question_number],
+                "QUESTION_NUMBER_DEVIATION": [self.question_number_deviation],
+                "AVERAGE_GENERATED_ANSWER_NUMBER": [self.avg_generated_answer_number],
+                "AVERAGE_ANSWER_NUMBER_DEVIATION": [self.avg_answer_number_deviation]
+            })], ignore_index=True)
 
+            self.clear()
 
-    def compute_deviations(self):
+        self.statistics.to_csv(os.path.join(results_dir, self.STATISTICS_FILENAME), index=False)
+        
+
+    def _compute_deviations(self):
         pred = self.predictions[self.predictions["QUESTIONNAIRE_ID"] == self.questionnaire_id]
 
         ground_truth = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"].values[0])
@@ -91,22 +107,46 @@ class Results:
         avg_ground_truth_answer_number = ground_truth.get_average_answer_number(self.questionnaire_id)
         self.avg_answer_number_deviation = avg_ground_truth_answer_number - self.avg_generated_answer_number
 
+
+    def print_current_deviation_results(self):
+        print("===========================================")
+        print(f"    QUESTIONNAIRE {self.questionnaire_id}")
+        print("===========================================")
+        print("Generated Question Number: ", self.generated_question_number)
+        print("Question Number Deviation: ", self.question_number_deviation)
+        print("Average Generated Answer Number: ", self.avg_generated_answer_number)
+        print("Average Answer Number Deviation: ", self.avg_answer_number_deviation)
+        print("===========================================")
+
     
-    def compute_bleu_scores(self):
+    def compute_bleu_scores(self, results_dir):
+        for i, _ in enumerate(self.predictions):
+            id = self.predictions["QUESTIONNAIRE_ID"].values[i]
+            self.set_questionnaire_id(id)
+            self._compute_bleu_scores()
+
+        self.question_bleu_scores.to_csv(os.path.join(results_dir, self.QUESTION_BLEU_FILENAME), index=False)
+        self.answer_bleu_scores.to_csv(os.path.join(results_dir, self.ANSWER_BLEU_FILENAME), index=False)
+
+
+    def _compute_bleu_scores(self):
         pred = self.predictions[self.predictions["QUESTIONNAIRE_ID"] == self.questionnaire_id]
 
         ground_truth = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"].values[0])
         generated = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"].values[0])
 
-        for question in generated.questions:
-            qst_id = question["ID"]
-            qst_text = question["NAME"]
-            self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_blue_score(qst_id, qst_text, ground_truth.questions)], ignore_index=True)
+        for question in generated.questions.iterrows():
+            qst_id = question[1]["ID"]
+            qst_text = question[1]["NAME"]
 
-            for answer in generated.answer[generated.answer["QUESTION_ID"] == qst_id]:
-                ans_id = answer["ID"]
-                ans_text = answer["ANSWER"]
-                self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth.answers)], ignore_index=True)
+            ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
+
+            self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_blue_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
+
+            for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
+                ans_id = answer[1]["ID"]
+                ans_text = answer[1]["ANSWER"]
+                self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
     
 
     def _compute_candidate_blue_score(self, id, candidate, ground_truth_references):
@@ -115,7 +155,7 @@ class Results:
         df = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
         for reference in ground_truth_references:
-            reference_split = reference.split()
+            reference_split = [reference.split()]
             bleu_core = sentence_bleu(reference_split, question_split, smoothing_function=SmoothingFunction().method4, weights=self.N_GRAMS_WEIGHTS)
 
             new_row = pd.DataFrame({
