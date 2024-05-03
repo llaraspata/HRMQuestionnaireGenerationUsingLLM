@@ -12,7 +12,7 @@ class Results:
                       "CONVERSION_ERROR"]
     
     STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", 
-                          "CONVERSION_ERROR", "GENERATED_QUESTIONNAIRES", "QUESTIONS_WITH_MISSING_ANSWERS", 
+                          "CONVERSION_ERROR", "IS_JSON", "ERROR_MESSAGE", "GENERATED_QUESTIONNAIRES", "QUESTIONS_WITH_MISSING_ANSWERS", 
                           "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
                           "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
 
@@ -22,8 +22,8 @@ class Results:
     LOG_FILENAME = "log.txt"
 
     STATISTICS_FILENAME = "statistics.csv"
-    QUESTION_BLEU_FILENAME = "question_bleu_scores.csv"
-    ANSWER_BLEU_FILENAME = "answer_bleu_scores.csv"
+    QUESTION_BLEU_FILENAME = "question_bleu_scores"
+    ANSWER_BLEU_FILENAME = "answer_bleu_scores"
 
     N_GRAMS_WEIGHTS = (0.25, 0.25, 0.25, 0.25)
 
@@ -39,14 +39,16 @@ class Results:
         self.questionnaire_id = None
 
         self.conversion_error = False
-        self.generated_questionnaires = 0
-        self.questions_with_missing_answers = 0
+        self.is_json = True
+        self.error_message = ""
+        self.generated_questionnaires = -1
+        self.questions_with_missing_answers = -1
 
-        self.generated_question_number = 0
-        self.question_number_deviation = 0
+        self.generated_question_number = -1
+        self.question_number_deviation = -1
         
-        self.avg_generated_answer_number = 0
-        self.avg_answer_number_deviation = 0
+        self.avg_generated_answer_number = -1
+        self.avg_answer_number_deviation = -1
         
         self.statistics = pd.DataFrame(columns=self.STATISTICS_COLUMNS)
         
@@ -77,27 +79,37 @@ class Results:
         self.questionnaire_id = 0
 
         self.conversion_error = False
-        self.generated_questionnaires = 0
-        self.questions_with_missing_answers = 0
+        self.is_json = True
+        self.error_message = ""
+        self.generated_questionnaires = -1
+        self.questions_with_missing_answers = -1
         
-        self.generated_question_number = 0
-        self.question_number_deviation = 0
+        self.generated_question_number = -1
+        self.question_number_deviation = -1
         
-        self.avg_generated_answer_number = 0
-        self.avg_answer_number_deviation = 0
+        self.avg_generated_answer_number = -1
+        self.avg_answer_number_deviation = -1
         
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
 
-    def compute_statistics(self, results_dir):
-        for i, _ in enumerate(self.predictions):
-            id = self.predictions["QUESTIONNAIRE_ID"].values[i]
+    def compute_statistics(self, project_root, results_dir):
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
-            self._compute_deviations()
-            
+
+            self._check_json_integrity(project_root, pred[1])
+            if self.is_json:
+                self._compute_deviations(project_root, pred[1])
+
             self.statistics = pd.concat([self.statistics, pd.DataFrame({
                 "QUESTIONNAIRE_ID": [id],
+                "CONVERSION_ERROR": [self.conversion_error],
+                "IS_JSON": [self.is_json],
+                "ERROR_MESSAGE": [self.error_message],
+                "GENERATED_QUESTIONNAIRES": [self.generated_questionnaires],
+                "QUESTIONS_WITH_MISSING_ANSWERS": [self.questions_with_missing_answers],
                 "GENERATED_QUESTION_NUMBER": [self.generated_question_number],
                 "QUESTION_NUMBER_DEVIATION": [self.question_number_deviation],
                 "AVERAGE_GENERATED_ANSWER_NUMBER": [self.avg_generated_answer_number],
@@ -109,15 +121,19 @@ class Results:
         self.statistics.to_csv(os.path.join(results_dir, self.STATISTICS_FILENAME), index=False)
     
 
-    def _check_json_integrity(self):
-        self.conversion_error, self.generated_questionnaires, self.questions_with_missing_answers = TFQuestionnairesDataset.check_json_integrity(self.questionnaire_id, self.predictions)
+    def _check_json_integrity(self, project_root, pred):
+        result = TFQuestionnairesDataset.check_json_integrity(project_root, pred["PREDICTED_JSON"])
+
+        self.conversion_error = result["conversion_error"]
+        self.is_json = result["is_json"]
+        self.error_message = result["error_message"]
+        self.generated_questionnaires = result["generated_questionnaires"]
+        self.questions_with_missing_answers = result["questions_with_missing_answers"]
 
 
-    def _compute_deviations(self):
-        pred = self.predictions[self.predictions["QUESTIONNAIRE_ID"] == self.questionnaire_id]
-
-        ground_truth = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"].values[0])
-        predicted = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"].values[0])
+    def _compute_deviations(self, project_root, pred):
+        ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
+        predicted = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
 
         # Question number deviation
         self.generated_question_number = len(predicted.questions)
@@ -141,35 +157,44 @@ class Results:
         print("===========================================")
 
     
-    def compute_bleu_scores(self, results_dir):
-        for i, _ in enumerate(self.predictions):
-            id = self.predictions["QUESTIONNAIRE_ID"].values[i]
+    def compute_bleu_scores(self, project_root, results_dir):
+        bleu_scores_path = os.path.join(results_dir, "BLEU_Scores")
+            
+        if not os.path.exists(bleu_scores_path):
+            os.makedirs(bleu_scores_path)
+
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
-            self._compute_bleu_scores()
+            self._compute_bleu_scores(project_root, pred[1])
 
-        self.question_bleu_scores.to_csv(os.path.join(results_dir, self.QUESTION_BLEU_FILENAME), index=False)
-        self.answer_bleu_scores.to_csv(os.path.join(results_dir, self.ANSWER_BLEU_FILENAME), index=False)
+            answer_filename = f"{self.QUESTION_BLEU_FILENAME}__QST_{id}.csv"
+            question_filename = f"{self.ANSWER_BLEU_FILENAME}__QST_{id}.csv"
+            self.question_bleu_scores.to_csv(os.path.join(bleu_scores_path, answer_filename), index=False)
+            self.answer_bleu_scores.to_csv(os.path.join(bleu_scores_path, question_filename), index=False)
+            
+            self.clear()
 
 
-    def _compute_bleu_scores(self):
-        pred = self.predictions[self.predictions["QUESTIONNAIRE_ID"] == self.questionnaire_id]
+    def _compute_bleu_scores(self, project_root, pred):
+        try:
+            ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
 
-        ground_truth = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"].values[0])
-        generated = TFQuestionnairesDataset.from_json(questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"].values[0])
+            for question in generated.questions.iterrows():
+                qst_id = question[1]["ID"]
+                qst_text = question[1]["NAME"]
 
-        for question in generated.questions.iterrows():
-            qst_id = question[1]["ID"]
-            qst_text = question[1]["NAME"]
+                ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
 
-            ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
+                self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_blue_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
 
-            self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_blue_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
-
-            for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
-                ans_id = answer[1]["ID"]
-                ans_text = answer[1]["ANSWER"]
-                self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
-    
+                for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
+                    ans_id = answer[1]["ID"]
+                    ans_text = answer[1]["ANSWER"]
+                    self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
+        except Exception as e:
+            return
 
     def _compute_candidate_blue_score(self, id, candidate, ground_truth_references):
         question_split = candidate.split()

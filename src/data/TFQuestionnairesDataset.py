@@ -52,8 +52,7 @@ class TFQuestionnairesDataset:
         self.answers = pd.read_csv(answer_path, encoding='latin1')
 
 
-    def load_question_types(self):
-        project_root = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+    def load_question_types(self, project_root):
         data_dir_path = os.path.join(project_root, "data", "processed")
         question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
@@ -101,7 +100,7 @@ class TFQuestionnairesDataset:
         return json.dumps(data)
     
 
-    def from_json(json_data, questionnaire_id):
+    def from_json(project_root, json_data, questionnaire_id):
         result = TFQuestionnairesDataset()
         data = json.loads(json_data)["data"]
 
@@ -135,7 +134,7 @@ class TFQuestionnairesDataset:
         result.questionnaires = pd.DataFrame(questionnaire)[result.ESSENTIAL_COLUMNS_QUESTIONNAIRES]
         result.questions = pd.DataFrame(questions)[result.ESSENTIAL_COLUMNS_QUESTIONS]
         result.answers = pd.DataFrame(answers_flat)[result.ESSENTIAL_COLUMNS_ANSWERS]
-        result.question_types = result.load_question_types()
+        result.question_types = result.load_question_types(project_root)
 
         return result
     
@@ -166,26 +165,35 @@ class TFQuestionnairesDataset:
         result.answers = pd.DataFrame(answers_flat)[result.ESSENTIAL_COLUMNS_ANSWERS]
 
     
-    def check_json_integrity(json_data):
-        conversion_error = False
-        is_json = True
-        generated_questionnaires = 0
-        questions_with_missing_answers = 0
+    def check_json_integrity(project_root, json_data):
+        result = {
+            "conversion_error": False,
+            "is_json": True,
+            "error_message": "",
+            "generated_questionnaires": -1,
+            "questions_with_missing_answers": -1
+        }
 
         try:
+            # Try to understand if the generated JSON is valid
             data = json.loads(json_data)["data"]
-            generated_questionnaires = len(data["TF_QUESTIONNAIRES"])
+            result["generated_questionnaires"] = len(data["TF_QUESTIONNAIRES"])
+            
+            TFQuestionnairesDataset.from_json(project_root, json_data, 1)
 
             try:
-                TFQuestionnairesDataset._from_json(data)
-            except:
-                conversion_error = True
-                questions_with_missing_answers = TFQuestionnairesDataset._get_questions_with_missing_answers(data)
-        except:
-            conversion_error = True
-            is_json = False
+                # Try to understand if the generated JSON has all the properties
+                TFQuestionnairesDataset._from_json(data, 1)
+            except Exception as e:
+                result["error_message"] = str(e)
+                result["conversion_error"] = True
+                result["questions_with_missing_answers"] = TFQuestionnairesDataset._get_questions_with_missing_answers(data)
+        except Exception as e:
+            result["error_message"] = str(e)
+            result["conversion_error"] = True
+            result["is_json"] = False
 
-        return conversion_error, is_json, generated_questionnaires, questions_with_missing_answers
+        return result
     
 
     def _get_questions_with_missing_answers(data):

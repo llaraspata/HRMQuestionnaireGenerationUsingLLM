@@ -1,23 +1,46 @@
 import pandas as pd
 import os
+import sys
+sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.models.Results import Results
+
+
+PROJECT_ROOT = os.getcwd()
 
 def main():
 
     print("=================================================")
-    print("                 Model evaluation                ")
+    print("                 MODEL EVALUATION                ")
     print("=================================================")
 
     # TODO:
     # 1. For each folder in the models directory
-    #   2. Load the Results object (experiment_id is the folder name)
-    #   3. Set the questionnaire_id
-    #   4. Compute deviations -> TO BE COMPLETED
-    #   5. Compute BLEU scores -> TO BE IMPLEMENTED
-    #   6. Compute ROUGE scores -> TO BE IMPLEMENTED
-    #   7. Save the Results object -> TO BE IMPLEMENTED
+    #   4. Compute ROUGE scores -> TO BE IMPLEMENTED
+    models_path = os.path.join(PROJECT_ROOT, "models")
+    results_path = os.path.join(PROJECT_ROOT, "results")
 
+    for subfolder in os.listdir(models_path):
+        experiment_path = os.path.join(models_path, subfolder)
 
+        if os.path.isdir(experiment_path):
+            results = Results()
+            results.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
+            
+            exp_results_path = os.path.join(results_path, subfolder)
+            
+            if not os.path.exists(exp_results_path):
+                os.makedirs(exp_results_path)
+            
+            print(f"Experiment ID: {subfolder}")
+            print("\t - Computing statistics...")
+            results.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+
+            print("\t - Computing BLEU scores...")
+            results.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+    
+    print("=================================================")
+    print("                 END OF EVALUATION               ")
+    print("=================================================")
     
 
 if __name__ == '__main__':
