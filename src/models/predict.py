@@ -18,8 +18,7 @@ from src.prompts.ScenarioGenerator import ScenarioGenerator
 PROJECT_ROOT = os.getcwd()
 CONFIG_FILENAME = "experiment_config.json"
 PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
-                      "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
-                      "CONVERSION_ERROR"]
+                      "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS"]
 
 
 # -----------------
@@ -201,7 +200,6 @@ def _add_prediction(df, questionnaire_id, ground_truth="", prediction="", spent_
         "PROMPT_TOKENS": [prompt_tokens],
         "COMPLETITION_TOKENS": [completition_tokens],
         "TOTAL_TOKENS": [total_tokens],
-        "CONVERSION_ERROR": [""],
     })
 
     df = pd.concat([df, new_row], ignore_index=True)
