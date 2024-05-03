@@ -11,7 +11,9 @@ class Results:
                       "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
                       "CONVERSION_ERROR"]
     
-    STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
+    STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", 
+                          "CONVERSION_ERROR", "GENERATED_QUESTIONNAIRES", "QUESTIONS_WITH_MISSING_ANSWERS", 
+                          "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
                           "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
 
     BLEU_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
@@ -31,14 +33,23 @@ class Results:
     # ------------
     def __init__(self):
         self.experiment_id = None
-        self.questionnaire_id = None
         self.predictions = pd.DataFrame(columns=self.PREDICTION_COLUMNS)
         self.log = pd.DataFrame()
+
+        self.questionnaire_id = None
+
+        self.conversion_error = False
+        self.generated_questionnaires = 0
+        self.questions_with_missing_answers = 0
+
         self.generated_question_number = 0
         self.question_number_deviation = 0
+        
         self.avg_generated_answer_number = 0
         self.avg_answer_number_deviation = 0
+        
         self.statistics = pd.DataFrame(columns=self.STATISTICS_COLUMNS)
+        
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
@@ -63,11 +74,18 @@ class Results:
 
 
     def clear(self):
-        self.questionnaire_id = None
+        self.questionnaire_id = 0
+
+        self.conversion_error = False
+        self.generated_questionnaires = 0
+        self.questions_with_missing_answers = 0
+        
         self.generated_question_number = 0
         self.question_number_deviation = 0
+        
         self.avg_generated_answer_number = 0
         self.avg_answer_number_deviation = 0
+        
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
 
@@ -89,7 +107,11 @@ class Results:
             self.clear()
 
         self.statistics.to_csv(os.path.join(results_dir, self.STATISTICS_FILENAME), index=False)
-        
+    
+
+    def _check_json_integrity(self):
+        self.conversion_error, self.generated_questionnaires, self.questions_with_missing_answers = TFQuestionnairesDataset.check_json_integrity(self.questionnaire_id, self.predictions)
+
 
     def _compute_deviations(self):
         pred = self.predictions[self.predictions["QUESTIONNAIRE_ID"] == self.questionnaire_id]
