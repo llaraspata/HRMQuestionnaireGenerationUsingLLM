@@ -137,23 +137,55 @@ class TFQuestionnairesDataset:
         result.answers = pd.DataFrame(answers_flat)[result.ESSENTIAL_COLUMNS_ANSWERS]
         result.question_types = result.load_question_types()
 
-        return 
+        return result
+    
+
+    def _from_json(data, questionnaire_id):
+        result = TFQuestionnairesDataset()
+
+        questionnaire = data["TF_QUESTIONNAIRES"]
+        questionnaire[0]["ID"] = questionnaire_id
+        questions = questionnaire[0]["_TF_QUESTIONS"]
+        
+        # Generate dummy IDs for questions
+        for i, question in enumerate(questions):
+            question["ID"] = i
+            question["QUESTIONNAIRE_ID"] = questionnaire_id
+
+        answers = []
+        for question in questions:
+            asw = question["_TF_ANSWERS"]
+            for i, a in enumerate(asw):
+                a["ID"] = i
+                a["QUESTION_ID"] = question["ID"]
+            answers.append(asw)
+        answers_flat = list(itertools.chain.from_iterable(answers))
+
+        result.questionnaires = pd.DataFrame(questionnaire)[result.ESSENTIAL_COLUMNS_QUESTIONNAIRES]
+        result.questions = pd.DataFrame(questions)[result.ESSENTIAL_COLUMNS_QUESTIONS]
+        result.answers = pd.DataFrame(answers_flat)[result.ESSENTIAL_COLUMNS_ANSWERS]
+
     
     def check_json_integrity(json_data):
         conversion_error = False
+        is_json = True
         generated_questionnaires = 0
         questions_with_missing_answers = 0
 
         try:
-            TFQuestionnairesDataset.from_json(json_data)
-        except:
             data = json.loads(json_data)["data"]
-
-            conversion_error = True
             generated_questionnaires = len(data["TF_QUESTIONNAIRES"])
-            questions_with_missing_answers = TFQuestionnairesDataset._get_questions_with_missing_answers(data)
 
-        return conversion_error, generated_questionnaires, questions_with_missing_answers
+            try:
+                TFQuestionnairesDataset._from_json(data)
+            except:
+                conversion_error = True
+                questions_with_missing_answers = TFQuestionnairesDataset._get_questions_with_missing_answers(data)
+        except:
+            conversion_error = True
+            is_json = False
+
+        return conversion_error, is_json, generated_questionnaires, questions_with_missing_answers
     
 
     def _get_questions_with_missing_answers(data):
