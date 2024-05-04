@@ -3,7 +3,7 @@ import os
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
-class Results:
+class ModelEvaluator:
     # ------------
     # Constants
     # ------------
@@ -146,17 +146,6 @@ class Results:
         self.avg_answer_number_deviation = avg_ground_truth_answer_number - self.avg_generated_answer_number
 
 
-    def print_current_deviation_results(self):
-        print("===========================================")
-        print(f"    QUESTIONNAIRE {self.questionnaire_id}")
-        print("===========================================")
-        print("Generated Question Number: ", self.generated_question_number)
-        print("Question Number Deviation: ", self.question_number_deviation)
-        print("Average Generated Answer Number: ", self.avg_generated_answer_number)
-        print("Average Answer Number Deviation: ", self.avg_answer_number_deviation)
-        print("===========================================")
-
-    
     def compute_bleu_scores(self, project_root, results_dir):
         bleu_scores_path = os.path.join(results_dir, "BLEU_Scores")
             

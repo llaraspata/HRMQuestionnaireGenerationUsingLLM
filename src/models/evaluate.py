@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
-from src.models.Results import Results
+from src.models.ModelEvaluator import ModelEvaluator
 
 
 PROJECT_ROOT = os.getcwd()
@@ -23,8 +23,8 @@ def main():
         experiment_path = os.path.join(models_path, subfolder)
 
         if os.path.isdir(experiment_path):
-            results = Results()
-            results.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
+            evaulator = ModelEvaluator()
+            evaulator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             
             exp_results_path = os.path.join(results_path, subfolder)
             
@@ -33,10 +33,10 @@ def main():
             
             print(f"Experiment ID: {subfolder}")
             print("\t - Computing statistics...")
-            results.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            evaulator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             print("\t - Computing BLEU scores...")
-            results.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            evaulator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
     
     print("=================================================")
     print("                 END OF EVALUATION               ")
