@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+from rouge_score import rouge_scorer
 
 class ModelEvaluator:
     # ------------
@@ -18,6 +19,11 @@ class ModelEvaluator:
 
     BLEU_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
 
+    ROUGE_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH",
+                     "R1_PRECISION", "R1_RECALL", "R1_F1_SCORE",
+                     "R2_PRECISION", "R2_RECALL", "R2_F1_SCORE",
+                     "RL_PRECISION", "RL_RECALL", "RL_F1_SCORE"]
+
     PREDICTIONS_FILENAME = "predictions.pkl"
     LOG_FILENAME = "log.txt"
 
@@ -25,7 +31,11 @@ class ModelEvaluator:
     QUESTION_BLEU_FILENAME = "question_bleu_scores"
     ANSWER_BLEU_FILENAME = "answer_bleu_scores"
 
-    N_GRAMS_WEIGHTS = (0.25, 0.25, 0.25, 0.25)
+    QUESTION_ROUGE_FILENAME = "question_rouge_scores"
+    ANSWER_ROUGE_FILENAME = "answer_rouge_scores"
+
+    N_GRAMS_WEIGHTS = (0.5, 0.5, 0, 0)
+
 
 
     # ------------
@@ -54,6 +64,10 @@ class ModelEvaluator:
         
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
+
+        self.scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
+        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
 
     
     # ------------
@@ -92,6 +106,9 @@ class ModelEvaluator:
         
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
+
+        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
 
 
     def compute_statistics(self, project_root, results_dir):
@@ -157,10 +174,10 @@ class ModelEvaluator:
             self.set_questionnaire_id(id)
             self._compute_bleu_scores(project_root, pred[1])
 
-            answer_filename = f"{self.QUESTION_BLEU_FILENAME}__QST_{id}.csv"
-            question_filename = f"{self.ANSWER_BLEU_FILENAME}__QST_{id}.csv"
-            self.question_bleu_scores.to_csv(os.path.join(bleu_scores_path, answer_filename), index=False)
-            self.answer_bleu_scores.to_csv(os.path.join(bleu_scores_path, question_filename), index=False)
+            question_filename = f"{self.QUESTION_BLEU_FILENAME}__QST_{id}.csv"
+            answer_filename = f"{self.ANSWER_BLEU_FILENAME}__QST_{id}.csv"
+            self.question_bleu_scores.to_csv(os.path.join(bleu_scores_path, question_filename), index=False)
+            self.answer_bleu_scores.to_csv(os.path.join(bleu_scores_path, answer_filename), index=False)
             
             self.clear()
 
@@ -173,17 +190,17 @@ class ModelEvaluator:
             for question in generated.questions.iterrows():
                 qst_id = question[1]["ID"]
                 qst_text = question[1]["NAME"]
-
                 ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
-
                 self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_blue_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
 
                 for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
                     ans_id = answer[1]["ID"]
                     ans_text = answer[1]["ANSWER"]
                     self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
+        
         except Exception as e:
             return
+
 
     def _compute_candidate_blue_score(self, id, candidate, ground_truth_references):
         question_split = candidate.split()
@@ -199,6 +216,71 @@ class ModelEvaluator:
                 "GENERATED": [candidate],
                 "GROUND_TRUTH": [reference],
                 "BLEU_SCORE": [bleu_core]
+            })
+
+            df = pd.concat([df, new_row], ignore_index=True)
+
+        return df
+
+
+    def compute_rouge_scores(self, project_root, results_dir):
+        rouge_scores_path = os.path.join(results_dir, "ROUGE_Scores")
+            
+        if not os.path.exists(rouge_scores_path):
+            os.makedirs(rouge_scores_path)
+
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
+            self.set_questionnaire_id(id)
+            self._compute_rouge_scores(project_root, pred[1])
+
+            answer_filename = f"{self.ANSWER_ROUGE_FILENAME}__QST_{id}.csv"
+            question_filename = f"{self.QUESTION_ROUGE_FILENAME}__QST_{id}.csv"
+            self.question_bleu_scores.to_csv(os.path.join(rouge_scores_path, question_filename), index=False)
+            self.answer_bleu_scores.to_csv(os.path.join(rouge_scores_path, answer_filename), index=False)
+            
+            self.clear()
+
+
+    def _compute_rouge_scores(self, project_root, pred):
+        try:
+            ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
+
+            for question in generated.questions.iterrows():
+                qst_id = question[1]["ID"]
+                qst_text = question[1]["NAME"]
+                ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
+                self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_rouge_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
+
+                for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
+                    ans_id = answer[1]["ID"]
+                    ans_text = answer[1]["ANSWER"]
+                    self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_rouge_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
+        
+        except Exception as e:
+            return
+
+
+    def _compute_candidate_rouge_score(self, id, candidate, ground_truth_references):
+        df = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+
+        for reference in ground_truth_references:
+            scores = self.scorer.score(reference, candidate)
+            
+            new_row = pd.DataFrame({
+                "ID": [id],
+                "GENERATED": [candidate],
+                "GROUND_TRUTH": [reference],
+                "R1_PRECISION": [scores["rouge1"].precision],
+                "R1_RECALL": [scores["rouge1"].recall],
+                "R1_F1_SCORE": [scores["rouge1"].fmeasure],
+                "R2_PRECISION": [scores["rouge2"].precision],
+                "R2_RECALL": [scores["rouge2"].recall],
+                "R2_F1_SCORE": [scores["rouge2"].fmeasure],
+                "RL_PRECISION": [scores["rougeL"].precision],
+                "RL_RECALL": [scores["rougeL"].recall],
+                "RL_F1_SCORE": [scores["rougeL"].fmeasure]
             })
 
             df = pd.concat([df, new_row], ignore_index=True)
