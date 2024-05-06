@@ -106,13 +106,23 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 # Record the start time
                 start_time = time.time()
 
-                response = client.chat.completions.create(
-                    model = conf["model"],
-                    messages=messages,
-                    temperature=conf["temperature"],
-                    max_tokens=conf["max_tokens"],
-                    frequency_penalty=conf["frequency_penalty"]
-                )
+                if (conf["response_format"] is not None) :
+                    response = client.chat.completions.create(
+                        model = conf["model"],
+                        messages=messages,
+                        temperature=conf["temperature"],
+                        max_tokens=conf["max_tokens"],
+                        frequency_penalty=conf["frequency_penalty"],
+                        response_format=conf["response_format"]
+                    )
+                else:
+                    response = client.chat.completions.create(
+                        model = conf["model"],
+                        messages=messages,
+                        temperature=conf["temperature"],
+                        max_tokens=conf["max_tokens"],
+                        frequency_penalty=conf["frequency_penalty"]
+                    )
 
                 # Record the end time
                 end_time = time.time()
