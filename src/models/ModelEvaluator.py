@@ -17,12 +17,17 @@ class ModelEvaluator:
                           "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
                           "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
 
-    BLEU_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
+    BLEU_COLUMNS_QUESTION = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
+    BLEU_COLUMNS_ANSWER = ["ID", "QUESTION_ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
 
-    ROUGE_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH",
-                     "R1_PRECISION", "R1_RECALL", "R1_F1_SCORE",
-                     "R2_PRECISION", "R2_RECALL", "R2_F1_SCORE",
-                     "RL_PRECISION", "RL_RECALL", "RL_F1_SCORE"]
+    ROUGE_COLUMNS_QUESTION = ["ID", "GENERATED", "GROUND_TRUTH",
+                              "R1_PRECISION", "R1_RECALL", "R1_F1_SCORE",
+                              "R2_PRECISION", "R2_RECALL", "R2_F1_SCORE",
+                              "RL_PRECISION", "RL_RECALL", "RL_F1_SCORE"]
+    ROUGE_COLUMNS_ANSWER = ["ID", "QUESTION_ID", "GENERATED", "GROUND_TRUTH",
+                            "R1_PRECISION", "R1_RECALL", "R1_F1_SCORE",
+                            "R2_PRECISION", "R2_RECALL", "R2_F1_SCORE",
+                            "RL_PRECISION", "RL_RECALL", "RL_F1_SCORE"]
 
     PREDICTIONS_FILENAME = "predictions.pkl"
     LOG_FILENAME = "log.txt"
@@ -62,12 +67,12 @@ class ModelEvaluator:
         
         self.statistics = pd.DataFrame(columns=self.STATISTICS_COLUMNS)
         
-        self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
-        self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
+        self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_QUESTION)
+        self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_ANSWER)
 
         self.scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
-        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
-        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_QUESTION)
+        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
 
     
     # ------------
@@ -104,11 +109,11 @@ class ModelEvaluator:
         self.avg_generated_answer_number = -1
         self.avg_answer_number_deviation = -1
         
-        self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
-        self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS)
+        self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_QUESTION)
+        self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_ANSWER)
 
-        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
-        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+        self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_QUESTION)
+        self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
 
 
     def compute_statistics(self, project_root, results_dir):
@@ -174,10 +179,13 @@ class ModelEvaluator:
             self.set_questionnaire_id(id)
             self._compute_bleu_scores(project_root, pred[1])
 
-            question_filename = f"{self.QUESTION_BLEU_FILENAME}__QST_{id}.csv"
-            answer_filename = f"{self.ANSWER_BLEU_FILENAME}__QST_{id}.csv"
-            self.question_bleu_scores.to_csv(os.path.join(bleu_scores_path, question_filename), index=False)
-            self.answer_bleu_scores.to_csv(os.path.join(bleu_scores_path, answer_filename), index=False)
+            if not self.question_bleu_scores.empty:
+                question_filename = f"{self.QUESTION_BLEU_FILENAME}__QST_{id}.csv"
+                self.question_bleu_scores.to_csv(os.path.join(bleu_scores_path, question_filename), index=False)
+
+            if not self.answer_bleu_scores.empty:
+                answer_filename = f"{self.ANSWER_BLEU_FILENAME}__QST_{id}.csv"
+                self.answer_bleu_scores.to_csv(os.path.join(bleu_scores_path, answer_filename), index=False)
             
             self.clear()
 
@@ -196,27 +204,38 @@ class ModelEvaluator:
                 for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
                     ans_id = answer[1]["ID"]
                     ans_text = answer[1]["ANSWER"]
-                    self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
+                    self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, 
+                                                         self._compute_candidate_blue_score(ans_id, ans_text, ground_truth_answers["ANSWER"], is_question=False, question_id=qst_id)
+                                                        ], ignore_index=True)
         
         except Exception as e:
             return
 
 
-    def _compute_candidate_blue_score(self, id, candidate, ground_truth_references):
+    def _compute_candidate_blue_score(self, id, candidate, ground_truth_references, is_question=True, question_id=None):
         question_split = candidate.split()
 
-        df = pd.DataFrame(columns=self.BLEU_COLUMNS)
+        df = pd.DataFrame(columns=self.BLEU_COLUMNS_QUESTION)
 
         for reference in ground_truth_references:
             reference_split = [reference.split()]
             bleu_core = sentence_bleu(reference_split, question_split, smoothing_function=SmoothingFunction().method4, weights=self.N_GRAMS_WEIGHTS)
 
-            new_row = pd.DataFrame({
-                "ID": [id],
-                "GENERATED": [candidate],
-                "GROUND_TRUTH": [reference],
-                "BLEU_SCORE": [bleu_core]
-            })
+            if is_question:
+                new_row = pd.DataFrame({
+                    "ID": [id],
+                    "GENERATED": [candidate],
+                    "GROUND_TRUTH": [reference],
+                    "BLEU_SCORE": [bleu_core]
+                })
+            else:
+                new_row = pd.DataFrame({
+                    "ID": [id],
+                    "QUESTION_ID": question_id,
+                    "GENERATED": [candidate],
+                    "GROUND_TRUTH": [reference],
+                    "BLEU_SCORE": [bleu_core]
+                })
 
             df = pd.concat([df, new_row], ignore_index=True)
 
@@ -234,10 +253,13 @@ class ModelEvaluator:
             self.set_questionnaire_id(id)
             self._compute_rouge_scores(project_root, pred[1])
 
-            answer_filename = f"{self.ANSWER_ROUGE_FILENAME}__QST_{id}.csv"
-            question_filename = f"{self.QUESTION_ROUGE_FILENAME}__QST_{id}.csv"
-            self.question_bleu_scores.to_csv(os.path.join(rouge_scores_path, question_filename), index=False)
-            self.answer_bleu_scores.to_csv(os.path.join(rouge_scores_path, answer_filename), index=False)
+            if not self.question_rouge_scores.empty:
+                question_filename = f"{self.QUESTION_ROUGE_FILENAME}__QST_{id}.csv"
+                self.question_rouge_scores.to_csv(os.path.join(rouge_scores_path, question_filename), index=False)
+
+            if not self.answer_rouge_scores.empty:
+                answer_filename = f"{self.ANSWER_ROUGE_FILENAME}__QST_{id}.csv"
+                self.answer_rouge_scores.to_csv(os.path.join(rouge_scores_path, answer_filename), index=False)
             
             self.clear()
 
@@ -251,37 +273,58 @@ class ModelEvaluator:
                 qst_id = question[1]["ID"]
                 qst_text = question[1]["NAME"]
                 ground_truth_answers = ground_truth.answers[ground_truth.answers["QUESTION_ID"] == qst_id]
-                self.question_bleu_scores = pd.concat([self.question_bleu_scores, self._compute_candidate_rouge_score(qst_id, qst_text, ground_truth.questions["NAME"])], ignore_index=True)
+                self.question_rouge_scores = pd.concat([self.question_rouge_scores, 
+                                                        self._compute_candidate_rouge_score(qst_id, qst_text, ground_truth.questions["NAME"])
+                                                       ], ignore_index=True)
 
                 for answer in generated.answers[generated.answers["QUESTION_ID"] == qst_id].iterrows():
                     ans_id = answer[1]["ID"]
                     ans_text = answer[1]["ANSWER"]
-                    self.answer_bleu_scores = pd.concat([self.answer_bleu_scores, self._compute_candidate_rouge_score(ans_id, ans_text, ground_truth_answers["ANSWER"])], ignore_index=True)
+                    self.answer_rouge_scores = pd.concat([self.answer_rouge_scores, 
+                                                          self._compute_candidate_rouge_score(ans_id, ans_text, ground_truth_answers["ANSWER"], is_question=False, question_id=qst_id)
+                                                         ], ignore_index=True)
         
         except Exception as e:
             return
 
 
-    def _compute_candidate_rouge_score(self, id, candidate, ground_truth_references):
-        df = pd.DataFrame(columns=self.ROUGE_COLUMNS)
+    def _compute_candidate_rouge_score(self, id, candidate, ground_truth_references, is_question=True, question_id=None):
+        df = pd.DataFrame(columns=self.ROUGE_COLUMNS_QUESTION)
 
         for reference in ground_truth_references:
             scores = self.scorer.score(reference, candidate)
             
-            new_row = pd.DataFrame({
-                "ID": [id],
-                "GENERATED": [candidate],
-                "GROUND_TRUTH": [reference],
-                "R1_PRECISION": [scores["rouge1"].precision],
-                "R1_RECALL": [scores["rouge1"].recall],
-                "R1_F1_SCORE": [scores["rouge1"].fmeasure],
-                "R2_PRECISION": [scores["rouge2"].precision],
-                "R2_RECALL": [scores["rouge2"].recall],
-                "R2_F1_SCORE": [scores["rouge2"].fmeasure],
-                "RL_PRECISION": [scores["rougeL"].precision],
-                "RL_RECALL": [scores["rougeL"].recall],
-                "RL_F1_SCORE": [scores["rougeL"].fmeasure]
-            })
+            if is_question:
+                new_row = pd.DataFrame({
+                    "ID": [id],
+                    "GENERATED": [candidate],
+                    "GROUND_TRUTH": [reference],
+                    "R1_PRECISION": [scores["rouge1"].precision],
+                    "R1_RECALL": [scores["rouge1"].recall],
+                    "R1_F1_SCORE": [scores["rouge1"].fmeasure],
+                    "R2_PRECISION": [scores["rouge2"].precision],
+                    "R2_RECALL": [scores["rouge2"].recall],
+                    "R2_F1_SCORE": [scores["rouge2"].fmeasure],
+                    "RL_PRECISION": [scores["rougeL"].precision],
+                    "RL_RECALL": [scores["rougeL"].recall],
+                    "RL_F1_SCORE": [scores["rougeL"].fmeasure]
+                })
+            else:
+                new_row = pd.DataFrame({
+                    "ID": [id],
+                    "QUESTION_ID": question_id,
+                    "GENERATED": [candidate],
+                    "GROUND_TRUTH": [reference],
+                    "R1_PRECISION": [scores["rouge1"].precision],
+                    "R1_RECALL": [scores["rouge1"].recall],
+                    "R1_F1_SCORE": [scores["rouge1"].fmeasure],
+                    "R2_PRECISION": [scores["rouge2"].precision],
+                    "R2_RECALL": [scores["rouge2"].recall],
+                    "R2_F1_SCORE": [scores["rouge2"].fmeasure],
+                    "RL_PRECISION": [scores["rougeL"].precision],
+                    "RL_RECALL": [scores["rougeL"].recall],
+                    "RL_F1_SCORE": [scores["rougeL"].fmeasure]
+                })
 
             df = pd.concat([df, new_row], ignore_index=True)
 
