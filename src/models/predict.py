@@ -106,7 +106,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 # Record the start time
                 start_time = time.time()
 
-                if (conf["response_format"] is not None) :
+                if "response_format" in conf.keys():
                     response = client.chat.completions.create(
                         model = conf["model"],
                         messages=messages,
