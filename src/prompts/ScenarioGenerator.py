@@ -81,7 +81,6 @@ class ScenarioGenerator:
             sample_questionnaires_ids.append(sample_questionnaire_id)
 
             topic = dataset.get_questionnaire_topic(sample_questionnaire_id)
-            question_type = dataset.get_questionnaire_question_type(sample_questionnaire_id)
             question_number = dataset.get_questionnaire_question_number(sample_questionnaire_id)
 
             formatted_json = dataset.to_json(sample_questionnaire_id)
@@ -90,12 +89,11 @@ class ScenarioGenerator:
                 log_file.write("\n\n-------------------")
                 log_file.write(f"\n[SAMPLE] QUESTIONNAIRE_ID: {current_questionnaire_id}")
                 log_file.write(f"\n     - Topic: {topic}")
-                log_file.write(f"\n     - Question type: {question_type}")
                 log_file.write(f"\n     - Question number: {question_number}")
 
             # Build sample user and assistant prompts
             sample_user_prompt = self.user_prompt_generator.generate_prompt(has_full_params=has_full_params, topic=topic,
-                                                                            question_type=question_type, question_number=question_number)
+                                                                            question_number=question_number)
 
             assistant_prompt = self.assistant_prompt_generator.generate_prompt(json=formatted_json)
 
@@ -106,7 +104,6 @@ class ScenarioGenerator:
         # TEST USER PROMPT
         # -------------------
         topic = dataset.get_questionnaire_topic(current_questionnaire_id)
-        question_type = dataset.get_questionnaire_question_type(current_questionnaire_id)
         question_number = dataset.get_questionnaire_question_number(current_questionnaire_id)
 
         log_file.write("\n\n-------------------")
@@ -114,11 +111,10 @@ class ScenarioGenerator:
 
         if self.full_log:
             log_file.write(f"\n     - Topic: {topic}")
-            log_file.write(f"\n     - Question type: {question_type}")
             log_file.write(f"\n     - Question number: {question_number}")
 
         user_prompt = self.user_prompt_generator.generate_prompt(has_full_params=has_full_params, topic=topic,
-                                                                 question_type=question_type, question_number=question_number)
+                                                                 question_number=question_number)
 
         return system_prompt, all_sample_user_prompts, all_assistant_prompts, user_prompt
 

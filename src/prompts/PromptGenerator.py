@@ -18,7 +18,7 @@ class PromptGenerator:
     # Prompt generation
     # ------------
     def generate_prompt(self,
-                        has_full_params=True, topic="", question_type="", question_number=5,
+                        has_full_params=True, topic="", question_number=5,
                         question_types_data=[],
                         json=""):
         """
@@ -27,7 +27,6 @@ class PromptGenerator:
             Parameters:
             - has_full_params (bool): Whether the prompts includes all the questionnaire parameters.
             - topic (str): The questionnaire topic.
-            - question_type (str): The type of the questions to be generated.
             - question_nuber (int): The number of questions the questionnaire must to have.
             - question_types_data (DataFrame): The possible types of questions.
             - json (str): The generated questionnaire.
@@ -45,7 +44,7 @@ class PromptGenerator:
             self._generate_system_prompt(has_full_params, question_types_data)
 
         elif self.role == "user":
-            self._generate_user_prompt(has_full_params, topic, question_type, question_number)
+            self._generate_user_prompt(has_full_params, topic, question_number)
 
         elif self.role == "assistant":
             self._generate_assistant_prompt(json)
@@ -79,21 +78,20 @@ class PromptGenerator:
         self.prompt += sys_conf.IMPERATIVE_COMMAND
 
 
-    def _generate_user_prompt(self, has_full_params, topic, question_type, question_nuber):
+    def _generate_user_prompt(self, has_full_params, topic, question_nuber):
         """
             Generate the user's prompt.
 
             Parameters:
                 - has_full_params (bool): Whether the prompts includes all the questionnaire parameters.
                 - topic (str): The questionnaire topic.
-                - question_type (str): The type of the questions to be generated.
                 - question_nuber (int): The number of questions the questionnaire must to have.
 
             Returns:
                 - str: The formatted prompt.
         """
         if has_full_params:
-            self.prompt = usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber, question_type)
+            self.prompt = usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber)
         else:
             self.prompt = usr_conf.STANDARD_USER_WITH_ONLY_TOPIC % (topic)
 
