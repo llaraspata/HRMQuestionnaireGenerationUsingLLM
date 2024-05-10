@@ -329,3 +329,95 @@ class ModelEvaluator:
             df = pd.concat([df, new_row], ignore_index=True)
 
         return df
+    
+
+    def compute_bleu_score_distribution(self, results_dir):
+        bleu_scores_path = os.path.join(results_dir, "BLEU_Scores")
+
+        questionnaires_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+        max_questions_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "ID"])
+        max_answers_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "QUESTION_ID", "ID"])
+
+        for qst_id in self.predictions["QUESTIONNAIRE_ID"]:
+            questionnaire_new_row = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+            questionnaire_new_row["QUESTIONNAIRE_ID"] = [qst_id]
+            
+            for scores_csv in os.listdir(bleu_scores_path):
+                if str(qst_id) in scores_csv:
+                    if "question" in scores_csv:
+                        global_questions_scores = pd.read_csv(os.path.join(bleu_scores_path, scores_csv))
+
+                        max_questions_scores_df = ModelEvaluator._get_max_bleu_score(global_questions_scores)
+                        qst_distribution = ModelEvaluator._get_distribution_bleu_score(global_questions_scores)
+                        max_questions_scores_df = ModelEvaluator._concat_bleu_scores_and_distribution(max_questions_scores_df, qst_distribution)
+
+                        distribution = ModelEvaluator._get_distribution_bleu_score(max_questions_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = ModelEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
+
+                        max_questions_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_questions_scores_df)
+                        max_questions_scores = pd.concat([max_questions_scores, max_questions_scores_df], ignore_index=True)
+
+                    elif "answer" in scores_csv:
+                        global_answers_scores = pd.read_csv(os.path.join(bleu_scores_path, scores_csv))
+
+                        max_answers_scores_df = ModelEvaluator._get_max_bleu_score(global_answers_scores, is_question=False)
+                        asw_distribution = ModelEvaluator._get_distribution_bleu_score(global_answers_scores, is_question=False)
+                        max_answers_scores_df = ModelEvaluator._concat_bleu_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
+
+                        distribution =  ModelEvaluator._get_distribution_bleu_score(max_answers_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = ModelEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
+
+                        max_answers_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_answers_scores_df)
+                        max_answers_scores = pd.concat([max_answers_scores, max_answers_scores_df], ignore_index=True)
+
+            questionnaires_scores = pd.concat([questionnaires_scores, questionnaire_new_row], ignore_index=True)
+
+        questionnaires_scores.to_csv(os.path.join(results_dir, "BLEU_questionnaires.csv"), index=False)
+        max_questions_scores.to_csv(os.path.join(results_dir, "BLEU_questions.csv"), index=False)
+        max_answers_scores.to_csv(os.path.join(results_dir, "BLEU_answers.csv"), index=False)
+
+
+    def _get_max_bleu_score(scores_df, is_question=True):
+        if is_question:
+            max_ids = scores_df.groupby('ID')['BLEU_SCORE'].idxmax()
+        else:
+            max_ids = scores_df.groupby(['QUESTION_ID', 'ID'])['BLEU_SCORE'].idxmax()
+        return scores_df.loc[max_ids]
+    
+
+    def _get_distribution_bleu_score(scores_df, at_questionnaire_level=False, is_question=True):
+        if at_questionnaire_level:
+            mean = scores_df['BLEU_SCORE'].mean()
+            variance = scores_df['BLEU_SCORE'].var()
+        else:
+            if is_question:
+                mean = scores_df.groupby('ID')['BLEU_SCORE'].mean()
+                variance = scores_df.groupby('ID')['BLEU_SCORE'].var()
+            else:
+                mean = scores_df.groupby(['QUESTION_ID', 'ID'])['BLEU_SCORE'].mean()
+                variance = scores_df.groupby(['QUESTION_ID', 'ID'])['BLEU_SCORE'].var()
+        return {
+            "mean": mean, 
+            "variance": variance
+            }
+    
+
+    def _concat_bleu_scores_and_distribution(scores_df, distribution, at_questionnaire_level=False, is_question=True):
+        if at_questionnaire_level:
+            if is_question:
+                scores_df["QST_BLEU_SCORE_MEAN"] = distribution['mean']
+                scores_df["QST_BLEU_SCORE_VAR"] = distribution['variance']
+            else:
+                scores_df["ASW_BLEU_SCORE_MEAN"] = distribution['mean']
+                scores_df["ASW_BLEU_SCORE_VAR"] = distribution['variance']
+
+        else:
+            if is_question:
+                scores_df = scores_df.merge(distribution['mean'], on='ID', suffixes=('', '_MEAN'))
+                scores_df = scores_df.merge(distribution['variance'], on='ID', suffixes=('', '_VAR'))
+            else:
+                scores_df = scores_df.merge(distribution['mean'], on=['QUESTION_ID', 'ID'], suffixes=('', '_MEAN'))
+                scores_df = scores_df.merge(distribution['variance'], on=['QUESTION_ID', 'ID'], suffixes=('', '_VAR'))
+
+        return scores_df
+        

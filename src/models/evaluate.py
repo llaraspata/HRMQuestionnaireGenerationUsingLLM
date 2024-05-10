@@ -38,8 +38,13 @@ def main():
             print("\t - Computing BLEU scores...")
             evaulator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
+            print("\t - Computing BLEU scores distribution...")
+            evaulator.compute_bleu_score_distribution(results_dir=exp_results_path)
+
             print("\t - Computing ROUGE scores...")
             evaulator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+
+            
 
     print("=================================================")
     print("                 END OF EVALUATION               ")
