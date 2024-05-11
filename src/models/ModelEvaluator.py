@@ -421,3 +421,97 @@ class ModelEvaluator:
 
         return scores_df
         
+    
+    def _get_max_rouge_score(scores_df, is_question=True):
+        if is_question:
+            max_ids = scores_df.groupby('ID')['RL_F1_SCORE'].idxmax()
+        else:
+            max_ids = scores_df.groupby(['QUESTION_ID', 'ID'])['RL_F1_SCORE'].idxmax()
+        return scores_df.loc[max_ids]
+    
+
+    def _get_distribution_rouge_score(scores_df, at_questionnaire_level=False, is_question=True):
+        if at_questionnaire_level:
+            mean = scores_df['RL_F1_SCORE'].mean()
+            variance = scores_df['RL_F1_SCORE'].var()
+        else:
+            if is_question:
+                mean = scores_df.groupby('ID')['RL_F1_SCORE'].mean()
+                variance = scores_df.groupby('ID')['RL_F1_SCORE'].var()
+            else:
+                mean = scores_df.groupby(['QUESTION_ID', 'ID'])['RL_F1_SCORE'].mean()
+                variance = scores_df.groupby(['QUESTION_ID', 'ID'])['RL_F1_SCORE'].var()
+        return {
+            "mean": mean, 
+            "variance": variance
+            }
+    
+
+    def _concat_rouge_scores_and_distribution(scores_df, distribution, at_questionnaire_level=False, is_question=True):
+        if at_questionnaire_level:
+            if is_question:
+                scores_df["QST_ROUGE_SCORE_MEAN"] = distribution['mean']
+                scores_df["QST_ROUGE_SCORE_VAR"] = distribution['variance']
+            else:
+                scores_df["ASW_ROUGE_SCORE_MEAN"] = distribution['mean']
+                scores_df["ASW_ROUGE_SCORE_VAR"] = distribution['variance']
+
+        else:
+            if is_question:
+                scores_df = scores_df.merge(distribution['mean'], on='ID', suffixes=('', '_MEAN'))
+                scores_df = scores_df.merge(distribution['variance'], on='ID', suffixes=('', '_VAR'))
+            else:
+                scores_df = scores_df.merge(distribution['mean'], on=['QUESTION_ID', 'ID'], suffixes=('', '_MEAN'))
+                scores_df = scores_df.merge(distribution['variance'], on=['QUESTION_ID', 'ID'], suffixes=('', '_VAR'))
+
+        return scores_df
+        
+
+    def compute_rouge_score_distribution(self, results_dir):
+        rouge_scores_path = os.path.join(results_dir, "ROUGE_Scores")
+
+        columns_to_discard = ["R1_PRECISION", "R1_RECALL", "R1_F1_SCORE", "R2_PRECISION", "R2_RECALL", "R2_F1_SCORE", "RL_PRECISION", "RL_RECALL"]
+
+        questionnaires_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+        max_questions_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "ID"])
+        max_answers_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "QUESTION_ID", "ID"])
+
+        for qst_id in self.predictions["QUESTIONNAIRE_ID"]:
+            questionnaire_new_row = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+            questionnaire_new_row["QUESTIONNAIRE_ID"] = [qst_id]
+            
+            for scores_csv in os.listdir(rouge_scores_path):
+                if str(qst_id) in scores_csv:
+                    if "question" in scores_csv:
+                        global_questions_scores = pd.read_csv(os.path.join(rouge_scores_path, scores_csv))
+                        global_questions_scores = global_questions_scores.drop(columns=columns_to_discard, axis=1)
+
+                        max_questions_scores_df = ModelEvaluator._get_max_rouge_score(global_questions_scores)
+                        qst_distribution = ModelEvaluator._get_distribution_rouge_score(global_questions_scores)
+                        max_questions_scores_df = ModelEvaluator._concat_rouge_scores_and_distribution(max_questions_scores_df, qst_distribution)
+
+                        distribution = ModelEvaluator._get_distribution_rouge_score(max_questions_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = ModelEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
+
+                        max_questions_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_questions_scores_df)
+                        max_questions_scores = pd.concat([max_questions_scores, max_questions_scores_df], ignore_index=True)
+
+                    elif "answer" in scores_csv:
+                        global_answers_scores = pd.read_csv(os.path.join(rouge_scores_path, scores_csv))
+                        global_answers_scores = global_answers_scores.drop(columns=columns_to_discard, axis=1)
+
+                        max_answers_scores_df = ModelEvaluator._get_max_rouge_score(global_answers_scores, is_question=False)
+                        asw_distribution = ModelEvaluator._get_distribution_rouge_score(global_answers_scores, is_question=False)
+                        max_answers_scores_df = ModelEvaluator._concat_rouge_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
+
+                        distribution = ModelEvaluator._get_distribution_rouge_score(max_answers_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = ModelEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
+
+                        max_answers_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_answers_scores_df)
+                        max_answers_scores = pd.concat([max_answers_scores, max_answers_scores_df], ignore_index=True)
+
+            questionnaires_scores = pd.concat([questionnaires_scores, questionnaire_new_row], ignore_index=True)
+
+        questionnaires_scores.to_csv(os.path.join(results_dir, "ROUGE_L_F1_questionnaires.csv"), index=False)
+        max_questions_scores.to_csv(os.path.join(results_dir, "ROUGE_L_F1_questions.csv"), index=False)
+        max_answers_scores.to_csv(os.path.join(results_dir, "ROUGE_L_F1_answers.csv"), index=False)

@@ -44,6 +44,9 @@ def main():
             print("\t - Computing ROUGE scores...")
             evaulator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
+            print("\t - Computing ROUGE-L (F1) scores distribution...")
+            evaulator.compute_rouge_score_distribution(results_dir=exp_results_path)
+
             
 
     print("=================================================")
