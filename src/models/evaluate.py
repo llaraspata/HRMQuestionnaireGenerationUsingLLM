@@ -13,9 +13,6 @@ def main():
     print("                 MODEL EVALUATION                ")
     print("=================================================")
 
-    # TODO:
-    # 1. For each folder in the models directory
-    #   4. Compute ROUGE scores -> TO BE IMPLEMENTED
     models_path = os.path.join(PROJECT_ROOT, "models")
     results_path = os.path.join(PROJECT_ROOT, "results")
 
@@ -49,8 +46,6 @@ def main():
 
             print("\t 6. Computing Intraquestionnaire Syntactic Similarity...")
             evaulator.compute_intraquestionnaire_syntactic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
-            
 
     print("=================================================")
     print("                 END OF EVALUATION               ")
