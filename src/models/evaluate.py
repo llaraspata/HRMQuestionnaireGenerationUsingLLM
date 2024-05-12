@@ -32,20 +32,23 @@ def main():
                 os.makedirs(exp_results_path)
             
             print(f"Experiment ID: {subfolder}")
-            print("\t - Computing statistics...")
+            print("\t 1. Computing statistics...")
             evaulator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
-            print("\t - Computing BLEU scores...")
+            print("\t 2. Computing BLEU scores...")
             evaulator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
-            print("\t - Computing BLEU scores distribution...")
+            print("\t 3. Computing BLEU scores distribution...")
             evaulator.compute_bleu_score_distribution(results_dir=exp_results_path)
 
-            print("\t - Computing ROUGE scores...")
+            print("\t 4. Computing ROUGE scores...")
             evaulator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
-            print("\t - Computing ROUGE-L (F1) scores distribution...")
+            print("\t 5. Computing ROUGE-L (F1) scores distribution...")
             evaulator.compute_rouge_score_distribution(results_dir=exp_results_path)
+
+            print("\t 6. Computing Intraquestionnaire Syntactic Similarity...")
+            evaulator.compute_intraquestionnaire_syntactic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             
 
