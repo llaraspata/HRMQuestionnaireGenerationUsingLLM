@@ -32,4 +32,4 @@ QUESTION_TYPES_DESCRIPTION = """\nThe admitted question's types are the followin
 SINGLE_QUESTION_TYPE_DESCRIPTION = """\n  - ID: %d, DESCRIPTION: %s"""
 
 
-IMPERATIVE_COMMAND = """Be creative and avoid using the same strucute while generating questions."""
+IMPERATIVE_COMMAND = """\nBe creative and avoid using the same structure while generating questions."""
