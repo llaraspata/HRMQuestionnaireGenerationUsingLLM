@@ -1,4 +1,3 @@
-import pandas as pd
 import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
