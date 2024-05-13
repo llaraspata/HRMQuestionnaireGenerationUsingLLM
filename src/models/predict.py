@@ -85,7 +85,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
     n_questionnaires = len(dataset.questionnaires["ID"])
 
     log_path = os.path.join(run_dir, log_filename)
-    with open(log_path, "a") as log_file: 
+    with open(log_path, "w") as log_file: 
         
         for i in tqdm(range(n_questionnaires)):
             try:

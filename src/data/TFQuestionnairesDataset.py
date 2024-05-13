@@ -232,6 +232,12 @@ class TFQuestionnairesDataset:
         return len(answers) / len(questions)
 
 
+    def get_not_unique_question_codes(self):
+        not_unique = len(self.questions["CODE"]) - len(self.questions["CODE"].unique())
+        
+        return not_unique
+
+
     def get_sample_questionnaire_id(self, sample_questionnaire_ids, current_questionnaire_id):
         """
             Gets a random questionnaire id from, excluding those in the sample questionnaire ids list.
@@ -246,3 +252,4 @@ class TFQuestionnairesDataset:
                 random_index = current_questionnaire_id
 
         return self.questionnaires["ID"][random_index]
+    

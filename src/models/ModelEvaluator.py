@@ -15,7 +15,9 @@ class ModelEvaluator:
                       "CONVERSION_ERROR"]
     
     STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", 
-                          "CONVERSION_ERROR", "IS_JSON", "ERROR_MESSAGE", "GENERATED_QUESTIONNAIRES", "QUESTIONS_WITH_MISSING_ANSWERS", 
+                          "CONVERSION_ERROR", "IS_JSON", "ERROR_MESSAGE", 
+                          "GENERATED_QUESTIONNAIRES", 
+                          "QUESTIONS_WITH_MISSING_ANSWERS", "NOT_UNIOUE_QUESTION_CODES", 
                           "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
                           "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
 
@@ -61,10 +63,11 @@ class ModelEvaluator:
         self.is_json = True
         self.error_message = ""
         self.generated_questionnaires = -1
-        self.questions_with_missing_answers = -1
 
         self.generated_question_number = -1
         self.question_number_deviation = -1
+        self.questions_with_missing_answers = -1
+        self.not_unique_question_codes = -1
         
         self.avg_generated_answer_number = -1
         self.avg_answer_number_deviation = -1
@@ -105,11 +108,12 @@ class ModelEvaluator:
         self.is_json = True
         self.error_message = ""
         self.generated_questionnaires = -1
-        self.questions_with_missing_answers = -1
-        
+
         self.generated_question_number = -1
         self.question_number_deviation = -1
-        
+        self.questions_with_missing_answers = -1
+        self.not_unique_question_codes = -1
+
         self.avg_generated_answer_number = -1
         self.avg_answer_number_deviation = -1
         
@@ -137,6 +141,7 @@ class ModelEvaluator:
                 "GENERATED_QUESTIONNAIRES": [self.generated_questionnaires],
                 "QUESTIONS_WITH_MISSING_ANSWERS": [self.questions_with_missing_answers],
                 "GENERATED_QUESTION_NUMBER": [self.generated_question_number],
+                "NOT_UNIOUE_QUESTION_CODES": [self.not_unique_question_codes],
                 "QUESTION_NUMBER_DEVIATION": [self.question_number_deviation],
                 "AVERAGE_GENERATED_ANSWER_NUMBER": [self.avg_generated_answer_number],
                 "AVERAGE_ANSWER_NUMBER_DEVIATION": [self.avg_answer_number_deviation]
@@ -170,6 +175,8 @@ class ModelEvaluator:
         self.avg_generated_answer_number = predicted.get_average_answer_number(self.questionnaire_id)
         avg_ground_truth_answer_number = ground_truth.get_average_answer_number(self.questionnaire_id)
         self.avg_answer_number_deviation = avg_ground_truth_answer_number - self.avg_generated_answer_number
+
+        self.not_unique_question_codes = predicted.get_not_unique_question_codes()
 
 
     def compute_bleu_scores(self, project_root, results_dir):
