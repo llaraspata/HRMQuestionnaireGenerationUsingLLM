@@ -25,15 +25,17 @@ class ScenarioGenerator:
                 - dataset (TFQuestionnairesDataset): The dataset containing the questionnaires.
 
             Returns:
-            - system prompt (str): Prompt for the system role.
-            - sample user prompts (list<str>): List of prompts for the sample users role (used only in few-shots scenarios).
-            - assistant prompts (list<str>): List of prompts for the assistants role (used only in few-shots scenarios).
-            - user prompt (str): Prompt for the test user.
+                - system prompt (str): Prompt for the system role.
+                - sample user prompts (list<str>): List of prompts for the sample users role (used only in few-shots scenarios).
+                - assistant prompts (list<str>): List of prompts for the assistants role (used only in few-shots scenarios).
+                - user prompt (str): Prompt for the test user.
+                - sample_questionnaires_ids (list<int>): List of the sample questionnaires identifiers.
         """
         # TODO: when implementing RAG, remember to switch accorfingly to the prompt technique
-        system_prompt, sample_user_prompts, assistant_prompts, user_prompt = self.generate_k_shot_scenario(log_file, current_questionnaire_id, dataset)
+        system_prompt, sample_user_prompts, assistant_prompts, user_prompt, sample_questionnaires_ids = self.generate_k_shot_scenario(log_file,
+                                                                                                                                      current_questionnaire_id, dataset)
 
-        return system_prompt, sample_user_prompts, assistant_prompts, user_prompt
+        return system_prompt, sample_user_prompts, assistant_prompts, user_prompt, sample_questionnaires_ids
 
     def generate_k_shot_scenario(self, log_file, current_questionnaire_id, dataset):
         """
@@ -50,6 +52,8 @@ class ScenarioGenerator:
                 - assistant prompts (list<str>): List of prompts for the assistants role (used only in few-shots scenarios).
                 - user prompt (str): Prompt for the test user.
                 - ground truth (dict): The ground truth for the test questionnaire.
+                - sample_questionnaires_ids (list<int>): List of the sample questionnaires identifiers.
+
         """
         has_full_params = self.experiment_config["has_full_params"]
         k = self.experiment_config["k"]
@@ -116,7 +120,7 @@ class ScenarioGenerator:
         user_prompt = self.user_prompt_generator.generate_prompt(has_full_params=has_full_params, topic=topic,
                                                                  question_number=question_number)
 
-        return system_prompt, all_sample_user_prompts, all_assistant_prompts, user_prompt
+        return system_prompt, all_sample_user_prompts, all_assistant_prompts, user_prompt, sample_questionnaires_ids
 
 
     

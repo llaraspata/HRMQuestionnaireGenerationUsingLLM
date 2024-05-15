@@ -17,7 +17,7 @@ from src.prompts.ScenarioGenerator import ScenarioGenerator
 # -----------------
 PROJECT_ROOT = os.getcwd()
 CONFIG_FILENAME = "experiment_config.json"
-PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
+PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
                       "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS"]
 
 
@@ -91,8 +91,8 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
             try:
                 # Generate prompts
                 questionnaire_id = dataset.questionnaires["ID"][i]
-                system_prompt, sample_user_prompts, assistant_prompts, user_prompt = scenario.generate_scenario(log_file=log_file,
-                                                                                                                        current_questionnaire_id=questionnaire_id, dataset=dataset)
+                system_prompt, sample_user_prompts, assistant_prompts, user_prompt, sample_questionnaires_ids = scenario.generate_scenario(log_file=log_file,
+                                                                                                                current_questionnaire_id=questionnaire_id, dataset=dataset)
             
                 log_file.write("\n-------------------")
                 log_file.write("\n[PROMPTS]")
@@ -143,7 +143,8 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 time_spent = end_time - start_time
                 spent_secs_per_request.append(time_spent)
 
-                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
+                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
+                                                 ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
     
                 time.sleep(2)  # sleep for 2 seconds to avoid exceeding the OpenAI API rate limit or other kind of errors
@@ -196,13 +197,14 @@ def _build_messages(k, system_prompt, sample_user_prompts, assistant_prompts, us
     return messages
 
 
-def _add_prediction(df, questionnaire_id, ground_truth="", prediction="", spent_time=0, 
+def _add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], ground_truth="", prediction="", spent_time=0, 
                     prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):
     """
         Adds a prediction to the DataFrame.
     """
     new_row = pd.DataFrame({
         "QUESTIONNAIRE_ID": [questionnaire_id],
+        "SAMPLE_QUESTIONNAIRES_IDS": [sample_questionnaire_ids], 
         "GROUND_TRUTH_JSON": [ground_truth],
         "PREDICTED_JSON": [prediction],
         "REPORTED_EXCEPTION": [reported_exception],

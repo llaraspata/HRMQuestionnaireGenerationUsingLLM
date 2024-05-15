@@ -10,9 +10,10 @@ class ModelEvaluator:
     # ------------
     # Constants
     # ------------
-    PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
-                      "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
-                      "CONVERSION_ERROR"]
+    PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", 
+                          "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION",
+                          "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS",
+                          "CONVERSION_ERROR"]
     
     STATISTICS_COLUMNS = ["QUESTIONNAIRE_ID", 
                           "CONVERSION_ERROR", "IS_JSON", "ERROR_MESSAGE", 
@@ -46,8 +47,6 @@ class ModelEvaluator:
     BLEU_SCORE_N_GRAMS_WEIGHTS = (0.5, 0.5, 0, 0)
     INTRAQSTN_BLEU_SCORE_N_GRAMS_WEIGHTS = (0, 0, 0, 1)
     
-
-
 
     # ------------
     # Constructor
