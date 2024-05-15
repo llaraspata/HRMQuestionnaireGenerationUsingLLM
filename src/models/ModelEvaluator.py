@@ -131,7 +131,7 @@ class ModelEvaluator:
 
             self._check_json_integrity(project_root, pred[1])
             if self.is_json:
-                self._compute_deviations(project_root, pred[1])
+                self._compute_statistics(project_root, pred[1])
 
             self.statistics = pd.concat([self.statistics, pd.DataFrame({
                 "QUESTIONNAIRE_ID": [id],
@@ -162,7 +162,7 @@ class ModelEvaluator:
         self.questions_with_missing_answers = result["questions_with_missing_answers"]
 
 
-    def _compute_deviations(self, project_root, pred):
+    def _compute_statistics(self, project_root, pred):
         ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
         predicted = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
 
@@ -176,6 +176,7 @@ class ModelEvaluator:
         avg_ground_truth_answer_number = ground_truth.get_average_answer_number(self.questionnaire_id)
         self.avg_answer_number_deviation = avg_ground_truth_answer_number - self.avg_generated_answer_number
 
+        # Not unique question codes
         self.not_unique_question_codes = predicted.get_not_unique_question_codes()
 
 
