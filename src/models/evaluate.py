@@ -43,8 +43,8 @@ def main():
             print("\t 5. Computing ROUGE-L (F1) scores distribution...")
             evaulator.compute_rouge_score_distribution(results_dir=exp_results_path)
 
-            print("\t 6. Computing Intraquestionnaire Syntactic Similarity...")
-            evaulator._compute_intraquestionnaires_syntactic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            print("\t 6. Computing Syntactic Similarity...")
+            evaulator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
     print("=================================================")
     print("                 END OF EVALUATION               ")

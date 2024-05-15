@@ -88,6 +88,7 @@ class ModelEvaluator:
     # Methos
     # ------------
     def load_data(self, project_root, experiment_id):
+        self.experiment_id = experiment_id
         result_dir_path = os.path.join(project_root, "models", experiment_id)
 
         predictions_path = os.path.join(result_dir_path, self.PREDICTIONS_FILENAME)
@@ -537,7 +538,7 @@ class ModelEvaluator:
         intraquestionnaire_sintactic_similarity.to_csv(os.path.join(results_dir, "Intraquestionnaire_Syntactic_Similarity.csv"), index=False)
 
         # Syntactic Similarity with Sample Questionnaires (only for few-shot)
-        if self.experiment_id.startswith("1s") :
+        if self.experiment_id.startswith("1s") and "SAMPLE_QUESTIONNAIRES_IDS" in self.predictions.columns:
             dataset = TFQuestionnairesDataset()
             dataset.load_data(project_root=project_root)
 
@@ -618,17 +619,27 @@ class ModelEvaluator:
         sintactic_similarity_df = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_SAMPLE_COLUMNS)
         
         for pred in self.predictions.iterrows():
-            id = pred[1]["QUESTIONNAIRE_ID"]
-            self.set_questionnaire_id(id)
-
+            self.set_questionnaire_id(pred[1]["QUESTIONNAIRE_ID"])
             sample_ids = pred[1]["SAMPLE_QUESTIONNAIRES_IDS"]
-            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
+
+            sintactic_similarity_df = pd.concat([sintactic_similarity_df,
+                                                 self._compute_syntactic_similarity_with_sample(project_root=project_root, dataset=dataset, sample_ids=sample_ids, generated_json=pred[1]["PREDICTED_JSON"])
+                                                ], ignore_index=True)
+        
+        return sintactic_similarity_df
+    
+
+    def _compute_syntactic_similarity_with_sample(self, project_root, dataset, sample_ids, generated_json):
+        try:
+            sintactic_similarity_df = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_SAMPLE_COLUMNS)
+
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated_json)
 
             for sample_id in sample_ids:
                 sample_questionnaire = dataset.get_questionnaire_data(sample_id)
 
-                mean_bleu = self._compute_bleu_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
-                mean_rougeL = self._compute_rouge_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+                mean_bleu = ModelEvaluator._compute_bleu_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+                mean_rougeL = ModelEvaluator._compute_rouge_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
 
                 new_row = pd.DataFrame({
                     "QUESTIONNAIRE_ID": [self.questionnaire_id],
@@ -639,9 +650,11 @@ class ModelEvaluator:
                     "ROUGE_L_F1": [mean_rougeL["f1"]]
                 })
                 sintactic_similarity_df = pd.concat([sintactic_similarity_df, new_row], ignore_index=True)
+        except Exception as e:
+            return
         
         return sintactic_similarity_df
-    
+
 
     def _compute_bleu_with_sample(generated_questions, sample_questions):
         scores = []

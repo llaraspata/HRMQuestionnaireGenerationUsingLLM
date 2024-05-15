@@ -18,7 +18,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -47,112 +47,124 @@ Generate me a questionnaire on Work stress with 7 questions
     "data": {
         "TF_QUESTIONNAIRES": [
             {
-                "CODE": "WSQ01",
+                "CODE": "WORK_STRESS_238f4a3d-9e2c-4c7b-a5be-0c6e47a1d3ba",
                 "NAME": "Work Stress Questionnaire",
                 "_TF_QUESTIONS": [
                     {
-                        "CODE": "WSQ01_Q1",
-                        "NAME": "Do you feel overwhelmed by your workload?",
-                        "TYPE_ID": 2,
-                        "_TF_ANSWERS": [
-                            {"ANSWER":"Yes"},
-                            {"ANSWER":"No"}
+                        "CODE": "Q1",
+                        "NAME": "How often do you feel overwhelmed by your workload?",
+                        "TYPE_ID": 3,
+                        "_TF_ANSWERS" : [
+                            {"ANSWER" : 	"Not at all"},
+                            {"ANSWER" :	"Seldom"},
+                            {"ANSWER" :	"Some of the time"},
+                            {"ANSWER" :	"Frequently"},
+                            {"ANSWER" :	"All the time"}
                         ],
-                        "DISPLAY_ORDER" : 1
+						"DISPLAY_ORDER": 1
                     },
                     {
-                        "CODE": 	"WSQ01_Q2",
-                       	"NAME":"Do you feel like you have no control over your work?",
-                    	"TYPE_ID" : 1,
-                    	"_TF_ANSWERS":[
-                    		{"ANSWER":"Strongly Agree"},
-                    		{"ANSWER":"Agree"},
-                    		{"ANSWER":"Neutral"},
-                    		{"ANSWER":"Disagree"},
-                    		{"ANSWER":"Strongly Disagree"}
-                    		
-                    		
-                		],
-                		"DISPLAY_ORDER" : 2
-                	
-                	
-                	
-            	 },
-            	 {
-            	 	   		   
-            		   "_TF_ANSWERS":[],
-            		   
-            		   
+                        "CODE":"Q2",
+						"NAME":"Do you have enough control over your work?",
+						"TYPE_ID":2,
+						"_TF_ANSWERS":[
+						      {   ANSWER:"Yes, I have complete control."},
+							  {   ANSWER:"Mostly, but there are some things that are out of my hands."},
+							  {   ANSWER:"No, I have very little control over my work."}
+						  ],
+						  DISPLAY_ORDER:2
+				 },
+				 {
+					  CODE: 'Q3',
+					  NAME: 'How often do you take breaks during work hours?',
+					  TYPE_ID: 1,
+					  _TF_ANSWERS: [
+						  { ANSWER: 'Never' },
+						  { ANSWER: 'Rarely' },
+						  { ANSWER: 'Sometimes' },
+						  { ANSWER: 'Often' },
+						  { ANSWER:'Always'}
+					  ],
+                      DISPLAY_ORDER: 3
+			 	 }, 
+			 	 {
+				 	  CODE:'Q4',
+				 	  NAME:'Do you feel that your job is secure?',
+				 	  TYPE_ID:2,
+				 	  _TF_ANSWERS:[
+				 		  	  {'ANSWER':'Yes'},
+								  {'ANSWER':'No'}
+							  
+				 	  	 ],
+						 DISPLAY_ORDER : 4
+			   }, 
+			   {
+			       CODE:'Q5',
+				   NAME:'How well do you get along with your coworkers and superiors?',
+				   TYPE_ID :5,
+				   _TF_ANSWERS:[
+					   {'ANSWER':'Great'},
+					   {'ANSWER':'Good'},
+					   {'ANSWER': 'Average'},
+					   {'ANSWER': 'Poor'}, 
+					   {'Answer': 'Terrible'}
+				   ], 
+                   DISPLAY_ORDER : 5
+			   }, 
+			   {
+			       CODE :'Q6', 
+				   NAME :'Have you ever experienced any physical symptoms due to stress at work? ',
+                   TYPE_ID :2 ,
+                   _TF_ANSWERS:[
+                       {'Answer': 'Yes'}, 
+                       {'Answer': 'No'}
+                   ],  
+                   DISPLAY_ORDER :6  
+               }, 
 
-            		   
-            		   "_TEMPLATE_CODE":"",
-            		    
-            		   
-            		   "_CLONE_FROM_TEMPLATE":"",
-            		     
-            		     
-            		    
+               {
 
+                  CODE :'Q7', 
 
-					 
-					 
-					 
-					 
+                  NAME :"What is the main cause of stress at work for you?", 
 
+                  TYPE_ID :-,
 
+                  _TF_ANSWERS:[
 
+                      {
 
-            	 },
-                   {  
-                     			  
-                      		       
-                      		 		 
-                      		 		  
-                     				  
-                     				  
+                          Answer :"High workload"
 
+                      },
 
-                     				 
+                      {
 
-                   },
+                          Answer :"Lack of recognition"
 
-                  {  
+                      },
+
+                      {
+
+                          Answer :"Poor management"
+
+                      },
 
                       
+                     {
 
-                     
-                        
-                      
-                    
-                      
-                  },
+                         Answer :"Personal problems affecting professional life"
 
-                  {  
+                     }
 
-                  
-                       
-                       
-                     
-                     
-                   
-                       
-                        
-                  },
-                
-               { 
+                 ],
 
-                  
-                 
-                   
-                    
-                   
-               }
-               
-               
+                 Display_Order =7
+
+             }
             ]
-         }
-      ]
-   }
+        ]
+    }
 }
 -------------------
 =================================================================
@@ -174,7 +186,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -200,84 +212,101 @@ Generate me a questionnaire on Working mood with 7 questions
 -------------------
 [LLM ANSWER]
 {
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "WM001",
-        "NAME": "Working Mood Questionnaire",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "WMQ001",
-            "NAME": "On a scale of 1 to 10, how satisfied are you with your current job?",
-            "TYPE_ID": 3,
-            "_TF_ANSWERS":[
-              {"ANSWER":"1"},{"ANSWER":"2"},{"ANSWER":"3"},{"ANSWER":"4"},
-              {"ANSWER":"5"},{"ANSWER":"6"},{"ANSWER":"7"},{"ANSWER":"8"},
-              {"ANSWER":"9"},{"ANSWER":"10"}
-            ],
-            "DISPLAY_ORDER" : 1
-          },
-          {
-            "CODE": "WMQ002",
-            "NAME":  	"On a scale of 1 to 10, how motivated are you in your work?",
-            "_TF_ANSWERS":[
-              {"ANSWER" : '1'},{"ANSWER" : '2'},
-              {"ANSWER" : '3'},{"ANSWER" : '4'},
-              {"ANSWER" : '5'},{"ANSWER" : '6'},
-              {"AHSERER" :'7'},{"ANSEWRER :" :'8'},
-            	{"ANSEWRER :" :'9'},{"ANSEWRER :" :'10'}
-           ],
-          	"TYPE_ID":3,
-          	"display_order ":2
-         },
-         {
-          	'CODE':'WMQ003',
-          	'NAME':'How often do you feel stressed at work?',
-          	'TYPE_ID':2,
-        	 '_TF_ANSWERS':[
-        		 {'answer':'Never'},
-        		 {'answer':'Rarely'},
-        		 {'answer':'Sometimes'},
-        		 {'answer':'Often'}],
-        	 'DISPLAY_ORDER':3
-         },
-       	 {
-        	 'CODE':"WMQ004",
-        	 'NAME':"Do you feel appreciated by your colleagues and superiors?",
-        	 '_TF_ANSWERS':[
-        			 {'answer':"Yes"},
-        			 {'answer':"No"}],
-		              	  	 	
-			 	    	 	 '_type_id':1,
-			 	    	 	 	 
-			 	    	 	 '_display_order ':4},
-      	 { 
-		              	 	 
-		              	 	 '_code ':' WMQ005',
-		              	 	 '_name ':' How often do you take breaks during work?',
-		              	 	 '_type_id ':2,
-				            	 
-				            	 _tf_answers:[
-					                	 { answer:  					  						 
-							                 					 						  		  
-							                		 					 				  					 
-							                		 					 						  					   
-							 					   			  }]},
-				                {		 	  
-		  		 	  		
-		  		 	  	 _code:' WMQ006',
-		  		 	  	 _name:'Do you have the resources and tools necessary to perform your job effectively?',
-		  		 	  	 _type_id:1,		 
-			  		   	  	 _tf_answers:[
-			  		   	  	     { answer:  					  						 
-								                 					 						  		  
-								                		 					 				  					 
-								                		 					 						  					   
-								 					   			  }]},		 
-				   	    {_code:' WMQ007',		 
-				   	     _name:'Do you think that the company's culture is conducive to good working mood?',		 
-				   	     _type_id:1,		 
-				   	     display_order:7,_tf_answers:[{ answer:"Yes"},{ answer:"No"}]}]}}]}
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "WORKING_MOOD_GUID",
+                "NAME": "Working Mood Questionnaire",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_GUID",
+                        "NAME": "How satisfied are you with your current job?",
+                        "TYPE_ID": 3,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Very dissatisfied"},
+                            {"ANSWER":"Dissatisfied"},
+                            {"ANSWER":"Neutral"},
+                            {"ANSWER":"Satisfied"},
+                            {"ANSWER":"Very satisfied"}
+                        ],
+                        "DISPLAY_ORDER" : 1
+                    },
+                    {
+                        "CODE" : 	"Q2_GUID",
+						"NAME" : 	"How often do you feel stressed at work?",
+						"TYPE_ID" : 3,
+						"_TF_ANSWERS":[
+							{"ANSWER":"Never"},
+							{"ANSWER":"Rarely"},
+							{"ANSWER":"Sometimes"},
+							{"ANSWER":"Often"},
+							{"ANSWER":"Always"}
+						],
+						DISPLAY_ORDER:2
+
+                    },
+				    
+				    {	
+					    CODE: 	   'Q3_GUID',
+					    NAME: 	   'Do you have the tools and resources needed to do your job effectively?',
+					    TYPE_ID:   1,
+					    DISPLAY_ORDER:3,
+					    _TF_ANSWERS:[
+						    { ANSWER:"Yes, I have everything I need."},
+						    { ANSWER:"Mostly, but there are some things missing."},
+						    { ANSWER:"No, I don't have what I need."}
+					    ]
+				    },
+					
+				    
+				    {	
+					   CODE: 	    'Q4_GUID',
+					   NAME: 	    'How well do you get along with your coworkers and superiors?',
+					   TYPE_ID:     3,
+					   DISPLAY_ORDER:4,
+					   _TF_ANSWERS:[
+						   { ANSWER:'Not at all'},
+						   { ANSWER:'Somewhat'},
+						   { ANSWER:'Well'},
+						   { ANSWER:'Very well'}
+					  ]
+				   },
+
+                   {
+                       CODE:"Q5_GUID",
+                       NAME:"Do you feel recognized for the work that you do?",
+                       TYPE_ID :1 ,
+                       DISPLAY_ORDER :5 ,
+                       _TF_ANSWERS:[
+                           {'ANSWER': 'Yes, always.'},
+                           {'ANSWER': 'Sometimes.'},
+                           {'ANSWER': 'No, never.'}
+                      ]
+                   },
+
+                   {
+                      CODE :"Q6_GUID", 
+                      NAME :"Do you feel like your work is meaningful and contributes to the goals of the company?", 
+                      TYPE_ID :2 , 
+                      DISPLAY_ORDER :6 , 
+                      _TF_ANSWERS:[
+                          {'answer':'Strongly disagree'},{'answer':'Disagree'},{'answer':'Neutral'},{'answer':'Agree'},{'answer':'Strongly agree'}
+                     ]
+                  },
+
+                  {
+
+                     CODE :"Q7_GUID", 
+                     NAME :"What would make your working environment better?", 
+                     TYPE_ID :4 , 
+                     DISPLAY_ORDER :7 , 
+
+                 }
+             ]  
+         }
+      ]  
+   }  
+}
 -------------------
 =================================================================
 0-SHOT
@@ -298,7 +327,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -327,116 +356,147 @@ Generate me a questionnaire on Remote working experience with 10 questions
   "data": {
     "TF_QUESTIONNAIRES": [
       {
-        "CODE": "RWEXP001",
+        "CODE": "REMOTE_WORKING_EXPERIENCE_GUID",
         "NAME": "Remote Working Experience Questionnaire",
         "_TF_QUESTIONS": [
           {
-            "CODE": "Q1",
+            "CODE": "Q1_GUID",
             "NAME": "How long have you been working remotely?",
-            "TYPE_ID": 3,
-            "_TF_ANSWERS": [
-              {"ANSWER":"Less than a year"},
-              {"ANSWER":"1-2 years"},
-              {"ANSWER":"2-5 years"},
-              {"ANSWER":"More than 5 years"}
+            "TYPE_ID": 1,
+            "_TF_ANSWERS" : [
+              {"ANSWER" : "< 6 months"},
+              {"ANSWER" : "> 6 months and < 1 year"},
+              {"ANSWER" : "> 1 year and < 2 years"},
+              {"ANSWER" : "> 2 years"}
             ],
-            "DISPLAY_ORDER" : 1
+            "DISPLAY_ORDER": 1
           },
           {
-            "CODE" : 'Q2',
-            'NAME' : 'What is your preferred communication tool for remote work?',
-             'TYPE_ID': 2,
-             '_TF_ANSWERS':[
-                 {'ANSWER':'Email'},
-                 {'ANSWER':'Phone Calls'},
-                 {'ANSWER':'Video Conferencing'},
-                 {'ANSWER':'Instant Messaging'}
+            "CODE":"Q2_GUID",
+            "NAME":"What is your preferred way of communication while working remotely?",
+            "_TF_ANSWERS":[
+               { 
+                 'ANSWER': 'Email'
+               },
+               { 
+                 'ANSWER': 'Instant Messaging (e.g. Slack, Teams)'
+               },
+               { 
+                 'ANSWER': 'Video Conferencing (e.g. Zoom, Skype)'
+               }
              ],
-             'DISPLAY_ORDER' : 2
+             TYPE_ID:2,
+             DISPLAY_ORDER:2
           },
           {
-          	"CODE" : 'Q3',
-          	'NAME' : 'How many hours do you work per day when working remotely?',
-          	'TYPE_ID': 3,
-          	'_TF_ANSWERS':[
-               {'ANSWER':'Less than 4 hours'},
-               {'ANSWER':'4-6 hours'},
-               {'ANSWER':'6-8 hours'},
-               {'ANSWER':'More than 8 hours'}
-           ],
-          	'DISPLAY_ORDER' : 3
-      	  },
-      	  {
-      		"CODE" :'Q4',
-      		'NAME' :'Do you feel isolated while working remotely?',
-      		'TYPE_ID':1,
-      		'_TF_ANSWERS':[{'Answer':"Yes"},{'Answer':"No"}],
-      		DISPLAY_ORDER:4
-      	  },
-      	   { 
-      		 'CODE':"Q5",
-      		 'NAME':"Which of the following challenges have you faced while working remotely? (Select all that apply)",
-      		 '_TF_ANSWERS':[{"Answer":"Lack of team communication"},{"Answer":"Difficulty in focusing on tasks"},{"Answer":"Technical issues with equipment or software"},{"Answer":"Distractions at home"}],
-      		 TYPE_ID:5,
-      		 DISPLAY_ORDER:5
-
-    	  }, 
-    	  {  
-    	  	  	
-    		      CODE:"Q6",
-    		      NAME:"Have you ever experienced burnout while working from home?",
-    		      TYPE_ID:1,   
-    		      _TF_ANSWERS:[{"answer":"Yes"},{"answer":"No"}],
-    		     DISPLAY_ORDER:6
-
-    	  }, 
-    	  {  
-    	  	  
-    		  CODE:"Q7",    
-    		  NAME:"Do you think remote work increases productivity?",    
-    		  TYPE_ID:1,    
-    		  _TF_ANSWERS:[{"answer":"Yes"},{"answer":"No"}],   
-    		  DISPLAY_ORDER:7 
-
-    	  }, 
-    	   {     
-    	   	  
-    	   	    CODE:"Q8",   
-    	   	    NAME:"What is your biggest challenge when it comes to remote work?",     
-    	   	    TYPE_ID:2,      
-    	   	    _TF_ANSWERS:[{"answer":"'Maintaining a healthy work-life balance'"},{"answer":"'Staying motivated and productive'"},{"answer":"'Communication with colleagues and managers'"},{"answer":"'Technical difficulties with equipment or software'"},{"answer":"'Distractions at home'",}],     
-    	   	     DISPLAY_ORDER:8 
-
-    	   }, 
-    	   {    	
-    		
-    			 CODE:'Q9',        
-    			 NAME:'Would you prefer to continue working from home after the pandemic ends?',         
-    			 TYPE_ID:1,        
-    			 _tf_answers:[{ answer:'Yes'}, { answer:'No'}],         
-    			 DISPLAY_ORDER:9    
-
-    	   },  
-
+          	"CODE":"Q3_GUID",
+          	"NAME":"Do you feel that your work-life balance has improved since working remotely?",
+          	"_TF_ANSWERS":[
+          		{
+          			'ANSWER':"Yes"
+          	},
+          		 {'ANSWER':"No"}
+        	 ],
+        	 TYPE_ID:1,
+        	 DISPLAY_ORDER:3
+         }, 
          {
-
-                CODE:'10',          
-                NAME:'On a scale of one to ten (one being the worst), how would rate your overall experience with remote work?',          
-                TYPEID=3,       
-                _tf_answers:[
-                    { answer='1'}, 
-                    { answer='2'}, 
-                    { answer='3'}, 
-                    { answer='4'}, 
-                    { answer='5'},                 
-                    ] ,             
-                DISPLAYORDER=10    
-
+         	"CODE":"Q4_GUID",	
+        	 	"NAME":"How often do you experience technical issues while working remotely?",
+        	  "_TF_ANSWERS":[
+        		 {'ANSWER':"Never"},
+        		 {'ANSWER':"Rarely"},
+        		 {'ANSWER':"Sometimes"},  
+        		 {'ANSWER':"Frequently"}],
+        	 TYPE_ID:1,
+        	 DISPLAY_ORDER:4       
+      	 },      
+      	 {
+      	  	 	
+      		 	  		
+      		 	  			
+      		 	  			  
+      	 	        
+      	   	  
+      	   	  
+      	 	        
+      	        
+      	         
+    	    	       	 
+               	         	         	          	        
+               	           	             	           	              	            	               	            	               	          	        
+               	                	    
+               	             	                 	                 	                 	                 	          	        
+            	    
+            	    
+            	            
+            		                  
+            		                  
+            		                  
+            		                    
+            		                    
+            		                    
+            		   		
+            		   		
+            		   		
+            	         
+            	      
+       	      
+       	          
+       	          
+       	          
+       	          
+     	        	    	   
+     	        	    	   
+     	              
+     	              
+     	              
+     	                
+     	     	     	     	    
+    	           
+    	           
+    	           
+    	   	        	    
+    	   	        	    
+    	   	        	    
+    	   	        	    
+    		     
+    		     
+    		     
+    	 	       	 
+    	 	       	 
+    	 	       	 
+    	 	       	 
+    	 	                
+    	 	                
+    	 	                
+    	 	               
+    	 	               
+    				   
+    				   
+    			       
+    			       
+    			       
+    			        
+       	      	    
+       	      	    
+       	      	    
+   	      	    	  
+   	      	    	  
+   	      	    	  
+   		             
+   		             
+   		             
+   	                 
+   	                 
+   	                 
+   		              
+   		              
+   		              
+  	                	                	                	                    	                    	                    	                   	                   	                   	                   	                       	                       	                       	                       	                       	                           	                           	                           		                   		                       		                       		                   		                       		                   		                       		                   		                       		                   			               		                     		       			                 			                 			                 			               		               			       		       		            			           		         		           			           		         		           			           		         		           			           		            				           				           				           				           				            
          }
-        ]
-      }
-    ]
-}
+      ]
+   }]
 }
 -------------------
 =================================================================
@@ -458,7 +518,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -487,119 +547,82 @@ Generate me a questionnaire on End of working relationship with 10 questions
   "data": {
     "TF_QUESTIONNAIRES": [
       {
-        "CODE": "EWR_Q1",
+        "CODE": "END_WORK_RELATIONSHIP_" + GUID(),
         "NAME": "End of Working Relationship Questionnaire",
         "_TF_QUESTIONS": [
           {
-            "CODE": "EWR_Q1_1",
-            "NAME": "What was your role in the company?",
+            "CODE": GUID(),
+            "NAME": "What was your position in the company?",
             "TYPE_ID": 1,
+            "DISPLAY_ORDER": 1,
             "_TF_ANSWERS":[
-              {"ANSWER":"Employee"},
               {"ANSWER":"Manager"},
-              {"ANSWER":"Other (please specify)"}
-            ],
-            "DISPLAY_ORDER" : 1
+              {"ANSWER":"Supervisor"},
+              {"ANSWER":"Employee"}
+             ]
           },
           {
-            "CODE":	"EWR_Q2_2",
-           	"NAME" :	"What was the reason for ending this working relationship?",
-          	"TYPE_ID" : 2,
-          	"_TF_ANSWERS":[
-            	  {"ANSWER":"Termination by employer"},
-            	  {"ANSWER":"Resignation by employee"},
-            	  {"ANSWER":"Mutual agreement to end employment contract"}
-        	    ],
-          	"DISPLAY_ORDER" : 2
-          },
-         {
-          	"CODE":"EWR_Q3_3",
-          	"NAME":"Did you have any issues with your manager or colleagues during your employment?",
-          	"TYPE_ID":3,
-           "_TF_ANSWERS":[
-               {"ANSWER":"Strongly agree"}, 
-               {"ANSWER":"Agree"}, 
-               {"ANSWER":"Neutral"}, 
-               {"ANSWER":"Disagree"}, 
-               {“Answer”:”Strongly disagree”}
-             ],
-             “DISPLAY_ORDER”:3
+            "CODE": GUID(),
+            "NAME":"How long have you been with the company?",
+            "TYPE_ID" : 3,
+            “DISPLAY_ORDER”:2,
+             "_TF_ANSWERS":[
+                {"ANSWER":"Less than a year",},
+                {"ANSWER":"1-3 years",},
+                {"ANSWER":"3-5 years",},
+                {"ANSWER":"5-10 years",},
+                {"ANSWER":"+10 years"}
+             ]
          },
          {
-        	 “CODE”:”EWR_Q4_4”,
-        	 “NAME”:”Were you satisfied with the training and development opportunities provided?”,
-        	 “TYPE_ID”:3,
-        	 "_TF_ANSWERS":[
-                {“Answer”:”Strongly agree”}, 
-                {“Answer”:”Agree}, 
-                {“Answer: Neutral}, 
-                {“Answer: Disagree},
-                {“Answer: Strongly disagree}
-              ],
-              “DISPLAY_ORDER:4”
+           “CODE”:GUID(),
+           “NAME”:”Did you feel supported by your colleagues and superiors during your time at the company?”,
+           “TYPE_ID”:2, 
+           “DISPLAY_ORDER”:3, 
+           "_TF_ANSWERS":[
+               {“ANSWER”:"Yes"}, 
+               {“ANSWER”:"No"}
+             ]
+         }, 
+         {  
+           “CODE”:GUID(),  
+           “NAME”:”Was there anything that could have been done differently to improve your experience at the company?”,  
+           “TYPE_ID”:4,   
+           ”DISPLAY_ORDER:4”
+         },   
+         {    
+          ”CODE:GUID(),    
+          ”NAME:”Did you receive proper training for your role?”,    
+          ”TYPE_ID:2”,     
+          ”DISPLAY_ORDER:5”,     
+          "_TF_ANSWERS":[      
+              {“ANSWER”:"Yes"},      
+              {“ASNSER" :"No"}     
+             ]    
+        },   
+        {     
+         ”CODE:GUID(),       
+         ”NAME:”Were you satisfied with the salary and benefits offered by the company?”,       
+         ”TYPE_ID:2”,        
+         ”DISPALY_ORDER :6“,        
+         _TF_ANSWERS:[         
+             {'Answer':'Yes'},         
+             {'Answer':'No'}        
+                   ]    
        },
        {
-       	 “CODE”: ”EWR_Q5_5”,  
-       	 ”NAME”: ”How would you describe your overall experience working at our company?”,  
-       	 ”TYPE_ID”: 4,  
-       	 "_TF_ANSWERS":[{"answer":""}],  
-       	 ”DISPLAY_ORDER’:5’},
-     		 	
-       {
-      	 “CODE’: ‘EWR-Q6-6’ ,
-      	 ‘NAME’: ‘Would you recommend our company to others?’ ,
-      	 ‘TYPE_ID’: 2 ,
-      	 _‘TF_ANSWERS’:[
-      		 {'answer':'Yes'},
-      		 {'answer':'No'}
-      	 ] ,   
-         'DISPLAY_ORDER' : 6     
+        'Code': GUID(),
+        'Name': 'How was communication between employees?',
+        'Type_id' : 5,
+        ‘Display_order’:7 ,
+       '_tf_answers':[{'answer': 'Excellent'},{'answer':'Good'},{'answer':'Average'},
+                      {'answer':'Poor'},{'answer':'Very poor'}]
        },
-       {
-
-    	   'CODE': 'EW-Q7-7',
-    	   'NAME': 'How could we have improved onboarding?',
-    	   'TYPE_ID': 5,   
-    	   '_TF_ANSWERS':[
-    		   {'answer':'Better communication of expectations'},
-    		   {'answer':'More thorough training'},
-    		   {'answer':'Improved access to resources'},    
-    		   {'answer':'Other (please specify)'}
-    		 ] ,   
-    		 'DISPLAY_ORDER' :7    
-    	  },      
-    	  {
-
-    	   	   'CODE': 'EW-Q8-8',
-    	   	   'NAME': ’Did you feel supported during your tenure?’ ,
-    	   	   ’TYPE-ID’:3,      
-    	   	   '_‘TF_ANSWERS’:[
-    			      {'anser':'Yes'},{'anser:'No'}],
-    		      ’DISPALY ORDER’:8       
-    	  },
-
-    	  {
-
-    	   	  CODE: EW-Q9-9',
-    	   	  NAME: ‘Do you feel that there is anything that we could do to improve our work environment?’ ,
-    	   	  TYPE-ID:4,      
-    	   	  _‘Tf_Answers’:[{‘ANswer':''}] ,   
-    			 DISPLAY ORDER ':9       
-     	 },
-
-     	 {
-
-       		 CODE:'EW-Q10-10',
-        		 NAME:'Is there anything else that we should know about why this working relationship ended?',
-        		 TYPE-ID:4,     
-        		 _‘Tf_Answers':[{'ANswer':''}] ,   
-        		 DISPLAY ORDER ':10        
-     	 }
-              
-        ]
-      }
-    ]
- }
+       {'Code': GUID(),'Name': 'Were there any conflicts with other employees?', 'Type_id' : 4,'Display_order’:8},
+       {'Code': GUID(),'Name': ‘Can we contact you in case of future job opportunities?’,'Type_id' : 2,‘Display_order’:9,_tf_answers:[{‘Answer’:’yes’},{‘Answer’:’no’}]},            
+      ]}
+   ]}
+}
 -------------------
 =================================================================
 0-SHOT
@@ -620,7 +643,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -649,84 +672,85 @@ Generate me a questionnaire on Onboarding with 6 questions
   "data": {
     "TF_QUESTIONNAIRES": [
       {
-        "CODE": "ONB-001",
+        "CODE": "ONB-4567-97",
         "NAME": "Onboarding Questionnaire",
         "_TF_QUESTIONS": [
           {
-            "CODE": "ONB-Q01",
-            "NAME": "How did you learn about our company?",
-            "TYPE_ID": 2,
+            "CODE": "ONB-Q1",
+            "NAME": "How did you hear about us?",
+            "TYPE_ID": 1,
             "_TF_ANSWERS":[
-              {"ANSWER":"From a job board"},
-              {"ANSWER":"From a recruiter"},
-              {"ANSWER":"From a friend/colleague"},
-              {"ANSWER":"Other"}
+              {"ANSWER":"Social Media"},
+              {"ANSWER":"Job Board"},
+              {"ANSWER":"Referral"}
             ],
             "DISPLAY_ORDER" : 1
           },
           {
-            "CODE": 	"ONB-Q02",
-           	"NAME":"What are your first impressions of our company culture?",
-          	"TYPE_ID" :3,
+            "CODE": "ONB-Q2",
+            "NAME": 	"What do you hope to achieve in your first month?",
+           	"TYPE_ID" : 4,
           	"_TF_ANSWERS":[],
-          	"DISPLAY_ORDER" :2
+          	"DISPLAY_ORDER" : 2
           },
           {
-            	"CODE":"ONB-Q03",
-            	"NAME":"Do you have any questions about your role or the company in general?",
-            	"TYPE_ID":4,
-            	"_TF_ANSWERS":[],
-            	 	 	 	 	 "_COMMENTS_ALLOWED_FLAG ": true,
-            	 "_COMMENTS_LABEL_TEXT ":"Please specify your question(s) below:",
-            	 "_COMMENTS_REQUIRED_FLAG ": false,
-            	 "_COMMENTS_MAX_LENGTH ":"1000", 
-            	 	  	  		   
-            	  			  
-          				  
-          				  
-            
-        	   		   
-        	   		  	
-        	   		  
-        	    
-        	    
-        	    
-        	      	
-           
-           
-          
-           
-         
-          
-         
-        	
-        	
-        	
-        	
-        	
-        	
-        
-            
-            
-            
-             
+          	"CODE":"ONB-Q3",
+          	"NAME":"What are your career goals for the next year?",
+          	"TYPE_ID" :4,
+          	"_TF_ANSWERS":[],
+          	"display_order ":3
+      	 },
+      	 {
+      	 	 	
+      	 	 "_TF_QUESTIONS":{
+      	 	 	 "_CLONE_FROM_TEMPLATE":{
+      	 	 		 "_TEMPLATE_QUESTION_CODE":["EMP_Q1","EMP_Q2"]
+      		 }
+      	 }
+      },
+      { 
+        	  	
+        	  	
+        	  
+        	  
+        	  	
+        	  	 CODE:"ONB-Q4",
+        		 NAME:"Please rate the quality of our onboarding process.",
+        		 TYPE_ID:3,
+        		 _TF_ANSWERS:[
+        			 {ANSWER:'Poor'},
+        			 {ANSWER:'Fair'},
+        			 {ANSWER:'Good'},
+        			 {ANSWER:'Very Good'},
+        			 {ANSWER:'Excellent'}
+        		 ],
+        		 DISPLAY_ORDER:4
+      }, 
       
-          
-         
-       
-       
-       
-       
-      
-        
-     
-     
-     
-      	
-      }
-    ]
-   }
-  }
+  	  {
+
+  	  		CODE:"ONB-Q5", 
+  	  		Name:"What was your first impression of our company culture?", 
+  	  		Type_ID:2, 
+  	  		DISPLAY_ORDER:5, 
+
+  		 	 _TF_ANSWERS:[{ ANSWER:"Collaborative"},{ ANSWER:"Competitive"},{ ANSWER:"Innovative"}]
+  	  },
+
+  	  {
+
+  		CODE :" ONB-Q6", 
+  		Name :"When is your preferred start date?", 
+  		Type_ID :8, 	
+  		DISPLAY_ORDER:6,
+
+  		 _TF_ANSWERS:[]
+  	  }
+
+     ]
+    }
+   ]
+ }   
 }
 -------------------
 =================================================================
@@ -748,7 +772,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -774,50 +798,46 @@ Generate me a questionnaire on Manager feedback with 3 questions
 -------------------
 [LLM ANSWER]
 {
-    "data": {
-        "TF_QUESTIONNAIRES": [
-            {
-                "CODE": "MGR_FDBK_001",
-                "NAME": "Manager Feedback Questionnaire",
-                "_TF_QUESTIONS": [
-                    {
-                        "CODE": "MGR_FDBK_Q1",
-                        "NAME": "How would you rate your manager's communication skills?",
-                        "TYPE_ID": 3,
-                        "_TF_ANSWERS":[
-                            {"ANSWER":"Excellent"},
-                            {"ANSWER":"Good"},
-                            {"ANSWER":"Average"},
-                            {"ANSWER":"Poor"}
-                        ],
-                        "DISPLAY_ORDER" : 1
-                    },
-                    {
-                        "CODE" : 	"MGR_FDBK_Q2",
-        				"NAME" : 	"What areas do you think your manager could improve on?",
-        				"TYPE_ID" : 4,
-        				"_TF_ANSWERS":[],
-        				"DISPLAY_ORDER" : 2
-        			},
-        			{
-        				"CODE":"MGR_FDBK_Q3",
-        				"NAME":"Do you feel supported by your manager in achieving your goals?",
-        				"TYPE_ID":1,
-        			    "_TF_ANSWERS":[
-        			        {"ANSWER":"Yes, always"},
-        			        {"ANSWER":"Most of the time"},
-        			        {"ANSWER":"Sometimes"},
-        			        {"ANSWER":"Rarely or never"}
-    			        ],
-    			        DISPLAY_ORDER:3
-    			    }
-    		 ]
-    	 }
-     ]
-   }
+  "data": {
+    "TF_QUESTIONNAIRES": [
+      {
+        "CODE": "MAN_FEEDBACK_1234-5678-abcd-efgh",
+        "NAME": "Manager Feedback Questionnaire",
+        "_TF_QUESTIONS": [
+          {
+            "CODE": "MFQ1",
+            "NAME": "How would you rate your manager's communication skills?",
+            "TYPE_ID": 3,
+            "_TF_ANSWERS":[
+              {"ANSWER":"Poor"},
+              {"ANSWER":"Fair"},
+              {"ANSWER":"Good"},
+              {"ANSWER":"Excellent"}
+             ],
+            "DISPLAY_ORDER" : 1
+          },
+          {
+            "CODE": 2,
+            "NAME": "Does your manager provide clear direction and expectations for your work?",
+            "_TF_ANSWERS":[
+              {"ANSWER":"Yes"},
+              {"ANSWER":"No"}
+             ],
+             TYPE_ID: 1,
+             DISPLAY_ORDER: 2
+          },
+          {
+          	"CODE" : 3,
+          	"NAME" :	"What is one thing that your manager could do to improve their leadership skills?",
+          	"_TF_ANSWERS":[],
+          	"TYPE_ID" :4, 
+          	DISPLAY_ORDER:3
+      	  }
+        ]
+      }
+    ]
+  }
 }
-
-This questionnaire has three questions. The first question is a rating question that asks the respondent to rate their manager's communication skills. The second question is an open-ended feedback question that asks respondents for areas of improvement for their managers. The third question is a single-choice question that asks whether respondents feel supported by their managers in achieving their goals.
 -------------------
 =================================================================
 0-SHOT
@@ -838,7 +858,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -867,12 +887,12 @@ Generate me a questionnaire on Employee feedback with 4 questions
     "data": {
         "TF_QUESTIONNAIRES": [
             {
-                "CODE": "EMP_FEEDBACK",
+                "CODE": "EMP_FEEDBACK_1234-5678-abcd-efgh",
                 "NAME": "Employee Feedback Questionnaire",
                 "_TF_QUESTIONS": [
                     {
-                        "CODE": "Q1",
-                        "NAME": "How satisfied are you with your current role and responsibilities?",
+                        "CODE": "Q1_EMP_FEEDBACK_1234-5678-abcd-efgh",
+                        "NAME": "How satisfied are you with your job?",
                         "TYPE_ID": 3,
                         "_TF_ANSWERS":[
                             {"ANSWER":"Very Satisfied"},
@@ -881,93 +901,73 @@ Generate me a questionnaire on Employee feedback with 4 questions
                             {"ANSWER":"Dissatisfied"},
                             {"ANSWER":"Very Dissatisfied"}
                         ],
-                        "DISPLAY_ORDER" : 1
+                        "DISPLAY_ORDER": 1
                     },
                     {
-                        "CODE": "Q2",
-                        "NAME": 	"What do you think about the company's work culture? ",
-						"TYPE_ID" : 2,
-						"_TF_ANSWERS":[
-							{"ANSWER":"Positive culture that encourages growth and development."},
-							{"ANSWER":"Neutral culture that supports employees but could be better."},
-							{"ANSWER":"Negative culture that needs improvement."}
-						],
-						"DISPLAY_ORDER" : 2
-					},
-					{
-						"CODE" :  	  	 		 			 			  
-							 
-						         		   
-							 
-								   	     	
-													  
-												   
-														      
-						
-						
-						
-						
-											
-											
-											    
-													
-								
-							
-							
-					
-					
-					
-					
-					
-				    
-				    ,
-					   
+                        "CODE": 	"Q2_EMP_FEEDBACK_1234-5678-abcd-efgh",
+                       	"NAME":"How do you feel about the company culture?",
+                    	"TYPE_ID":2,
+                    	"_TF_ANSWERS":[
+                        	{"ANSWER":"Positive environment and culture."},
+                        	{"ANSWER":"Neutral or no opinion."},
+                        	{"ANSWER":"Negative environment and culture."}
+                    	],
+                    	"DISPLAY_ORDER ":2
+                 },
+                 {
+                     	    "_TF_ANSWERS":[
+                            	    {    			
+                                    	    	       		   
+                                    	  	  			  
+                                     	    }
+                                    ],
+                     	 	  	 	
+                     	 	 "_TEMPLATE_CODE":"",
+                     	 	 "_TEMPLATE_VERSION":"",
+                      	  	 "_CLONEABLE_FROM_TEMPLATE_FLAG":"",
+                      	  	 
+                      	  	 
+                      	  	 
 
-					   
+                	 },
 
-					   
+                 {
+                 	 
 
-					   
+	                   		 "_TF_ANSWERS":[
 
+	                            {      
+		                        },    
+		                        {     
+		                        },  
+		                        {     
+		                        } 
+		                    ],
 
-					  
+		                    "_TEMPLATE_CODE":"",
+		                    "_TEMPLATE_VERSION":"",
+		                    "_CLONEABLE_FROM_TEMPLATE_FLAG":""
 
 
-					
-					
-					
-					
-                    
-				
-					
-					
-                    
-                    
-                    {
-                      'CODE': 'Q3',
-                       'NAME': 'Would you like to suggest any changes or improvements in the company policies?',
-                       'TYPE_ID': 4,
-                       '_TF_ANSWERS':[{'ANSWER':''}],
-                       'DISPLAY_ORDER' : 3
-                    
-                    
-                        
-                        
-                        
-                        
-                     },
-                     {   'CODE': 'Q4',
-                         'NAME':   What is one thing management can do to improve your experience at work?',
-                         '_TF_ANSWERS':[{'answer':''}],
-                          TYPE_ID:4, 
-                          DISPLAY_ORDER:4
-                        
-                     }
-                
-                 ]
-           }
-        ]
-    }
+	                },
+
+
+	                {
+
+	                	
+	                       	 
+	                       	 
+	                       	    		
+	                   		 
+
+	                   		 	
+	                   		 	
+
+	                  }
+             ]
+         }
+      ]
+   }
 }
 -------------------
 =================================================================
@@ -989,7 +989,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1015,46 +1015,51 @@ Generate me a questionnaire on Training effectiveness with 2 questions
 -------------------
 [LLM ANSWER]
 {
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "TRAIN_EFF_001",
-        "NAME": "Training Effectiveness Questionnaire",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "Q1",
-            "NAME": "On a scale of 1 to 10, how would you rate the overall quality of the training program?",
-            "TYPE_ID": 3,
-            "_TF_ANSWERS":[
-              {"ANSWER":"1"},
-              {"ANSWER":"2"},
-              {"ANSWER":"3"},
-              {"ANSWER":"4"},
-              {"ANSWER":"5"},
-              {"ANSWER":"6"},
-              {"ANSWER":"7"},
-              {"ANSWER":"8"},
-              {"ANSWER":"9"}, 
-              {"ANSWER":"10"}
-            ],
-            "DISPLAY_ORDER" : 1
-          },
-          {
-            'CODE': 'Q2',
-            'NAME': 'What aspects of the training program did you find most helpful? (select all that apply)',
-             'TYPE_ID': 2,
-             '_TF_ANSWERS':[
-               {'ANSWER':'The trainer'},
-               {'ANSWER':'The content'},
-               {'ANSWER':'The delivery method'},
-               {'ANSWER':'The materials provided'}
-             ],
-             'DISPLAY_ORDER' : 2
-          }
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "TRAINING_EFFECTIVENESS_GUID",
+                "NAME": "Training Effectiveness Questionnaire",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_GUID",
+                        "NAME": "Was the training content relevant to your job responsibilities?",
+                        "TYPE_ID": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Strongly Agree"},
+                            {"ANSWER":"Agree"},
+                            {"ANSWER":"Neutral"},
+                            {"ANSWER":"Disagree"},
+                            {"ANSWER":"Strongly Disagree"}
+                        ],
+                        "DISPLAY_ORDER" : 1
+                    },
+                    {
+                        "CODE": 2,
+                        "_TF_ANSWERS":[
+                                { 
+                                    ANSWER: 'Excellent'
+                                },
+                                { 
+                                    ANSWER: 'Good'
+                                },
+                                { 
+                                    ANSWER: 'Fair'
+                                },
+                                { 
+                                    ANSWER: 'Poor'
+                                }
+                         ],
+                         DISPLAY_ORDER : 2,
+                         NAME : 'How would you rate the overall quality of the training? ',
+                         TYPE_ID :3 ,
+                         CODE : 'Q2_GUID'
+
+                    }
+                ]
+            }
         ]
-      }
-    ]
-   }
+    }
 }
 -------------------
 =================================================================
@@ -1076,7 +1081,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1102,176 +1107,247 @@ Generate me a questionnaire on Career with 10 questions
 -------------------
 [LLM ANSWER]
 {
-    "data": {
-        "TF_QUESTIONNAIRES": [
-            {
-                "CODE": "CAREER_Q",
-                "NAME": "Career Questionnaire",
-                "_TF_QUESTIONS": [
-                    {
-                        "CODE": "Q1",
-                        "NAME": "What is your current job position?",
-                        "TYPE_ID": 1,
-                        "_TF_ANSWERS":[
-                            {"ANSWER":"Manager"},
-                            {"ANSWER":"Supervisor"},
-                            {"ANSWER":"Specialist"},
-                            {"ANSWER":"Associate"},
-                            {"ANSWER":"Assistant"}
-                        ],
-                        "DISPLAY_ORDER" : 1
-                    },
-                    {
-                        "CODE": 2,
-                        "NAME": 	"What are your primary job responsibilities?",
-                        "_TF_ANSWERS":[
-                            	{"ANSWER":"Project Management"},
-                            	{"ANSWER":"Team Management"},
-                            	{"ANSWER":"Client Relationship Management"},
-                            	{"ANSWER":"Training and Development"}
-                         ],
-                         TYPE_ID:2,
-                         DISPLAY_ORDER:2
-                    },
-                     {
-                     	"CODE" :3,
-                     	"NAME" :"What is the most important skill for success in your current role?",
-                     	"_TF_ANSWERS":[
-                         		 {"ANSWER" : 'Leadership'},
-                         		 {"ASNSER" :'Communication'},
-                         		 {'ASNSER':'Problem Solving'},
-                         		 {'ASNSER':'Time Management'}
-                     ],
-                     TYPE_ID:1,
-                     DISPLAY_ORDER:3   
-                 }, 
-                 {
-                 	   'CODE':4, 
-                 	   'Name':"How often do you feel challenged in your work?", 
-                 	   '_TF_ANSWERS':[
-                               {'ASNSER':"Never"}, 
-                               {'ASNSER':"Rarely"}, 
-                               {'ASNSER':"Sometimes"},  
-                               {'ASNSER':"Frequently"},  
-                               {'ASNSER': 'Always'}
-                           ], 
-                           TYPE_ID:1,  
-                           DISPLAY_ORDER:4   
+  "data": {
+    "TF_QUESTIONNAIRES": [
+      {
+        "CODE": "CAREER_GUID_1234",
+        "NAME": "Career Questionnaire",
+        "_TF_QUESTIONS": [
+          {
+            "CODE": "CAREER_Q1",
+            "NAME": "What is your current job?",
+            "TYPE_ID": 1,
+            "DISPLAY_ORDER": 1,
+            "_TF_ANSWERS":[
+              {"ANSWER":"Full-time employee"},
+              {"ANSWER":"Part-time employee"},
+              {"ANSWER":"Freelancer"},
+              {"ANSWER":"Self-employed"}
+            ]
+          },
+          {
+            "CODE": "CAREER_Q2",
+            "NAME":"How satisfied are you with your current job?",
+             TYPE_ID:3,
+             DISPLAY_ORDER:2,
+             "_TF_ANSWERS":[
+                { 
+                  ANSWER:"Not at all satisfied", 
+                  VALUE:1 
+                },
+                { 
+                  ANSWER:"Slightly satisfied", 
+                  VALUE:2 
+                },       
+                {  
+                   ANSWER:"Moderately satisfied",  
+                   VALUE:3  
+                 },   
+                 {    
+                    ANSWER:"Very satisfied",    
+                    VALUE:4     
+                 }   
+               ]      
+           },
+           {
+             CODE:"CAREER_Q3",
+             NAME:"What motivates you the most in your career?",
+             TYPE_ID:5,
+             DISPLAY_ORDER:3,
+             "_TF_ANSWERS":[
+               {"ANSWER":"Salary"},
+               {"ANSWER":"Recognition and rewards"},
+               {"ANSWER":"Opportunities for growth and development"},
+               {"ANSWER":"Work-life balance"}
+              ]
+           },
+           {
+             CODE:"CAREER_Q4",
+             NAME:"How often do you communicate with your manager or supervisor about work-related issues?",
+             TYPE_ID:2,
+             DISPLAY_ORDER:4,             
+              "_TF_ANSWERS":[
+                {   
+                   ANSWER:'Never',   
+                   IS_OTHER:false,    
+                   ORDER:null    
                  },    
-                
-                   {      
-                       'CODE':5,    
-                       'Name':'Do you feel valued by your employer?',    
-                       '_TF_ANSWERS':[     
-                                {   ANSWER:"Yes"},     
-                                {   ANSWRE:'No'}     
-                       ],    
-                       TYPE_ID:1,    
-                       DISPLAY_ORDER:5       
-                   },         
-                
-                   {      
-                       CODE:'Q6',      
-                       NAME:'How satisfied are you with the opportunities for growth and development at this company?',      
-                       _TF_ANSWERS:[       
-                                  {    ANSWRE:'Very Satisfied' },        
-                                  {    ANSWRE:'Satisfied'},        
-                                  {    ANSWRE:'Neutral'},        
-                                  {    ANSWRE:'Dissatisfied'},        
-                                  {    ANSWRE:"Very Dissatisfied"}          
-                              ],         
-                              TYPE_ID :3 ,         
-                              DISPLAY_ORDEr :6          
-                  },
-                  
-                   {
-                      CODE :'Q7',
-                      NAME :'Do you believe that there are equal opportunities for all employees to advance their careers within this company?',
-                      _TF_ANSWERS:[
-                                  			          		      		     										  		     		  		      		         		   		     		    				  			         		   		       			     		    			  		           		     					            	           	     								             		        		         		 	 		          	         	 	        		           		    		           					      		 	      	         					     				    		            		       		  		    	     						             		    		        			   					              	   				     													    							    	     				 	    				      	       	      		    	    		         	 			  		            	   				           				    		 				       				      		 	      		   			        				   					      			       				       			      		 	       			     		                   					       										 		  			        		        			    					              	    		    		    	     	    	 	
-                                  				 			 			         		           				     						          	            	           	     								             		        		         		 	 		          	         	 	        		           		    		           					      		 	      	         					     				    		            		       		  		    	     						             		    		        			   					              	   				     													    							    	     				 	    				      	       	      		    	    		         	 			  		            	   				           				    		 				       				      		 	      		   			        				   					      			       				       			      		 	       			     		                   					       										 		  			        	        		        			    					              	    		    		    	     	    	 	            
-                                   		           
-                                   		
-                                 ],
-                                 TYPE_ID :2 ,
-                                 DISPLAY_ORDEr :7        	
-                  },
-                   
-                   
-                    
-                   {
-                      CODE :'Q8',
-                      NAME :"Do you feel like the work culture of this company aligns with your personal values? ",
-                      
-                      
-                      
-                     
-                     
-                     
-                                      _TF_ANSWERS:[
-                                      			
-                                      			           
-                                                 	          				
-                                              	             					
-                                              	             					
-                                              	             					
-                                              	             					
-                                               	          				
-                                        ],
+                 {     
+                    ANSWER:'Rarely',     
+                    IS_OTHER:false,      
+                    ORDER:null      
+                 },     
+                 {       
+                     ANSWER:'Sometimes',       
+                     IS_OTHER:false,        
+                     ORDER:null        
+                  },         
+                  {          
+                      ANSWER:'Often',           
+                      IS_OTHER:false,            
+                      ORDER:null            
+                   }         
+               ]         
+         },
+         {
+           CODE:'CAREE_Q5',
+           NAME:'Have you ever changed jobs?',
+           TYPE_ID=1,
+           DISPLAY_ORDER=5,
+          _TF_ANSWERS:[
+                       {'Answer':'Yes'},
+                       {'Answer':'No'}
+                       ]
+         },
 
-                                        TYPE_ID :2 ,
-                                        DISPLAy_ORDer =8
+         {
 
-                                        
-                                     },
+          CODE:'CARREAR6',
+          NAME:'Do you feel that there is room for advancement in your current position?',
+          TYPEID=2,
 
-                                     {
+                        DISPLAYORDER=6,
 
-                                         CODE :"Q9", 
+                        _TF_ANSWERS:[
 
-                                         NAME :"What motivates you to come to work every day?",
+                          {
 
-                                         
+                            'Answer':'Yes'
 
-                                         
+                          },
 
-                                           _tf_answers:[{answere:"Salary",},{answere:"Job Security",},{answere:"Opportunities for Growth and Advancement",},{answere:"Work-Life Balance"}],
+                          {
 
-                                           Type_Id=2,
+                            'Answer':'No'
 
-                                           Display_Order=9
+                          }
 
+                        ]
 
+        },
 
-                                     },
+        
 
-                                     {
+        {
 
-                                         CODE :"10",
+                        CODE:'CARREAR7',
 
-                                         Name :"Would You recommend a friend or colleague to work at our company?",
+                        NAME:'Do you feel that the company values its employees?',
 
-                                         
+                        TYPEID=2,
 
-                                         
+                        DISPLAYORDER=7,
 
-                                            _tf_answers:[{answer:"Yes",},{{answer"No"}}],
+                        
 
-                                            Type_Id=1,
+                         _TF_ANSWERS:[
 
-                                            Display_Order=10
+                           {
+
+                             'Answer':'Strongly Agree'
+
+                           },
+
+                           {
+
+                             'Answer':'Agree'
+
+                           },
+
+                           {
+
+                             'Answer':'Disagree'
+
+                           },
+
+                           {
+
+                             'Answer':'Strongly Disagree'
+
+                           }
+
+                         ]
+
+                      },
 
 
-                                     }
-                    
-                    
-                    
-                    
-                    
-                ]
-            }
-        ]
+                      {
+
+
+
+                                    CODE : 'CARREAR8',
+
+                                    NAME : 'What skills would you like to develop further in order to progress in your career?',
+
+                                    TYPEID : 4,
+
+                                    DISPLAYORDER : 8
+
+
+
+                                  },
+
+
+                                  {
+
+
+
+                                   CODE : 'CARREAR9',
+
+                                   NAME : 'Would You Like To Be In A Leadership Role In The Future?',
+
+                                   TYPEID = 1,
+
+                                               
+
+                                               
+
+                                                _tf_answers:[{
+
+                                                  Answer :'Yes'},
+
+                                                  {'answer':   No}]
+
+                                                 , 
+
+                                          DisplayOrder =9
+
+
+
+                                 },
+
+
+                                {
+
+
+
+                                Code :'Carrear10' ,
+
+                                Name :'Are You Open To New Opportunities ?' ,
+
+                                TypeId = 1 ,
+
+                               DisplayOrder =10 , 
+
+
+
+                               '_tf_answers':[{
+
+                                                 Answer :'Yes'},
+
+                                                  {'answer':   No}]
+
+
+
+                              }
+
+
+
+       ]
+
     }
+     ]
+   }
 }
 -------------------
 =================================================================
@@ -1293,7 +1369,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1322,130 +1398,131 @@ Generate me a questionnaire on Training to professional users with 12 questions
     "data": {
         "TF_QUESTIONNAIRES": [
             {
-                "CODE": "TRAINING_PROFESSIONAL_USERS",
-                "NAME": "Training for Professional Users Questionnaire",
+                "CODE": "TRAINING_PROFESSIONAL_GUID",
+                "NAME": "Training to Professional Users Questionnaire",
                 "_TF_QUESTIONS": [
                     {
-                        "CODE": "Q1",
-                        "NAME": "How would you rate the overall quality of the training materials?",
+                        "CODE": "Q1_GUID",
+                        "NAME": "How satisfied are you with the training content?",
                         "TYPE_ID": 3,
                         "_TF_ANSWERS":[
-                            {"ANSWER":"Excellent"},
-                            {"ANSWER":"Good"},
-                            {"ANSWER":"Average"},
-                            {"ANSWER":"Poor"}
+                            {"ANSWER":"Very Satisfied"},
+                            {"ANSWER":"Satisfied"},
+                            {"ANSWER":"Neutral"},
+                            {"ANSWER":"Unsatisfied"},
+                            {"ANSWER":"Very Unsatisfied"}
                         ],
                         "DISPLAY_ORDER" : 1
                     },
                     {
-                        "CODE": 	"Q2",
-                       	"NAME" :  	"How satisfied are you with the trainer's knowledge and expertise?",
-						"TYPE_ID" : 3,
-						"_TF_ANSWERS":[
-							{"ANSWER":"Very Satisfied"},
-							{"ANSWER":"Satisfied"},
-							{"ANSWER":"Neutral"},
-							{"ANSWER":"Dissatisfied"},
-							{"ANSWER":"Very Dissatisfied"}
-						],
-						DISPLAY_ORDER:2
-				 },
-			          {
-                     		          	  "_TF_ANSWERS":[{"answer":""}],
-                         			  	  TYPE_ID:7,
-                         			  	  DISPLAY_ORDER:3,
-                         			  	  CODE:"Q3"
-                     		      },
-				      {
-                      			  CODE:"Q4",
-                        			  NAME:"Please rate your level of satisfaction with each module covered in this training program.",
-                        			  TYPE_ID:6,
-                        			  DISPLAY_ORDER:4, 
-                        			  _TF_ANSWERS:[
-                            			 {answer:"Module 1"},{answer:"Module 2"},{answer:"Module 3"},{answer:"Module 4"},{answer:"Module5"}
-                          		 ]
-                    		  },
-				  {
-                      			CODE:'Q5',
-                      			DISPLAY_ORDER:5, 
-                      			MAX_SELECTIONS_ALLOWED:null, 
-                      			MIN_SELECTIONS_ALLOWED:null, 
-                      			MULTIPLE_SELECTION:true, 
-                      			MUST_SELECT_ALL:false,  
-                     		    NAME:'Which topics did you find most useful? (Select all that apply)',  
-                     		    TYPE_ID:2,  
-                    		     _TF_ANSWERS:[
-                    	            	 { answer:'Introduction to the software' },  
-                    	            	 { answer:'Advanced features' },  
-                    	            	 { answer:'Troubleshooting techniques' },   
-                    	            	 { answer:'Integration with other tools/software' }   
-                 		 	 ]},
-				  {
-				      CODE :"Q6",	
-				      NAME :"Did you find the pace of training too slow or too fast?",	
-				      TYPE_ID :1 ,
-				      DISPLAY_ORDER :6 ,
-			     	      _TF_ANSWERS:[
-					      {"anser":""},
-					      {"anser":""}
-					      ]
-				   },
-				   {
-				       CODE :"Q7",	
-				       NAME :"What did you like best about this training program?",	
-				       TYPE_ID :4 ,
-				       DISPLAY_ORDER :7 ,
-			      	       _TF_ANSWERS:[]
-				    }
-				    ,{
-				        CODE :"Q8",	
-				        NAME :"What could have been done differently to improve your learning experience?",	
-				        TYPE_ID :4 ,
-				        DISPLAY_ORDER :8 ,
-			       	        _TF_ANSWERS:[]
-				     },{
-				         CODE :'q9', 	
-				         NAME :'How likely are you to recommend this training program to a colleague?', 	
-				         TYPE_ID :'3', 	
-					     display_order :'9', 		
-					     '_tf_answers':[
-					       {'Answer':'Very Likely'}, 		
-					       {'Answer':'Likely'}, 		
-					       {'Answer':'Neutral'}, 		
-					       {'Answer':'Unlikely'},		
-					       {'Answer':'Very Unlikely'}]		
-				     },{
-					 	CODE :'q10', 	
-					 	display_order :'10', 	
-					 	max_selections_allowed:null , 	
-					 	min_selections_allowed:null ,  	
-					 	multiple_selection:false ,  	
-					 	must_select_all:false ,  	
-					 	name :'Were there any technical issues during the training?',  	
-					    type_id :'1',
-					    '_tf_answers':[
-					        {'Answer':''},{'Answer':''}]
-				     },{
-					  	CODE :"q11",	 
-					  	DISPLAY_ORDER :"11",	 
-					  	MAX_SELECTIONS_ALLOWED:"",	 
-					  	MIN_SELECTIONS_ALLOWED:"",	 
-					  	MULTIPLE_SELECTION:true,	  
-					    MUST_SELECT_ALL:false,	  
-					    NAME :"Which aspects of this course were most challenging? (Select all that apply)",	  
-					    '_tf_answers':[
-					        {'Answer':"Keeping up with new concepts and terminology"},		 
-					        {'Answer':"Applying what was learned in practical scenarios"}]}			 
-				     
-				            ,{
-				           	  	    'CODE':"q12",	   
-				           	  	    'DISPLAY ORDER':12,	   
-				           	  	    'MAX SELECTION ALLOWED':null,
-				           	  	    'MIN SELECTION ALLOWED':null,
-				           	  	    'MULTIPLE SELECTION ':false,
-				           	  	     MUST SELECT ALL ':false,'NAME':"When would be a good time for us to follow up on your progress after completing this course?",
-			           	          	     '_tf_answers':[{'Answeer':''}]	   
-			           	          	      }]
+                        "CODE": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Yes, definitely!"},
+                            {"ANSWER":"I think so."},
+                            {"ANSWER":"Not sure."},
+                            {"ANSWER":"No, not really."}
+                         ],
+                         TYPE_ID: 1,
+                         NAME: 'Did you learn something new?',
+                         DISPLAY_ORDER : 2
+                     },
+                     {
+                          CODE: 'Q3_GUID',
+                          NAME: 'Was the training duration appropriate?',
+                          TYPE_ID: 2,
+                          DISPLAY_ORDER : 3,
+                           _TF_ANSWERS:[
+                              { ANSWER:'Too short' },
+                              { ANSWER:'Just right' },
+                              { ANSWER:'Too long' }
+                           ]
+                      },
+                      {
+                           CODE:'Q4_GUID',
+                           NAME:"What was your favorite part of the training?",
+                           TYPE_ID:4,
+                           DISPLAY_ORDER :4 
+                       }, 
+                       {  
+                             CODE:"Q5_GUID", 
+                             NAME:"Would you recommend this training to others?", 
+                             TYPE_ID:1, 
+                             DISPLAY_ORDER :5,  
+                             _TF_ANSWERS:[  
+                                 { ANSWER:"Definitely yes" },  
+                                 { ANSWER:"Probably yes" },   
+                                 { ANSWER:"Not sure" },   
+                                 { ANSWER:"Probably no" },   
+                                 { ANSWER:"Definitely no"}    
+                               ]     
+                       },
+                       {
+                          CODE:'Q6_GUID',
+                          NAME:'How would you rate the trainer’s knowledge and expertise?',
+                          TYPE_ID:3,
+                          DISPLAY_ORDER :6 ,
+                          
+                           _TF_ANSWERS:[
+                              {'ANSWER':'Excellent'},
+                              {'ANSWER':'Good'},
+                              {'ANSWER':'Average'},
+                              {'ANSWER':'Poor'}
+                             
+                             
+                              
+                              
+                               
+                               ]
+                      },
+
+                      {
+
+                         
+                     
+                      
+                       
+                           
+                        
+                            
+                            
+                           
+                       
+                         
+                          
+                          
+                           
+                          
+                         
+                        
+                        
+                     
+                   
+                       
+                      
+                    
+                        
+                      
+                     
+                     
+                      
+                    
+                    
+                  
+                   
+                    
+                  
+                   
+                 
+                
+               
+             
+              
+              
+
+                  }
+                
+                
+                
             }
         ]
     }
@@ -1470,7 +1547,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1496,118 +1573,116 @@ Generate me a questionnaire on Learner feedback after a course session with 8 qu
 -------------------
 [LLM ANSWER]
 {
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "LFCS01",
-        "NAME": "Learner Feedback after Course Session",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "LFCS01_Q1",
-            "NAME": "Did the course meet your expectations?",
-            "TYPE_ID": 1,
-            "DISPLAY_ORDER": 1,
-            "_TF_ANSWERS":[
-              {"ANSWER":"Yes"},
-              {"ANSWER":"No"}
-            ]
-          },
-          {
-            "CODE":"LFCS01_Q2",
-            "NAME":"What did you like about the course?",
-            "_TF_ANSWERS":[],
-            	"TYPE_ID" : 4,
-            	"DISPLAY_ORDER" : 2
-          },
-          {
-          	"CODE":"LFCS01_Q3",
-          	"NAME":"What aspects of the course could be improved?",
-          	"_TF_ANSWERS":[],
-          	"TYPE_ID" : 4,
-          	"DISPLAY_ORDER" : 3
-         },
-         {
-			"CODE":"LFCS01_Q4",
-			"NAME":"How would you rate the instructor's knowledge of the subject matter?",
-			"_TF_ANSWERS":[
-			 {"ANSWER":"Excellent"},
-			 {"ANSWER":"Good"},
-			 {"ANSWER":"Fair"},
-			 {"ANSWER":"Poor"}
-		 ],
-		  "_DEFAULT_ANSWER":["Fair"],
-		  "_MIN_SELECTIONS_REQUIRED_PER_USER_RESPONSE":["1"],
-		  "_MAX_SELECTIONS_ALLOWED_PER_USER_RESPONSE":["1"],
-		  "_ALLOWED_NUMBER_OF_BLANK_ANSWERS_PER_USER_RESPONSE":["0"],
-		  "_ALLOWED_NUMBER_OF_OTHER_SPECIFIED_ANSWERS_PER_USER_RESPONSE":["0"],
-		  	 	
-		  	
-		  	
-		    	 		
-        	 
-        	 
-		   
-		  
-		  
-		  
-		 
-		   
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "LFCS-9d7f3c6a-4b0e-11ec-9621-0242ac130002",
+                "NAME": "Learner Feedback Course Session",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "LFCS-Q1",
+                        "NAME": "Did the course meet your expectations?",
+                        "TYPE_ID": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Yes"},
+                            {"ANSWER":"No"}
+                        ],
+                        "DISPLAY_ORDER" : 1
+                    },
+                    {
+                        "CODE": 	"LFCS-Q2",
+                       	"NAME":"Was the course content relevant to you?",
+                    	"TYPE_ID":1,
+                    	"_TF_ANSWERS":[
+                        	        {"ANSWER":"Yes, completely"},
+                        	        {"ANSWER":"Yes, somewhat"},
+                        	        {"ANSWER":"No"}
+                    	 ],
+                         	"DISPLAY_ORDER" : 2
+                    },
+                    {
+                      	  	"CODE":"LFCS-Q3",
+                      	  	"NAME":"How would you rate the instructor's knowledge of the subject matter?",
+                     	   	  "_TF_ANSWERS":[
+                          	     		 { 
+                                  			 	   "_id":"",
+                                        		  	   "_value":"",
+                                        		  	   "_label":"" 
+                                			 },
+                                			 { 
+                                  				   "_id":"",
+                                        			   "_value":"",
+                                       				   "_label":"" 
+                               			  },
+                               			  { 
+                                 				 	  "_id":"",
+                                         			  	  "_value":"",
+                                         			   	  "_label":""  
+                                		 }],
+                            		   
+                     	   	 	 TYPE_ID:3,
+                     	   	 	 DISPLAY_ORDER:3	
+                  		  },
+                  		  {
+                      	  	 CODE:"LFCS-Q4",	
+                      	  	 NAME:"What did you like most about this course?",	
+                      	  	 TYPE_ID:4,
+                             _TF_ANSWERS:[
+                              		    { ANSWER:"The instructor's teaching style was engaging and informative."},	 
+                              		    { ANSWER:"The content was very practical and applicable to my job."},
+                              		    { ANSWER:"The class size was small enough for individual attention from the instructor."},	 
+                              		    { ANSWER:"Other (please specify)"}
+                              ],
+                              DISPLAY_ORDER:4		
+                 		 },	  
+                 		 {
+                    	      CODE: 	  'LFCS-Q5',
+                    	      NAME: 	  'How would you rate your overall satisfaction with this course?',
+                    	      TYPE_ID: 3,
+                             _TF_ANSWERS:[
+                                            {_id:"",_value:"",_label:""},	 
+                                            {_id:"",_value:"",_label:""},	 
+                                            {_id:"",_value:"",_label:""}  
+                                        ],	
+                              DISPLAY_ORDER :5		
+                  		  },	  
+                 		  {
+                          	CODE:'LFCS-Q6',
+                          	NAME:'Would you recommend this course to others?',
+                          	TYPE_ID:2,
+                             _TF_ANSWERS:[
+                                     		      {'ANSWER':'Definitely yes'},
+                                     		      {'ANSWER':'Probably yes'},
+                                     		      {'ANSWER':'Not sure'},
+                                     		      {'ANSWER':'Probably not'},
+                                     		      {'ANSWER':'Definitely not'}
+                                    	     ],	   
+                            	DISPLAY_ORDER :6		
+                		   },	  
+                		   {
+                            CODE:'LFSC-Q7',
+                            NAME:'Which area(s) of this session could be improved upon? Check all that apply.',
+                            TYPE_ID:5,
+                          _TF_ANSWERS:[
+                                   		     {'answer': 'Course materials'},     
+                                   		     {'answer': 'Instructor delivery'},    
+                                   		     {'answer': 'Class size'},              
+                                   		     {'answer': 'Facilities/Equipment'} ,     
+                                   		     {'answer': 'Other (please specify)' }    
+                                    	     ],	   
+                          DISPLAY_ORDER :7		
+                		   },	  
+                		   {
 
-         
-         
-         ]},
-         {  
-	        CODE:"LFCS01_Q5",  
-	        NAME:"Rate your overall satisfaction with this training session.",  
-	        TYPE_ID:3,  
-	        DISPLAY_ORDER:5,   
-	         _MIN_SCALE_LABELS:["Not Satisfied", "", "", "", "", "", "", "" ,"Very Satisfied"],   
-	         _MAX_SCALE_VALUE:["9"]  
-	     },    
-	     {    
-	       CODE:"LFCS01_Q6",    
-	       NAME:"Which part(s) of this training session did you find most beneficial?",    
-	       TYPE_ID:2,    
-	       DISPLAY_ORDER:6,     
-	       _ALLOWED_NUMBER_OF_BLANK_ANSWERS_PER_USER_RESPONSE:["0"],     
-	       _ALLOWED_NUMBER_OF_OTHER_SPECIFIED_ANSWERS_PER_USER_RESPONSE:["0"],      
-	     	   _DEFAULT_OPTIONS:[      
-	             {      
-	               OPTION_CODE:"A",     
-	               OPTION_NAME:"Course Content/ Materials",     
-	               SELECTED_BY_DEFAULT:true       
-	             },       
-	             {        
-	               OPTION_CODE:"B",        
-	               OPTION_NAME:"Instructor's Delivery Style/ Knowledge Level ",        
-	              SELECTED_BY_DEFAULT:false          
-	            },           
-	            {           
-	              OPTION_CODE:"C",            
-	              OPTION_NAME :"Opportunities for Interaction and Questions ",            
-	              SELECTED_BY_DEFAULT:false             
-	           }              
-	          ],               
-	          _OPTIONS:[],                 
-	          _HAS_OTHER_OPTION:true                
-	    },          
-	    {           
-	      CODE :" LFCS01_Q7 ",            
-	      NAME :" How likely are you to recommend this course to a friend or colleague? ",             
-	      TYPE_ID :3,              
-	      DISPLAY_ORDER:7 ,               
-	      _MIN_SCALE_LABELS:["Not Likely","","","","","","","","Extremely Likely"],                
-	     _MAX_SCALE_VALUE:["9"]                
-	    },                 
-	    {                  
-	     CODE :" LFSC02 Q8 ",                    
-	     NAME :" What other courses would you like us to offer in future? ",                     
-	     TYPE_ID :4 ,                      
-	     DISPLAY_ORDER:8 ,                       
-	    }                  
-	   ]                   
-	  }                     
-   ]                        
+                         	CODE:' LFSC-Q8',
+                          NAME :'Do you have any additional comments or suggestions on how we can improve our training programs?',
+                          TYPE_ID   :4,
+                         _ TF_ANSWERS:[{ answer:''}],	   
+                         	DISPLAY ORDER :8			
+               }
+           ]
+       }
+   ]
 }
 -------------------
 =================================================================
@@ -1629,7 +1704,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1654,66 +1729,7 @@ Generate me a questionnaire on Employee experience with 16 questions
 -------------------
 -------------------
 [LLM ANSWER]
-{
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "EEQ001",
-        "NAME": "Employee Experience Questionnaire",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "EEQ001_Q1",
-            "NAME": "How satisfied are you with your current role?",
-            "TYPE_ID": 3,
-            "_TF_ANSWERS":[
-              {"ANSWER":"Very satisfied"},
-              {"ANSWER":"Satisfied"},
-              {"ANSWER":"Neutral"},
-              {"ANSWER":"Unsatisfied"},
-              {"ANSWER":"Very unsatisfied"}
-            ],
-            "DISPLAY_ORDER": 1
-          },
-          {
-            "CODE": "EEQ001_Q2",
-            "NAME": 	"How challenging do you find your daily tasks?",
-           	"TYPE_ID" : 3,
-          	"_TF_ANSWERS":[
-            	{"ANSWER":"Very challenging"},
-            	{"ANSWER":"Challenging enough"}, 
-            	{"ANSWER":"Not very challenging"}, 
-            	{"ANSWER":"Not at all challenging"}
-           ],
-          	"DISPLAY_ORDER" :2
-          },
-          {
-          	 	
-        	  "_TF_ANSWERS":[
-            		{"ANSWER":"",
-            		 "_VALUE":""},
-            		{"ANSWER":"",
-            		 "_VALUE":""},
-            		{"ANSWER":"",
-            		 "_VALUE":""}
-        	 ],	
-        	 
-        	 
-        	 
-        	 	
-        	 
 
-	        }
-          
-          
-          
-          
-          
-        ]
-      }
-    ]
-  }
-}
--------------------
 =================================================================
 0-SHOT
 With FULL questionnaire parameters
@@ -1733,7 +1749,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1759,109 +1775,104 @@ Generate me a questionnaire on Employee potential with 8 questions
 -------------------
 [LLM ANSWER]
 {
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "EPQ",
-        "NAME": "Employee Potential Questionnaire",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "EPQ1",
-            "NAME": "Which of the following skills do you believe are most important for an employee to have in order to reach their full potential? Choose one.",
-            "TYPE_ID": 1,
-            "_TF_ANSWERS":[
-              {"ANSWER":"Leadership"},
-              {"ANSWER":"Communication"},
-              {"ANSWER":"Problem-solving"},
-              {"ANSWER":"Time management"}
-            ],
-            "DISPLAY_ORDER" : 1
-          },
-          {
-            "CODE": "EPQ2",
-            "NAME": 	"On a scale of 1-10, how much do you feel that your current job is helping you reach your full potential?",
-            	"TYPE_ID" :3,
-            	"_TF_ANSWERS":[
-            		{"ANSWER":"1"},{"ANSWER":"2"},{"ANSWER":"3"},{"ANSWER":"4"},{"ANSWER":"5"},
-            		{"ANSWER":"6"},{"ANSWER":"7"},{"ANSWER":"8"},{"ANSWER":"9"},{	" ANSWER ":"10"}
-            	],
-          	  DISPLAY_ORDER:2
-          },
-          {
-          	  CODE:"EPQ3",
-          	  NAME:"What motivates you at work? Choose one or more.",
-          	  TYPE_ID:2,
-          	   "_TF_ANSWERS":[
-            		{"answertext ":"Salary and benefits"}, 
-            		{"answertext ":"Recognition and praise"}, 
-            		{"answertext ":"Opportunities for growth and development"}, 
-            		{"answertext ":"Challenging work assignments"}],
-                DISPLAY_ORDER:3
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "EMP-POTENTIAL-4e8c3d9f-6a5b-4c1b-b7d2-e315e0f1a78c",
+                "NAME": "Employee Potential Questionnaire",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "EPQ-Q1",
+                        "NAME": "What are the employee's top skills?",
+                        "TYPE_ID": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Leadership"},
+                            {"ANSWER":"Communication"},
+                            {"ANSWER":"Problem Solving"},
+                            {"ANSWER":"Teamwork"}
+                         ],
+                        DISPLAY_ORDER: 1
+                    },
+                    {
+                        "CODE": "EPQ-Q2",
+                        "NAME": 	"Does the employee have a history of taking initiative?",
+                        TYPE_ID: 1,
+                         "_TF_ANSWERS":[
+                             {"ANSWER":"Yes"},
+                             {"ANSWER":"No"}
+                         ],
+                         DISPLAY_ORDER: 2
+                     },
+                     {
+                         CODE:"EPQ-Q3",
+                         NAME:"How would you rate the employee's ability to learn new things quickly?",
+                         TYPE_ID:3,
+                          "_TF_ANSWERS":[
+                              { ANSWER:"Poor", SCORE:1},
+                              { ANSWER:"Fair", SCORE:2},
+                              { ANSWER:"Good", SCORE:3},
+                              { ANSWER:"Very Good", SCORE:4},
+                              { ANSWER:"Excellent", SCORE:5}
+                          ],
+                          DISPLAY_ORDER : 3
+                      },
+                      {
+                          CODE : 'EPQ-Q4',
+                          NAME : 'Has this employee shown any signs of being able to work under pressure?',
+                          TYPE_ID : 1,
+                           _TF_ANSWERS:[
+                               {'ANSWER':'Yes'},
+                               {'ANSWER':'No'}
+                           ],
+                           DISPLAY_ORDER : 4
+                       },
+                       {
+                           CODE:'EPQ-Q5',
+                           NAME:'What is your view on the Employee\'s overall attitude towards work and colleagues?',
+                           TYPE_ID : 4,
+                            _TF_ANSWERS:[
+                                {'ANSWER':'Positive'},
+                                {'ANSWER':'Negative'}
+                            ],
+                            DISPLAY_ORDER : 5 
+                       },
+                       {
+                           CODE:'EPQ-Q6',
+                           NAME:'How would you rate this Employee\'s ability to handle conflicts with colleagues or clients?',
+                           TYPE_ID :3 ,
+                             _TF_ANSWERS:[
+                                 {'SCORE':0,'LABEL': 'Not Applicable'},
+                                 {'SCORE':1,'LABEL': 'Poor'},
+                                 {'SCORE':2,'LABEL': 'Fair'},
+                                 {'SCORE':3,'LABEL': 'Good'},
+                                 {'SCORE':4,'LABEL' :'Very Good' }
+                             ]
+                       ,DISPLAY_ORDER :6 
+                   },  
+                   {
+                       CODE:'EPQ-Q7',
+                       NAME:'In which areas do you think this Employee could improve upon in order to reach their full potential within your organization?',
+                       TYPE_ID :2 ,
+                   '_TF_ANSWERS':[{'ID':'A','TEXT':"Time Management"},{'ID':'B','TEXT':"Professional Development"},{'ID':'C','TEXT':"Leadership Skills"}],
+                   DISPLAY_ORDER :7 
+               },  
+               {
 
-         },
-         {	
-        	 CODE:"EPQ4",	
-        	 NAME:"How often do you seek feedback on your performance?",	
-        	 TYPE_ID:1,	
-        	 "_TF_ANSWERS":[	
-        		 {"ANswertext ": “Never”}, 	
-        		 {"ANswertext ": “Rarely”}, 	
-        		 {"ANswertext ": “Sometimes”}, 	
-        		 {"ANswertext ": “Frequently”}, 	
-        		 {“AnswerText”: ”Always"}],		
-        	 DISPLAY_ORDER :4	 
-         },	 
-         {	 
-        	 CODE:"EPQ5",		
-        	 NAME:"On a scale of 1-10, how comfortable are you with taking risks in the workplace?",		
-        	 TYPE_ID:3,		
-                 "_TF_ANSWERS":[			
-                	 {'AnswerText': '1'},			
-                	 {'AnswerText': '2'},			
-                	 {'AnswerText': '3'},			
-                	 {'AnswerText': '4'},						
-                     {'AnswerText':'5'},
-                     {'AnswerText':'6'},
-                     {'AnswerText':'7'},
-                     {'AnswerText':'8'},
-                     {'Answetext':'9'},
-                     {'Answetext':'10'}],				
-                 DISPLAY_ORDER :5				
-         },
-         {			 
-                 CODE:'EPQ6',			 
-                 NAME:'What is your preferred way to learn new skills?',			 
-                 TYPE_ID:2,			 			  
-                  '_TF_ANSWERS':[				  
-                         {‘answer’: ‘Reading’},
-                         {‘answer’: ‘Watching videos’},
-                         {‘answer’: ‘Attending training sessions’},
-                         {‘answer’: ‘Hands-on experience’}],				
-                  DISPLAY_ORDER :6		 
-          },		 
-          {
-              	CODE:'EPQ7',
-              	Name:'Do you feel that there are opportunities for advancement within the company?',
-              	Type_Id:1,
-               '_tf_answers':[{'anwer' :'Yes'},{ 'anwer' :'No'}],
-                Display_Order :7
+                  CODE :'EQP_Q8', 
 
-              
-              
-              
-              
-          
-          
-          
-          
-          
-         
-         
-         
+                  NAME :'When did the Employee join your organization?',
+
+                  TYPE_ID :'8',
+
+                  '_TF_ANSWERS':[],
+
+                  DISPLAY_ORDER :'8'
+
+              }   
+            ]
+          }
         ]
-      }
-    ]
-  }
+    }
 }
 -------------------
 =================================================================
@@ -1883,7 +1894,7 @@ If the topic is valid, reply with only a JSON, which must respect the following 
     - The root of the JSON is an object that contains a single property 'data'.
     - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
     - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-        - 'CODE': (string) the questionnaire's code.
+        - 'CODE': (string) the questionnaire's code. Append a random GUID to this code.
         - 'NAME': (string) the questionnaire's name.
         - '_TF_QUESTIONS': An array of objects, each representing a question.
     - Each question in the '_TF_QUESTIONS' array has the following properties:
@@ -1909,77 +1920,76 @@ Generate me a questionnaire on Course feedback with 5 questions
 -------------------
 [LLM ANSWER]
 {
-  "data": {
-    "TF_QUESTIONNAIRES": [
-      {
-        "CODE": "CF",
-        "NAME": "Course Feedback",
-        "_TF_QUESTIONS": [
-          {
-            "CODE": "CF1",
-            "NAME": "How would you rate the quality of the course content?",
-            "TYPE_ID": 3,
-            "_TF_ANSWERS":[
-              {"ANSWER":"Excellent"},
-              {"ANSWER":"Good"},
-              {"ANSWER":"Average"},
-              {"ANSWER":"Poor"}
-            ],
-            "DISPLAY_ORDER": 1
-          },
-          {
-            "CODE": "CF2",
-            "NAME": 	"How would you rate the instructor's ability to teach and explain concepts effectively?",
-           	"TYPE_ID" : 3,
-          	"_TF_ANSWERS":[
-              {"ANSWER":"Excellent"},
-              {"ANSWER":"Good"},
-              {"ANSWER":"Average"},
-              {"ANSWER":"Poor"}
-          	],
-          	"DISPLAY_ORDER" :2 
-          },
-          {
-            	"CODE" :  	"CF3", 
-            	"NAME" :  	"Were there any topics or concepts that you found particularly challenging or difficult to understand?", 
-            	"TYPE_ID" :   4, 
-            	  "_TF_ANSWERS":[]
-            	 ,
-            	 DISPLAY_ORDER:3
-         },  
-         {   
-              	 	  	
-               	  	 	
-        	      	   	 
-        	      	   	 
-        	      	 CODE: 'CF4',
-                   NAME: 'What did you like most about this course?',
-                   TYPE_ID: 4,
-                   _TF_ANSWERS:[]
-                  ,
-                  DISPLAY_ORDER:4
-         },  
-         {   
-              	 	  	
-               	  	 	
-        	      	   	 
-        	      	   	 
-                CODE:'CF5',
-                NAME:'Overall, how satisfied are you with this course?',
-                TYPE_ID:3,
-                 _TF_ANSWERS:[
-                    { ANSWER:"Very satisfied"},{ ANSWER:"Satisfied"},{ ANSWER:"Neutral"},{ ANSWER:"Unsatisfied"},{ ANSWER:"Very unsatisfied"}
-                 ],
-              	DISPLAY_ORDER:5
-                
-                
-         }  
-          
-          
-          
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "COURSE_FEEDBACK_4c8e6f5a-1d7b-4c1f-ba34-0d2b9a7f3dc6",
+                "NAME": "Course Feedback",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "CFQ1",
+                        "NAME": "How would you rate the instructor's knowledge of the subject matter?",
+                        "TYPE_ID": 3,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Excellent"},
+                            {"ANSWER":"Good"},
+                            {"ANSWER":"Average"},
+                            {"ANSWER":"Poor"}
+                        ],
+                        "DISPLAY_ORDER" : 1
+                    },
+                    {
+                      	"CODE" :	"CFQ2",
+						"NAME" :	"What did you enjoy most about this course?",
+						"TYPE_ID" : 4,
+						"_TF_ANSWERS":[],
+						"display_order":2
+					},
+					{
+                      	  "_TF_ANSWERS":[
+						      { 
+                                'ORDER': 'A',
+                                'ANSWER': 'The pace of the course was just right'
+                              },
+							  { 
+                                'ORDER': 'B',
+                                'ANSWER': 'The pace of the course was too fast'
+                              }, 
+							  { 
+                                'ORDER': 'C',
+                                 ANSWER: '"The pace of the course was too slow'
+                              }
+                          ],
+						  "_TEMPLATE_QUESTION_CODE":"",
+						  CODE:"CFQ3",	
+						  DISPLAY_ORDER: 3,					
+						  NAME:"What is your opinion on the pace of this course?",
+						  TYPE_ID:5
+					},
+					{
+					  	  "_TEMPLATE_QUESTION_CODE":"",
+					      CODE:"CFQ4",	
+					      DISPLAY_ORDER: 4,					
+					      NAME:"Did this course meet your expectations? Why or why not?",
+					      TYPE_ID:2,
+					      "_TF_ANSWERS":[
+						      { ANSWER:'Yes' }, 
+						      { ANSWER:'No' }
+						   ]
+				    },
+				    {
+				        CODE :"CFQ5",
+				        NAME :"Would you recommend this course to others? Why or why not?",
+				        TYPE_ID : 2,
+				        DISPLAY_ORDER : 5,
+				        _TEMPLATE_QUESTION_CODE:"",
+				       _TF_ANSWERS:[
+					        {'ANSWER':"Yes"},{'ANSWER':"No"}
+				       ]
+				    }                     
+                ]
+            }
         ]
-      }
-    ]
-  }
+    }
 }
 -------------------

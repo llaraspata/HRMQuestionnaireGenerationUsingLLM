@@ -66,6 +66,8 @@ class TFQuestionnairesDataset:
         questionnaire_data.questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
         questionnaire_data.answers = self.answers[self.answers["QUESTION_ID"].isin(questionnaire_data.questions["ID"])]
 
+        return questionnaire_data
+
     
     def get_sample_questionnaire_data(self):
         sample_instance = TFQuestionnairesDataset()
