@@ -23,7 +23,7 @@ def main():
             evaulator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             
             exp_results_path = os.path.join(results_path, subfolder)
-            
+
             if not os.path.exists(exp_results_path):
                 os.makedirs(exp_results_path)
             
@@ -44,7 +44,7 @@ def main():
             evaulator.compute_rouge_score_distribution(results_dir=exp_results_path)
 
             print("\t 6. Computing Intraquestionnaire Syntactic Similarity...")
-            evaulator.compute_intraquestionnaire_syntactic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            evaulator._compute_intraquestionnaires_syntactic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
     print("=================================================")
     print("                 END OF EVALUATION               ")

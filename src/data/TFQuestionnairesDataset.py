@@ -58,6 +58,15 @@ class TFQuestionnairesDataset:
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
 
     
+    def get_questionnaire_data(self, questionnaire_id):
+        questionnaire_data = TFQuestionnairesDataset()
+
+        questionnaire_data.questionnaires = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]
+        questionnaire_data.question_types = self.question_types
+        questionnaire_data.questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
+        questionnaire_data.answers = self.answers[self.answers["QUESTION_ID"].isin(questionnaire_data.questions["ID"])]
+
+    
     def get_sample_questionnaire_data(self):
         sample_instance = TFQuestionnairesDataset()
 

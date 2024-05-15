@@ -45,7 +45,10 @@ class ModelEvaluator:
     ANSWER_ROUGE_FILENAME = "answer_rouge_scores"
 
     BLEU_SCORE_N_GRAMS_WEIGHTS = (0.5, 0.5, 0, 0)
-    INTRAQSTN_BLEU_SCORE_N_GRAMS_WEIGHTS = (0, 0, 0, 1)
+    SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS = (0, 0, 0, 1)
+
+    SYNTACTIC_SIMILARITY_INTRAQSTN_COLUMNS = ["QUESTIONNAIRE_ID", "BLEU_SCORE", "ROUGE_L_PRECISION", "ROUGE_L_RECALL", "ROUGE_L_F1"]
+    SYNTACTIC_SIMILARITY_SAMPLE_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRE_ID", "BLEU_SCORE", "ROUGE_L_PRECISION", "ROUGE_L_RECALL", "ROUGE_L_F1"]
     
 
     # ------------
@@ -528,15 +531,30 @@ class ModelEvaluator:
         max_answers_scores.to_csv(os.path.join(results_dir, "ROUGE_L_F1_answers.csv"), index=False)
 
 
-    def compute_intraquestionnaire_syntactic_similarity(self, project_root, results_dir):
-        sintactic_similarity_df = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "BLEU_SCORE", "ROUGE_L_PRECISION", "ROUGE_L_RECALL", "ROUGE_L_F1"])
+    def compute_syntactic_similarities(self, project_root, results_dir):
+        # Intraquestionnaire Syntactic Similarity
+        intraquestionnaire_sintactic_similarity = self._compute_intraquestionnaires_syntactic_similarity(project_root)
+        intraquestionnaire_sintactic_similarity.to_csv(os.path.join(results_dir, "Intraquestionnaire_Syntactic_Similarity.csv"), index=False)
+
+        # Syntactic Similarity with Sample Questionnaires (only for few-shot)
+        if self.experiment_id.startswith("1s") :
+            dataset = TFQuestionnairesDataset()
+            dataset.load_data(project_root=project_root)
+
+            syntactic_similarity_with_sample = self._compute_syntactic_similarity_with_samples(project_root=project_root, dataset=dataset)
+            syntactic_similarity_with_sample.to_csv(os.path.join(results_dir, "Syntactic_Similarity_With_Sample.csv"), index=False)
+
+
+    def _compute_intraquestionnaires_syntactic_similarity(self, project_root):
+        sintactic_similarity_df = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_INTRAQSTN_COLUMNS)
+        
         for pred in self.predictions.iterrows():
             id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
             new_row = self._compute_intraquestionnaire_syntactic_similarity(project_root, pred[1])
             sintactic_similarity_df = pd.concat([sintactic_similarity_df, new_row], ignore_index=True)
-
-        sintactic_similarity_df.to_csv(os.path.join(results_dir, "Intraquestionnaire_Syntactic_Similarity.csv"), index=False)
+        
+        return sintactic_similarity_df
 
 
     def _compute_intraquestionnaire_syntactic_similarity(self, project_root, pred):
@@ -566,7 +584,7 @@ class ModelEvaluator:
 
                 ref = reference.split()
                 can = candidate.split()
-                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=ModelEvaluator.INTRAQSTN_BLEU_SCORE_N_GRAMS_WEIGHTS)
+                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=ModelEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
                 scores.append(score)
         
         return np.mean(scores)
@@ -584,6 +602,68 @@ class ModelEvaluator:
                 if (ref == candidate):
                     continue
                 
+                score = scorer.score(ref, candidate)
+                precisions.append(score["rougeL"].precision)
+                recalls.append(score["rougeL"].recall)
+                f1measures.append(score["rougeL"].fmeasure)
+
+        return {
+            "precision": np.mean(precisions),
+            "recall": np.mean(recalls),
+            "f1": np.mean(f1measures)
+        }
+
+
+    def _compute_syntactic_similarity_with_samples(self, project_root, dataset):
+        sintactic_similarity_df = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_SAMPLE_COLUMNS)
+        
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
+            self.set_questionnaire_id(id)
+
+            sample_ids = pred[1]["SAMPLE_QUESTIONNAIRES_IDS"]
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
+
+            for sample_id in sample_ids:
+                sample_questionnaire = dataset.get_questionnaire_data(sample_id)
+
+                mean_bleu = self._compute_bleu_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+                mean_rougeL = self._compute_rouge_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+
+                new_row = pd.DataFrame({
+                    "QUESTIONNAIRE_ID": [self.questionnaire_id],
+                    "SAMPLE_QUESTIONNAIRE_ID": [sample_id],
+                    "BLEU_SCORE": [mean_bleu],
+                    "ROUGE_L_PRECISION": [mean_rougeL["precision"]],
+                    "ROUGE_L_RECALL": [mean_rougeL["recall"]],
+                    "ROUGE_L_F1": [mean_rougeL["f1"]]
+                })
+                sintactic_similarity_df = pd.concat([sintactic_similarity_df, new_row], ignore_index=True)
+        
+        return sintactic_similarity_df
+    
+
+    def _compute_bleu_with_sample(generated_questions, sample_questions):
+        scores = []
+        for candidate in generated_questions:
+            for reference in sample_questions:
+                ref = reference.split()
+                can = candidate.split()
+                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=ModelEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
+                scores.append(score)
+        
+        return np.mean(scores)
+    
+
+    def _compute_rouge_with_sample(generated_questions, sample_questions):
+        precisions = []
+        recalls = []
+        f1measures = []
+
+        scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
+
+        for candidate in generated_questions:
+            for ref in sample_questions:
                 score = scorer.score(ref, candidate)
                 precisions.append(score["rougeL"].precision)
                 recalls.append(score["rougeL"].recall)
