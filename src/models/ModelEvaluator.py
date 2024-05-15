@@ -19,7 +19,7 @@ class ModelEvaluator:
                           "CONVERSION_ERROR", "IS_JSON", "ERROR_MESSAGE", 
                           "GENERATED_QUESTIONNAIRES", 
                           "QUESTIONS_WITH_MISSING_ANSWERS", "NOT_UNIOUE_QUESTION_CODES", 
-                          "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", 
+                          "GENERATED_QUESTION_NUMBER", "QUESTION_NUMBER_DEVIATION", "QUESTION_NUMBER_DEVIATION_FROM_SAMPLE",
                           "AVERAGE_GENERATED_ANSWER_NUMBER", "AVERAGE_ANSWER_NUMBER_DEVIATION"]
 
     BLEU_COLUMNS_QUESTION = ["ID", "GENERATED", "GROUND_TRUTH", "BLEU_SCORE"]
@@ -68,6 +68,7 @@ class ModelEvaluator:
 
         self.generated_question_number = -1
         self.question_number_deviation = -1
+        self.question_number_deviation_from_sample = -1
         self.questions_with_missing_answers = -1
         self.not_unique_question_codes = -1
         
@@ -114,6 +115,7 @@ class ModelEvaluator:
 
         self.generated_question_number = -1
         self.question_number_deviation = -1
+        self.question_number_deviation_from_sample = -1
         self.questions_with_missing_answers = -1
         self.not_unique_question_codes = -1
 
@@ -128,13 +130,16 @@ class ModelEvaluator:
 
 
     def compute_statistics(self, project_root, results_dir):
+        dataset = TFQuestionnairesDataset()
+        dataset.load_data(project_root=project_root)
+
         for pred in self.predictions.iterrows():
             id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
 
             self._check_json_integrity(project_root, pred[1])
             if self.is_json:
-                self._compute_statistics(project_root, pred[1])
+                self._compute_statistics(project_root, pred[1], dataset)
 
             self.statistics = pd.concat([self.statistics, pd.DataFrame({
                 "QUESTIONNAIRE_ID": [id],
@@ -146,6 +151,7 @@ class ModelEvaluator:
                 "GENERATED_QUESTION_NUMBER": [self.generated_question_number],
                 "NOT_UNIOUE_QUESTION_CODES": [self.not_unique_question_codes],
                 "QUESTION_NUMBER_DEVIATION": [self.question_number_deviation],
+                "QUESTION_NUMBER_DEVIATION_FROM_SAMPLE": [self.question_number_deviation_from_sample],
                 "AVERAGE_GENERATED_ANSWER_NUMBER": [self.avg_generated_answer_number],
                 "AVERAGE_ANSWER_NUMBER_DEVIATION": [self.avg_answer_number_deviation]
             })], ignore_index=True)
@@ -165,7 +171,7 @@ class ModelEvaluator:
         self.questions_with_missing_answers = result["questions_with_missing_answers"]
 
 
-    def _compute_statistics(self, project_root, pred):
+    def _compute_statistics(self, project_root, pred, dataset):
         ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
         predicted = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
 
@@ -181,6 +187,19 @@ class ModelEvaluator:
 
         # Not unique question codes
         self.not_unique_question_codes = predicted.get_not_unique_question_codes()
+
+        # Question number deviation from sample (only few-shot)
+        if self.experiment_id.startswith("1s") and "SAMPLE_QUESTIONNAIRES_IDS" in pred.index:
+            sample_ids = pred["SAMPLE_QUESTIONNAIRES_IDS"]
+            deviations = []
+            
+            for sample_id in sample_ids:
+                sample_questionnaire = dataset.get_questionnaire_data(sample_id)
+                sample_question_number = len(sample_questionnaire.questions)
+                deviations.append(sample_question_number - self.generated_question_number)
+
+            self.question_number_deviation_from_sample = np.mean(deviations)
+       
 
 
     def compute_bleu_scores(self, project_root, results_dir):
