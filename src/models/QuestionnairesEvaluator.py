@@ -6,7 +6,7 @@ from rouge_score import rouge_scorer
 import numpy as np
 
 
-class ExperimentEvaluator:
+class QuestionnairesEvaluator:
     # ------------
     # Constants
     # ------------
@@ -380,12 +380,12 @@ class ExperimentEvaluator:
                     if "question" in scores_csv:
                         global_questions_scores = pd.read_csv(os.path.join(bleu_scores_path, scores_csv))
 
-                        max_questions_scores_df = ExperimentEvaluator._get_max_bleu_score(global_questions_scores)
-                        qst_distribution = ExperimentEvaluator._get_distribution_bleu_score(global_questions_scores)
-                        max_questions_scores_df = ExperimentEvaluator._concat_bleu_scores_and_distribution(max_questions_scores_df, qst_distribution)
+                        max_questions_scores_df = QuestionnairesEvaluator._get_max_bleu_score(global_questions_scores)
+                        qst_distribution = QuestionnairesEvaluator._get_distribution_bleu_score(global_questions_scores)
+                        max_questions_scores_df = QuestionnairesEvaluator._concat_bleu_scores_and_distribution(max_questions_scores_df, qst_distribution)
 
-                        distribution = ExperimentEvaluator._get_distribution_bleu_score(max_questions_scores_df, at_questionnaire_level=True)
-                        questionnaire_new_row = ExperimentEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
+                        distribution = QuestionnairesEvaluator._get_distribution_bleu_score(max_questions_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = QuestionnairesEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
 
                         max_questions_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_questions_scores_df)
                         max_questions_scores = pd.concat([max_questions_scores, max_questions_scores_df], ignore_index=True)
@@ -393,12 +393,12 @@ class ExperimentEvaluator:
                     elif "answer" in scores_csv:
                         global_answers_scores = pd.read_csv(os.path.join(bleu_scores_path, scores_csv))
 
-                        max_answers_scores_df = ExperimentEvaluator._get_max_bleu_score(global_answers_scores, is_question=False)
-                        asw_distribution = ExperimentEvaluator._get_distribution_bleu_score(global_answers_scores, is_question=False)
-                        max_answers_scores_df = ExperimentEvaluator._concat_bleu_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
+                        max_answers_scores_df = QuestionnairesEvaluator._get_max_bleu_score(global_answers_scores, is_question=False)
+                        asw_distribution = QuestionnairesEvaluator._get_distribution_bleu_score(global_answers_scores, is_question=False)
+                        max_answers_scores_df = QuestionnairesEvaluator._concat_bleu_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
 
-                        distribution =  ExperimentEvaluator._get_distribution_bleu_score(max_answers_scores_df, at_questionnaire_level=True)
-                        questionnaire_new_row = ExperimentEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
+                        distribution =  QuestionnairesEvaluator._get_distribution_bleu_score(max_answers_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = QuestionnairesEvaluator._concat_bleu_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
 
                         max_answers_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_answers_scores_df)
                         max_answers_scores = pd.concat([max_answers_scores, max_answers_scores_df], ignore_index=True)
@@ -519,12 +519,12 @@ class ExperimentEvaluator:
                         global_questions_scores = pd.read_csv(os.path.join(rouge_scores_path, scores_csv))
                         global_questions_scores = global_questions_scores.drop(columns=columns_to_discard, axis=1)
 
-                        max_questions_scores_df = ExperimentEvaluator._get_max_rouge_score(global_questions_scores)
-                        qst_distribution = ExperimentEvaluator._get_distribution_rouge_score(global_questions_scores)
-                        max_questions_scores_df = ExperimentEvaluator._concat_rouge_scores_and_distribution(max_questions_scores_df, qst_distribution)
+                        max_questions_scores_df = QuestionnairesEvaluator._get_max_rouge_score(global_questions_scores)
+                        qst_distribution = QuestionnairesEvaluator._get_distribution_rouge_score(global_questions_scores)
+                        max_questions_scores_df = QuestionnairesEvaluator._concat_rouge_scores_and_distribution(max_questions_scores_df, qst_distribution)
 
-                        distribution = ExperimentEvaluator._get_distribution_rouge_score(max_questions_scores_df, at_questionnaire_level=True)
-                        questionnaire_new_row = ExperimentEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
+                        distribution = QuestionnairesEvaluator._get_distribution_rouge_score(max_questions_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = QuestionnairesEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True)
 
                         max_questions_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_questions_scores_df)
                         max_questions_scores = pd.concat([max_questions_scores, max_questions_scores_df], ignore_index=True)
@@ -533,12 +533,12 @@ class ExperimentEvaluator:
                         global_answers_scores = pd.read_csv(os.path.join(rouge_scores_path, scores_csv))
                         global_answers_scores = global_answers_scores.drop(columns=columns_to_discard, axis=1)
 
-                        max_answers_scores_df = ExperimentEvaluator._get_max_rouge_score(global_answers_scores, is_question=False)
-                        asw_distribution = ExperimentEvaluator._get_distribution_rouge_score(global_answers_scores, is_question=False)
-                        max_answers_scores_df = ExperimentEvaluator._concat_rouge_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
+                        max_answers_scores_df = QuestionnairesEvaluator._get_max_rouge_score(global_answers_scores, is_question=False)
+                        asw_distribution = QuestionnairesEvaluator._get_distribution_rouge_score(global_answers_scores, is_question=False)
+                        max_answers_scores_df = QuestionnairesEvaluator._concat_rouge_scores_and_distribution(max_answers_scores_df, asw_distribution, is_question=False)
 
-                        distribution = ExperimentEvaluator._get_distribution_rouge_score(max_answers_scores_df, at_questionnaire_level=True)
-                        questionnaire_new_row = ExperimentEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
+                        distribution = QuestionnairesEvaluator._get_distribution_rouge_score(max_answers_scores_df, at_questionnaire_level=True)
+                        questionnaire_new_row = QuestionnairesEvaluator._concat_rouge_scores_and_distribution(questionnaire_new_row, distribution, at_questionnaire_level=True, is_question=False)
 
                         max_answers_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_answers_scores_df)
                         max_answers_scores = pd.concat([max_answers_scores, max_answers_scores_df], ignore_index=True)
@@ -579,8 +579,8 @@ class ExperimentEvaluator:
     def _compute_intraquestionnaire_syntactic_similarity(self, project_root, pred):
         try:
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
-            bleu_score = ExperimentEvaluator._compute_bleu_intraquestionnaire(generated.questions["NAME"])
-            rouge_score = ExperimentEvaluator._compute_rouge_intraquestionnaire(generated.questions["NAME"])
+            bleu_score = QuestionnairesEvaluator._compute_bleu_intraquestionnaire(generated.questions["NAME"])
+            rouge_score = QuestionnairesEvaluator._compute_rouge_intraquestionnaire(generated.questions["NAME"])
 
             return pd.DataFrame({
                 "QUESTIONNAIRE_ID": [self.questionnaire_id],
@@ -603,7 +603,7 @@ class ExperimentEvaluator:
 
                 ref = reference.split()
                 can = candidate.split()
-                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=ExperimentEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
+                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=QuestionnairesEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
                 scores.append(score)
         
         return np.mean(scores)
@@ -656,8 +656,8 @@ class ExperimentEvaluator:
             for sample_id in sample_ids:
                 sample_questionnaire = dataset.get_questionnaire_data(sample_id)
 
-                mean_bleu = ExperimentEvaluator._compute_bleu_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
-                mean_rougeL = ExperimentEvaluator._compute_rouge_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+                mean_bleu = QuestionnairesEvaluator._compute_bleu_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
+                mean_rougeL = QuestionnairesEvaluator._compute_rouge_with_sample(generated.questions["NAME"], sample_questionnaire.questions["NAME"])
 
                 new_row = pd.DataFrame({
                     "QUESTIONNAIRE_ID": [self.questionnaire_id],
@@ -680,7 +680,7 @@ class ExperimentEvaluator:
             for reference in sample_questions:
                 ref = reference.split()
                 can = candidate.split()
-                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=ExperimentEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
+                score = sentence_bleu([ref], can, smoothing_function=SmoothingFunction().method4, weights=QuestionnairesEvaluator.SYNT_SIM_BLEU_SCORE_N_GRAMS_WEIGHTS)
                 scores.append(score)
         
         return np.mean(scores)

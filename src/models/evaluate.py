@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
-from src.models.ExperimentEvaluator import ExperimentEvaluator
+from src.models.QuestionnairesEvaluator import QuestionnairesEvaluator
 
 
 PROJECT_ROOT = os.getcwd()
@@ -19,8 +19,8 @@ def main():
         experiment_path = os.path.join(models_path, subfolder)
 
         if os.path.isdir(experiment_path):
-            experiment_evaluator = ExperimentEvaluator()
-            experiment_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
+            questionnaires_evaluator = QuestionnairesEvaluator()
+            questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             
             exp_results_path = os.path.join(results_path, subfolder)
 
@@ -29,22 +29,22 @@ def main():
             
             print(f"Experiment ID: {subfolder}")
             print("\t 1. Computing statistics...")
-            experiment_evaluator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            questionnaires_evaluator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             print("\t 2. Computing BLEU scores...")
-            experiment_evaluator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            questionnaires_evaluator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             print("\t 3. Computing BLEU scores distribution...")
-            experiment_evaluator.compute_bleu_score_distribution(results_dir=exp_results_path)
+            questionnaires_evaluator.compute_bleu_score_distribution(results_dir=exp_results_path)
 
             print("\t 4. Computing ROUGE scores...")
-            experiment_evaluator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            questionnaires_evaluator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             print("\t 5. Computing ROUGE-L (F1) scores distribution...")
-            experiment_evaluator.compute_rouge_score_distribution(results_dir=exp_results_path)
+            questionnaires_evaluator.compute_rouge_score_distribution(results_dir=exp_results_path)
 
             print("\t 6. Computing Syntactic Similarity...")
-            experiment_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            questionnaires_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
     print("=================================================")
     print("                 END OF EVALUATION               ")
