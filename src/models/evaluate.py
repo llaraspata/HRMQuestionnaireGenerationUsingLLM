@@ -46,6 +46,9 @@ def main():
             print("\t 6. Computing Syntactic Similarity...")
             questionnaires_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
+            print("\t 7. Computing Semantic Similarity...")
+            questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+
     print("=================================================")
     print("                 END OF EVALUATION               ")
     print("=================================================")

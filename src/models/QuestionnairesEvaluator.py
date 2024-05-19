@@ -4,6 +4,9 @@ from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from rouge_score import rouge_scorer
 import numpy as np
+from openai import AzureOpenAI
+import json
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 class QuestionnairesEvaluator:
@@ -49,7 +52,26 @@ class QuestionnairesEvaluator:
 
     SYNTACTIC_SIMILARITY_INTRAQSTN_COLUMNS = ["QUESTIONNAIRE_ID", "BLEU_SCORE", "ROUGE_L_PRECISION", "ROUGE_L_RECALL", "ROUGE_L_F1"]
     SYNTACTIC_SIMILARITY_SAMPLE_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRE_ID", "BLEU_SCORE", "ROUGE_L_PRECISION", "ROUGE_L_RECALL", "ROUGE_L_F1"]
+
+    SYNTACTIC_SIMILARITY_FILENAME = "Intraquestionnaire_Syntactic_Similarity.csv"
+    SYNTACTIC_SIMILARITY_WITH_SAMPLE_FILENAME = "Syntactic_Similarity_With_Sample.csv"
+
+    SEMANTIC_SIMILARITY_QUESTIONS_FILENAME = "Semantic_Similarity_questions.csv"
+    SEMANTIC_SIMILARITY_QUESTIONNAIRES_FILENAME = "Semantic_Similarity_questionnaires.csv"
+
+    SEMANTIC_SIMILARITY_QUESTION_COLUMNS = ["QUESTIONNAIRE_ID", "QUESTIONNAIRE_TOPIC", 
+                                            "ID", "GENERATED", "GROUND_TRUTH",
+                                            "POSITION_DEVIATION", "COSINE_WITH_QUESTION", "COSINE_WITH_TOPIC",
+                                            "FINAL_SCORE"]
+    SEMANTIC_SIMILARITY_QUESTIONNAIRE_COLUMNS = ["QUESTIONNAIRE_ID",
+                                                 "POSITION_DEVIATION", "COSINE_WITH_QUESTION", "COSINE_WITH_TOPIC",
+                                                 "FINAL_SCORE"]
     
+    EMBEDDING_MODEL = "text-embedding-3-large"
+
+    QUESTIONS_SIMILARITY_WEIGHT = 0.7
+    TOPIC_SIMILARITY_WEIGHT = 0.3
+
 
     # ------------
     # Constructor
@@ -83,6 +105,8 @@ class QuestionnairesEvaluator:
         self.scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
         self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_QUESTION)
         self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
+
+        self.question_semantic_scores = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
     
     # ------------
@@ -127,6 +151,8 @@ class QuestionnairesEvaluator:
 
         self.question_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_QUESTION)
         self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
+
+        self.question_semantic_scores = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
 
     def compute_statistics(self, project_root, results_dir):
@@ -553,7 +579,7 @@ class QuestionnairesEvaluator:
     def compute_syntactic_similarities(self, project_root, results_dir):
         # Intraquestionnaire Syntactic Similarity
         intraquestionnaire_sintactic_similarity = self._compute_intraquestionnaires_syntactic_similarity(project_root)
-        intraquestionnaire_sintactic_similarity.to_csv(os.path.join(results_dir, "Intraquestionnaire_Syntactic_Similarity.csv"), index=False)
+        intraquestionnaire_sintactic_similarity.to_csv(os.path.join(results_dir, self.SYNTACTIC_SIMILARITY_FILENAME), index=False)
 
         # Syntactic Similarity with Sample Questionnaires (only for few-shot)
         if self.experiment_id.startswith("1s") and "SAMPLE_QUESTIONNAIRES_IDS" in self.predictions.columns:
@@ -561,7 +587,7 @@ class QuestionnairesEvaluator:
             dataset.load_data(project_root=project_root)
 
             syntactic_similarity_with_sample = self._compute_syntactic_similarity_with_samples(project_root=project_root, dataset=dataset)
-            syntactic_similarity_with_sample.to_csv(os.path.join(results_dir, "Syntactic_Similarity_With_Sample.csv"), index=False)
+            syntactic_similarity_with_sample.to_csv(os.path.join(results_dir, self.SYNTACTIC_SIMILARITY_WITH_SAMPLE_FILENAME), index=False)
 
 
     def _compute_intraquestionnaires_syntactic_similarity(self, project_root):
@@ -705,3 +731,102 @@ class QuestionnairesEvaluator:
             "recall": np.mean(recalls),
             "f1": np.mean(f1measures)
         }
+
+
+    def compute_semantic_similarity(self, project_root, results_dir):
+        semsim_scores_path = os.path.join(results_dir, "SemanticSimilarity_Scores")
+            
+        if not os.path.exists(semsim_scores_path):
+            os.makedirs(semsim_scores_path)
+
+        client = AzureOpenAI(
+            api_key = os.getenv("AZURE_OPENAI_KEY"),  
+            api_version = "2024-02-01",
+            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
+        )
+
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
+            self.set_questionnaire_id(id)
+            self._compute_semantic_similarity(project_root, pred[1], client)
+
+            if not self.question_semantic_scores.empty:
+                question_filename = f"questions__QST_{id}.csv"
+                self.question_semantic_scores.to_csv(os.path.join(semsim_scores_path, question_filename), index=False)
+            
+            self.clear()
+        
+    
+    def _compute_semantic_similarity(self, project_root, pred, client):
+        try:
+            ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
+
+            for i in range(len(generated.questions)):
+                qst_id = generated.questions["ID"][i]
+                qst_text = generated.questions["NAME"][i]
+
+                question_embedding = QuestionnairesEvaluator.get_text_embedding(client, qst_text)
+
+                new_rows = self._compute_question_semantic_similarity(project_root, client, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
+
+                self.question_semantic_scores = pd.concat([self.question_semantic_scores, new_rows], ignore_index=True)
+
+        except Exception as e:
+            return
+        
+
+    def get_text_embedding(client, text):
+        response = client.embeddings.create(
+            input = text,
+            model= QuestionnairesEvaluator.EMBEDDING_MODEL
+        )
+
+        response_json = json.loads(response.model_dump_json(indent=2))["data"]
+        
+        return response_json[0]["embedding"]
+
+
+    def _compute_question_semantic_similarity(self, project_root, client, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
+        df = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
+
+        for j in range(len(ground_truth_questions)):
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(client, ground_truth_questions[j])
+            questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
+            deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
+            
+            topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, self.questionnaire_id)
+            topic_embedding = QuestionnairesEvaluator.get_text_embedding(client, topic)
+            topic_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, topic_embedding)
+
+            weight_sum = self.QUESTIONS_SIMILARITY_WEIGHT + self.TOPIC_SIMILARITY_WEIGHT
+            score = ((self.QUESTIONS_SIMILARITY_WEIGHT * questions_cosine) + (self.TOPIC_SIMILARITY_WEIGHT * topic_cosine)) / (weight_sum + deviation) 
+
+            new_row = pd.DataFrame({
+                "QUESTIONNAIRE_ID": [self.questionnaire_id],
+                "QUESTIONNAIRE_TOPIC": [topic],
+                "ID": [generated_question_id],
+                "GENERATED": [generated_question],
+                "GROUND_TRUTH": [ground_truth_questions[j]],
+                "POSITION_DEVIATION": [deviation],
+                "COSINE_WITH_QUESTION": [questions_cosine],
+                "COSINE_WITH_TOPIC": [topic_cosine],
+                "FINAL_SCORE": [score]
+            })
+
+            df = pd.concat([df, new_row], ignore_index=True)
+
+        return df
+    
+
+    def compute_cosine_similarity(generated_embedding, ground_truth_embedding):
+        X = np.array(generated_embedding).reshape(1, -1)
+        Y = np.array(ground_truth_embedding).reshape(1, -1)
+
+        similarity_score = cosine_similarity(X, Y)
+
+        return similarity_score[0][0]
+
+
+    def compute_position_deviation_normalized(generated_position, ground_truth_position, len_generated, len_ground_truth):
+        return abs(generated_position - ground_truth_position)/np.max([len_generated, len_ground_truth])
