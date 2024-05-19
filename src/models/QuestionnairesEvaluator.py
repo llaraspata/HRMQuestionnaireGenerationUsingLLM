@@ -59,8 +59,7 @@ class QuestionnairesEvaluator:
     SEMANTIC_SIMILARITY_QUESTIONS_FILENAME = "Semantic_Similarity_questions.csv"
     SEMANTIC_SIMILARITY_QUESTIONNAIRES_FILENAME = "Semantic_Similarity_questionnaires.csv"
 
-    SEMANTIC_SIMILARITY_QUESTION_COLUMNS = ["QUESTIONNAIRE_ID", "QUESTIONNAIRE_TOPIC", 
-                                            "ID", "GENERATED", "GROUND_TRUTH",
+    SEMANTIC_SIMILARITY_QUESTION_COLUMNS = ["ID", "GENERATED", "GROUND_TRUTH", "QUESTIONNAIRE_TOPIC",
                                             "POSITION_DEVIATION", "COSINE_WITH_QUESTION", "COSINE_WITH_TOPIC",
                                             "FINAL_SCORE"]
     SEMANTIC_SIMILARITY_QUESTIONNAIRE_COLUMNS = ["QUESTIONNAIRE_ID",
@@ -755,6 +754,8 @@ class QuestionnairesEvaluator:
                 self.question_semantic_scores.to_csv(os.path.join(semsim_scores_path, question_filename), index=False)
             
             self.clear()
+
+        self.compute_semantic_similarity_for_questionnaires(results_dir)
         
     
     def _compute_semantic_similarity(self, project_root, pred, client):
@@ -830,3 +831,78 @@ class QuestionnairesEvaluator:
 
     def compute_position_deviation_normalized(generated_position, ground_truth_position, len_generated, len_ground_truth):
         return abs(generated_position - ground_truth_position)/np.max([len_generated, len_ground_truth])
+
+
+    def compute_semantic_similarity_for_questionnaires(self, results_dir):
+        semsim_scores_path = os.path.join(results_dir, "SemanticSimilarity_Scores")
+
+        questionnaires_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+        max_questions_scores = pd.DataFrame(columns=["QUESTIONNAIRE_ID", "ID"])
+
+        for qst_id in self.predictions["QUESTIONNAIRE_ID"]:
+            questionnaire_new_row = pd.DataFrame(columns=["QUESTIONNAIRE_ID"])
+            questionnaire_new_row["QUESTIONNAIRE_ID"] = [qst_id]
+            
+            for scores_csv in os.listdir(semsim_scores_path):
+                if str(qst_id) in scores_csv:
+                    global_questions_scores = pd.read_csv(os.path.join(semsim_scores_path, scores_csv))
+
+                    max_questions_scores_df = QuestionnairesEvaluator._get_max_semantic_score(global_questions_scores)
+
+                    distribution = QuestionnairesEvaluator._get_distribution_semantic_score(max_questions_scores_df)
+                    questionnaire_new_row = QuestionnairesEvaluator._concat_semantic_scores_and_distribution(questionnaire_new_row, distribution)
+
+                    max_questions_scores_df["QUESTIONNAIRE_ID"] = [qst_id] * len(max_questions_scores_df)
+                    max_questions_scores = pd.concat([max_questions_scores, max_questions_scores_df], ignore_index=True)
+
+                    break
+
+            questionnaires_scores = pd.concat([questionnaires_scores, questionnaire_new_row], ignore_index=True)
+
+        questionnaires_scores.to_csv(os.path.join(results_dir, "SemanticSimilarity_questionnaires.csv"), index=False)
+        max_questions_scores.to_csv(os.path.join(results_dir, "SemanticSimilarity_questions.csv"), index=False)
+
+
+    def _get_max_semantic_score(scores_df):
+        max_ids = scores_df.groupby('ID')['COSINE_WITH_QUESTION'].idxmax()
+        
+        return scores_df.loc[max_ids]
+    
+
+    def _get_distribution_semantic_score(scores_df):
+        mean_question_sim = scores_df['COSINE_WITH_QUESTION'].mean()
+        variance_question_sim = scores_df['COSINE_WITH_QUESTION'].var()
+
+        mean_topic_sim = scores_df['COSINE_WITH_TOPIC'].mean()
+        variance_topic_sim = scores_df['COSINE_WITH_TOPIC'].var()
+
+        mean_final_score = scores_df['FINAL_SCORE'].mean()
+        variance_final_score = scores_df['FINAL_SCORE'].var()
+        
+        return {
+            "question_similarity" : {
+                "mean": mean_question_sim, 
+                "variance": variance_question_sim
+            },
+            "topic_similarity" : {
+                "mean": mean_topic_sim, 
+                "variance": variance_topic_sim
+            },
+            "final_score" : {
+                "mean": mean_final_score, 
+                "variance": variance_final_score
+            }
+        }
+    
+
+    def _concat_semantic_scores_and_distribution(scores_df, distribution):
+        scores_df["FINAL_SCORE_MEAN"] = distribution["final_score"]['mean']
+        scores_df["FINAL_SCORE_VAR"] = distribution["final_score"]['variance']
+
+        scores_df["SIMILARITY_WITH_QUESTION_MEAN"] = distribution["question_similarity"]['mean']
+        scores_df["SIMILARITY_WITH_QUESTION_VAR"] = distribution["question_similarity"]['variance']
+       
+        scores_df["SIMILARITY_WITH_TOPIC_MEAN"] = distribution["topic_similarity"]['mean']
+        scores_df["SIMILARITY_WITH_TOPIC_VAR"] = distribution["topic_similarity"]['variance']
+
+        return scores_df
