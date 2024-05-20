@@ -804,11 +804,10 @@ class QuestionnairesEvaluator:
             score = ((self.QUESTIONS_SIMILARITY_WEIGHT * questions_cosine) + (self.TOPIC_SIMILARITY_WEIGHT * topic_cosine)) / (weight_sum + deviation) 
 
             new_row = pd.DataFrame({
-                "QUESTIONNAIRE_ID": [self.questionnaire_id],
-                "QUESTIONNAIRE_TOPIC": [topic],
                 "ID": [generated_question_id],
                 "GENERATED": [generated_question],
                 "GROUND_TRUTH": [ground_truth_questions[j]],
+                "QUESTIONNAIRE_TOPIC": [topic],
                 "POSITION_DEVIATION": [deviation],
                 "COSINE_WITH_QUESTION": [questions_cosine],
                 "COSINE_WITH_TOPIC": [topic_cosine],
