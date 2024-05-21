@@ -869,6 +869,8 @@ class QuestionnairesEvaluator:
     
 
     def _get_distribution_semantic_score(scores_df):
+        mean_position_deviation = scores_df['POSITION_DEVIATION'].mean()
+
         mean_question_sim = scores_df['COSINE_WITH_QUESTION'].mean()
         variance_question_sim = scores_df['COSINE_WITH_QUESTION'].var()
 
@@ -890,11 +892,14 @@ class QuestionnairesEvaluator:
             "final_score" : {
                 "mean": mean_final_score, 
                 "variance": variance_final_score
-            }
+            },
+            "position_deviation" : mean_position_deviation
         }
     
 
     def _concat_semantic_scores_and_distribution(scores_df, distribution):
+        scores_df["POSITION_DEVIATION"] = distribution["position_deviation"]
+
         scores_df["FINAL_SCORE_MEAN"] = distribution["final_score"]['mean']
         scores_df["FINAL_SCORE_VAR"] = distribution["final_score"]['variance']
 

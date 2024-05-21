@@ -2,6 +2,7 @@ import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.models.QuestionnairesEvaluator import QuestionnairesEvaluator
+from src.models.ModelEvaluator import ModelEvaluator
 
 
 PROJECT_ROOT = os.getcwd()
@@ -14,6 +15,8 @@ def main():
 
     models_path = os.path.join(PROJECT_ROOT, "models")
     results_path = os.path.join(PROJECT_ROOT, "results")
+
+    model_evaluator = ModelEvaluator(results_dir=results_path)
 
     for subfolder in os.listdir(models_path):
         experiment_path = os.path.join(models_path, subfolder)
@@ -49,6 +52,10 @@ def main():
             print("\t 7. Computing Semantic Similarity...")
             questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
+    print("-----------------------------------")
+    print("Globally evaluating the model...")
+    model_evaluator.evaluate()
+    
     print("=================================================")
     print("                 END OF EVALUATION               ")
     print("=================================================")
