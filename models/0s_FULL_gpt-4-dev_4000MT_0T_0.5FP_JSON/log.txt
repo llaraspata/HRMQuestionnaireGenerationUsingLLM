@@ -1,0 +1,9043 @@
+
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1146002
+     - Topic: Work stress
+     - Question number: 7
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Work stress with 7 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+  "data": {
+    "TF_QUESTIONNAIRES": [
+      {
+        "CODE": "WORK_STRESS_SURVEY_4E2B8A7F-5B6D-4F0D-9C34-F1B6E8D58CC1",
+        "NAME": "Work Stress Assessment",
+        "_TF_QUESTIONS": [
+          {
+            "CODE": "QST_WORKLOAD_01_A3C5AD36-DCC5-4B6E-A6B9-C7DB669BA3F3",
+            "NAME": "How often do you feel overwhelmed by your workload?",
+            "TYPE_ID": 1,
+            "DISPLAY_ORDER": 1,
+            "_TF_ANSWERS": [
+              {"ANSWER": "Always"},
+              {"ANSWER": "Often"},
+              {"ANSWER": "Sometimes"},
+              {"ANSWER": "Rarely"},
+              {"ANSWER": "Never"}
+            ]
+          },
+          {
+            "CODE": "QST_DEADLINES_02_BA7C2F0E-8D67-4F23-B8CE-2D83116A5C60",
+            "NAME": "Do tight deadlines make you feel anxious or stressed?",
+            "TYPE_ID": 1,
+            "DISPLAY_ORDER": 2,
+            "_TF_ANSWERS":[
+              {"ANSWER":"Yes, always"},
+              {"ANSWER":"Yes, but only when they are unreasonable"},
+              {"ANSWER":"Occasionally, it depends on the project"},
+              {"ANSWER":"No, I manage deadlines well"}
+            ]
+          },
+          {
+            "CODE":"QST_SUPPORT_03_E9A45C68-E3BF-48DA-B655-A8CF0095D1A4",
+            "NAME":"Do you feel that you have the support you need from management to manage work stress effectively?",
+            "TYPE_ID": 1,
+            "DISPLAY_ORDER": 3,
+             "_TF_ANSWERS":[
+               {"ANSWER":"Strongly agree"},
+               {"ANSWER":"Agree"},
+               {"ANSWER":"Neutral"},
+               {"ANSWER":"Disagree"},
+               {"ANSWER":"Strongly disagree"}
+             ]
+          },
+          {
+          	"CODE":"QST_RESOURCES_04_C9DDAA59-D08F-4EFD-BECB-A82BE09718D7",
+          	"NAME":"Are there sufficient resources (time, budget, manpower) allocated to your tasks?",
+          	"TYPE_ID": 2,
+          	"DISPLAY_ORDER": 4,
+          	"_TF_ANSWERS":[
+          	  {"ANSWER":"Always sufficient"},
+          	  {"ANSWER":"Usually sufficient"},
+          	  {"ANSWER":"Sometimes insufficient"},
+          	  {"ANSWER":"Often insufficient"},
+          	  {"ANSWER":"Always insufficient"}
+          	]
+          },
+          {
+          	"CODE":"QST_BALANCE_05_FEEBF230-F5FF-43C0-AAEF-E58D657BA6EA",
+          	"NAME":"How would you rate your work-life balance?",
+          	"TYPE_ID": 3,
+          	"DISPLAY_ORDER": 5,
+             "_TF_ANSWERS":[
+               {"ANSWER":"Very poor balance"},
+               {"ANSWER":"Poor balance"},
+               {"ANSWER":"Fair balance"}, 
+               {"ANSWER":"Good balance"}, 
+               {"ANSWER":"Excellent balance"}
+             ]
+          },
+          {
+          	"CODE":"QST_FEEDBACK_06_AEFAFC9A-C2CB-42AC-BDBF-C8836824DFEF",
+          	"NAME":"",
+          	"TYPE_ID": 4,
+          	"DISPLAY_ORDER": 6,
+             "_TF_ANSWERS":[
+                { 
+                 	"QUESTION_CONTENT_PLACEHOLDER":
+                 	    ["What aspects of your job do you think contribute most to your stress levels?", 
+                 	     "(Please provide specific examples or situations.)"]
+                }
+             ]
+          },
+          {
+        	 	"CODE":"",
+        	 	"NAME":"",
+        	 	"TYPE_ID":"",
+        	 	"_TF_ANSWERS":[]
+         }
+        ]
+      }
+    ]
+  }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1146004
+     - Topic: Working mood
+     - Question number: 7
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Working mood with 7 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "WORKING_MOOD_SURVEY_4e2b7fde-8a6e-4a5f-b3c2-c01df5bcb5d1",
+                "NAME": "Working Mood Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "MOOD_Q1_7c9a9d64-8f93-4b76-aeb0-4d8fbc6c8e00",
+                        "NAME": "On a scale from 1 to 5, how would you rate your overall mood at work this week?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "1"},
+                            {"ANSWER": "2"},
+                            {"ANSWER": "3"},
+                            {"ANSWER": "4"},
+                            {"ANSWER": "5"}
+                        ]
+                    },
+                    {
+                        "CODE": "MOOD_Q2_9b0e0bce-cbb0-47e7-aec4-a9d3db65956b",
+                        "NAME": "Do you feel that your work environment is positive and energizing?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Yes"},
+                            {"ANSWER": "No"}
+                        ]
+                    },
+                    {
+                        "CODE": "MOOD_Q3_6aefb3c0-f27b-40bd-b9ff-2f768a007ec2",
+                        "NAME":"What factors contribute most to your current mood at work? Select all that apply.",
+                        "TYPE_ID" : 2,
+                       	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS" : [
+                        	{"ANSWER":"Workload"},
+                        	{"ANSWER":"Colleagues"},
+                        	{"ANSWER":"Management"},
+                        	{"ANSWER":"Work-life balance"},
+                        	{"ANSWER":"Personal growth opportunities"}
+                      	]
+                    },
+                    {
+                     	"CODE" : 	"MOOD_Q4_b88f61ad-f89a-4c88-b75e-f1d58ae30bd7",
+                     	"NAME" :  	"How likely are you to recommend our company as a good place to work?",
+                     	"TYPE_ID" : 3,
+                     	"DISPLAY_ORDER" : 4,
+                      "_TF_ANSWERS":[
+                          {"ANSWER":"Very unlikely"},
+                          {"ANSWER":"Unlikely"},
+                          {"ANSWER":"Neutral"},
+                          {"ANSWER":"Likely"},
+                          {"ANSWER":"Very likely"}
+                      ]
+                   },
+                   {
+                    	"CODE" :  	"MOOD_Q5_cdbed588-c625-43ab-b18e-dc603cc8ea59",
+                    	"NAME" :  	"If you could change one thing about your current work situation to improve your mood, what would it be?",
+                    	"TYPE_ID" : 4,
+                    	"DISPLAY_ORDER" : 5,
+                     "_TF_ANSWERS":[
+                         {"ANSWER":"Open text feedback..."}
+                     ]
+                   },
+                   {
+                    	 	 	 	 	
+                    	 	 	 	 
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                    	                    
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                 	
+                	 
+                	 
+                	 
+                	 
+                	 
+                	 
+                	 
+                	 
+                	 
+                	 
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                	      
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                      
+                      
+                      
+                      
+                      
+                      
+                       
+                       
+                       
+                       
+                        
+                        
+                        
+                         
+                         
+                          
+                          
+                           
+                            
+                             
+ }]
+ }] }}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173001
+     - Topic: Remote working experience
+     - Question number: 10
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Remote working experience with 10 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "REMOTE_WORK_EXP_4E2B1C6F-5A65-4D84-BF15-72E3C68F2B21",
+                "NAME": "Remote Working Experience Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7A8B9C1D-2E3F-40G1-H2I3-J4K5L6M7N8O9",
+                        "NAME": "How satisfied are you with your current remote working environment?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very Satisfied"},
+                            {"ANSWER": "Satisfied"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Unsatisfied"},
+                            {"ANSWER": "Very Unsatisfied"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_8B9C1D7A-E2F3-G40H-I12J-K34L56M78N90",
+                        "NAME": "Which tools do you use regularly for remote communication? (Select all that apply)",
+                        "TYPE_ID": 2,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Email"},
+                            {"ANSWER":"Instant Messaging (e.g., Slack, Teams)"},
+                            {"ANSWER":"Video Conferencing (e.g., Zoom, Google Meet)"},
+                            {"ANSWER":"Project Management Software (e.g., Asana, Trello)"},
+                            {"ANSWER":"None of the above"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_9C1D7A8B-FE23-GH40-IJ12-KL34M56N78O9",
+                        "NAME":"How often do you experience technical issues while working remotely?",
+                        "TYPE_ID" : 1,
+                        "DISPLAY_ORDER" : 3,
+                         "_TF_ANSWERS":[
+                             {"ANSWER":"Very Often"},
+                             {"ANSWER":"Often"},
+                             {"ANSWER":"Sometimes"},
+                             {"ANSWER":"Rarely"},
+                             {"ANSWER":"Never"}
+                         ]
+                    },
+                    {
+                      	"CODE" :	"Q4_A1B2C3D4-E5F6-G7H8-I9J0-KL11M12N13O14",
+                      	"NAME" :	"Do you feel that remote work has affected your work-life balance positively or negatively?",
+                      	"TYPE_ID" : 1,
+                      	"DISPLAY_ORDER" : 4,
+                      	"_TF_ANSWERS":[
+                          	{"ANSWER":"Positively, I have a better balance now."},
+                          	{"ANSWER":"Negatively, it's harder to separate work from personal life."},
+                          	{"ANSWER":"No significant change."}
+                      	]
+                   },
+                   {
+                     	"CODE" :	"Q5_B2C3D4A5-E6F7-G8H9-I0J1-KL21M22N23O24",
+                     	"NAME" :	"How do you rate the level of support provided by the company for remote work?",
+                     	"TYPE_ID" : 3,
+                     	"DISPLAY_ORDER" : 5,
+                     	"_TF_ANSWERS":[
+                         	{"ANSWER":"Excellent"},
+                         	{"ANSWER":"Good"},
+                         	{"ANSWER":"Average"},
+                         	{"ANSWER":"Poor"},
+                         	{"ANSWER":"Very Poor"}
+                      ]
+                  },
+                  {
+                    	 	 	 	 	
+                    	 	 	 	 	                    
+                    	
+                    	
+                    	
+                    	
+                    	
+                    	
+                    	
+                    	
+                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                    	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	                                                                                	 		                    
+                  }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173002
+     - Topic: End of working relationship
+     - Question number: 10
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on End of working relationship with 10 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "END_OF_WORK_RELATIONSHIP_4e2b9a7e-3bfb-4a6c-a1d1-9b504c6c2995",
+                "NAME": "End of Working Relationship Feedback",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "QUESTION_1_8d5f5e5b-0f97-4d70-bae3-ec3d54a4f3ef",
+                        "NAME": "What is the primary reason for ending your working relationship with the company?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Contract completion"},
+                            {"ANSWER": "Personal reasons"},
+                            {"ANSWER": "Found a new job"},
+                            {"ANSWER": "Dissatisfaction with the company"},
+                            {"ANSWER": "Retirement"}
+                        ]
+                    },
+                    {
+                        "CODE": "QUESTION_2_b8a7c47e-cf44-4ed8-bde6-fd6e8c96fa08",
+                        "NAME": "How would you rate your overall satisfaction with your employment experience?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Very dissatisfied"},
+                            {"ANSWER":"Dissatisfied"},
+                            {"ANSWER":"Neutral"},
+                            {"ANSWER":"Satisfied"},
+                            {"ANSWER":"Very satisfied"}
+                        ]
+                    },
+                    {
+                        "CODE": "QUESTION_3_f0a4bece-d58e-4bc9-b77d-ee071aa34fe7",
+                        "NAME":"Did you feel that you had the resources and support necessary to perform your job effectively?",
+                        "TYPE_ID" : 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Always"},
+                            {"ANSWER":"Often"},
+                            {"ANSWER":"Sometimes"},
+                            {"ANSWER":"Rarely"},
+                            {"ANSWER":"Never"}
+                         ],
+                         "_DISPLAY_ORDER" : 3
+                    },
+                    {
+                      	"CODE" :	"QUESTION_4_c0a1bef2-f9bf-40ff-bb64-c93fd6387bda",
+                      	"NAME" :	"What could have been improved to make your workplace better?",
+                      	"TYPE_ID" : 4,
+                      	"_TF_ANSWERS":[],
+                      	"_DISPLAY_ORDER" : 4
+                    },
+                    {
+                     	"CODE" :	"QUESTION_5_aebf90ac-d245-46b2-a31b-e14617be61bb",
+                     	"NAME" :	"How well did your job responsibilities align with the job description provided to you at hiring?",
+                     	"_TF_ANSWERS":[
+                         	  {  	  	
+                         	  	 	   	   	   	   	   	   	   	   	   	  	
+                         	  	 	   	   	   	   	   	  	
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	 	    	   
+                         	  	      
+                          	      }
+                           ],
+                           "_DISPLAY_ORDER" : 5,
+                           "_TYPE_ID_" : 6
+                     },
+                     {
+                     	"_CODE_" :"QUESTION_6_bebc10ac-d245-46b2-a31b-e14617be61bb",
+                     	"_NAME_" :"Would you consider rejoining the company in the future, should an opportunity arise?",
+                     	"_TYPE_ID_" :"1",
+                     	"_DISPLAY_ORDER_" :"6",
+                     	"_TF_ANSWERS":[
+                          	      {  	  	      
+                          	      	      }
+                           ],
+                    	 
+                    	 
+                    	 
+                    	 
+                    	 
+                    	 
+                    	 
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	         
+                	           
+                	           
+                	              
+                	           
+                	           
+                	           
+                	           
+                	           
+                	           
+                	           
+                	           
+                	           
+                	           
+                	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	         	
+                 	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	  
+                  	          	    
+                   	    
+                   	    
+                   	    
+                   	    
+                   	    
+                   	    
+                   	    
+                   	    
+              	       	       	       	       	       	       	       	       	       	       	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+              	        
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	 
+             	        	     	        	     	        	     	        	     	        	     	        	     	        	     	        	     	        	     	        	   
+            	      	      	      	      	      	      	      	      	      	      	      	      	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+            	    	    
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+          		    	  
+        			      			      			      			      			      			      			      			      			      			     			    	     
+        			     			    	     
+        			     			    	     
+        			     			    	     
+        			     			    	     
+        			     			    	     
+        			     			    	     
+        				    	  				    	  				    	  				    	  				    	  				    	  				    	  				    	  			      			        			        			        			        			        			        			        			        			        			        			        		        		        		        		        		        		        		        		        		        		        	      		      		      		      		      		      		      		      		      		      		     		    		    		    		    		    		    		    		    		    		    		    	   		  		  		  		  		  		  		  		  		  		 		 		 		 		 		 		 		 		 		 		 	     		 	     		 	     		 	     		 	     		 	     		 	     		 	     		 	     	        
+     	        
+     	        
+     	        
+     	        
+     	        
+     	        
+     	        
+     	        
+     	        
+     	    		   
+     	    		   
+     	    		   
+     	    		   
+     	    		   
+     	    		   
+     	    		   
+     	    		   
+    	   		   		   		   		   		   		   		   		   		    
+   		     		    
+   		     		    
+   		     		    
+   		     		    
+   		     		    
+   		     		    
+   		     		    
+   		 	  		 	  		 	  		 	  		 	  		 	  		 	  		 	  	      	        	      	        	      	        	      	        	      	        	      	        	      	        	      		        		        		        		        		        		        		        		        		       		       		       		       		       		       		       		       		       		       
+   		       
+   		       
+   		       
+   		       
+   		       
+   		       
+   		       
+   		       
+   		       
+      		   
+      		   
+      		   
+      		   
+      		   
+      		   
+      		   
+      		   
+      		 
+      		 
+      		 
+      		 
+      		 
+      		 
+      		 
+      		 
+      		 
+    			       			       			       			       			       			       			       			       			       			    			    			    			    			    			    			    			    			   			   			   			   			   			   			   			   			         		         		         		         		         		         		         		         		          
+		          
+		          
+		          
+		          
+		          
+		          
+		          
+		          
+		    		       		    		       		    		       		    		       		    		       		    		       		    		       		    		       	            
+       	            
+       	            
+       	            
+       	            
+       	            
+       	            
+       	            
+       	    			         	    			         	    			         	    			         	    			         	    			         	    			         	    			           
+           		           		           		           		           		           		           		           		            		            		            		            		            		            		            			           			           			           			           			           			           			           			           
+			           
+			           
+			           
+			           
+			           
+			           
+			           
+			        			        			        			        			        			        			        			        	 		            		            		            		            		            		            		            		            	            	            	            	            	            	            	            	            	          	              	              	              	              	              	              	              	               	               	               	               	               	               	               	               	                	                	                	                	                	                	                	                 	                 	                 	                 	                 	                 	                 	                   	                   	                   	                   	                   	                   	                   	                   	                       	                       	                       	                       	                       	                       	                       	                       	                           	                           	                           	                           	                           	                           	                           	                           	             	             	             	             	             	             	             	             	            	            	            	            	            	            	            	            		               		               		               		               		               		               		               		                   		                   		                   		                   		                   		                   		                   		                       		                       		                       		                       		                       		                       		                       		                       		                        		           	 		            		            		            		            		            		            		            		            	            	            	            	            	            	            	            	            	           	              	              	              	              	              	              	              	               	               	               	               	               	               	               	               	                	                	                	                	                	                	                	                 	                 	                 	                 	                 	                 	                   	                   	                   	                   	                   	                   	                       	                       	                       	                       	                       	                       	                           	                           	                           	                           	                           	             	             	             	             	             	            	            	            	            		               		               		               		                   		                   		                   		                        		           	 		            		            		            		            		             
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               		
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+              
+              
+              
+              
+              
+              
+              
+              
+              
+             
+             
+             
+             
+             
+             
+             
+             
+             
+           
+            
+            
+            
+            
+            
+            
+            
+            
+            
+           
+           
+           
+           
+           
+           
+           
+          
+          
+          
+          
+          
+          
+         
+         
+         
+         
+         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                                                                                                                        
+                                                                                                                        
+                                                                                                                                                       
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                  
+                  
+                  
+                  
+                  
+                  
+                 
+                 
+                 
+                 
+                
+                
+
+                
+                
+                
+                
+                
+                
+                
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+
+                                              
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+
+                                               
+
+
+                                                
+
+
+                                                
+
+
+                                                
+
+
+                                                
+
+
+                                                
+
+
+                                                
+
+
+                                                
+
+
+                                                 
+
+
+
+
+
+
+                                                 
+
+
+
+
+
+
+                                                 
+
+
+
+
+
+
+                                                 
+
+
+
+
+
+
+                                                 
+
+
+
+
+
+
+                                                 
+
+
+
+
+
+
+                                                  
+
+
+
+
+
+
+
+                                                  
+
+
+
+
+
+
+
+                                                  
+
+
+
+
+
+
+
+                                                  
+
+
+
+
+
+
+
+                                                  
+
+
+
+
+
+
+
+                                                   
+
+
+
+
+
+
+
+
+
+                                                   
+
+
+
+
+
+
+
+
+
+                                                   
+
+
+
+
+
+
+
+
+
+                                                   
+
+
+
+
+
+
+
+
+
+                                                    
+
+
+
+
+
+
+
+
+
+
+
+                                                    
+
+
+
+
+
+
+
+
+
+
+
+                                                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                        
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                           
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                             
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                              
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                               
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                 
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                   
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                            
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                           
+
+                                                                                            
+
+                                                                                            
+
+                                                                                            
+
+                                                                                             
+
+                                                                                             	
+
+                                                                                             	
+
+                                                                                             	
+
+                                                                                             	
+
+                                                                                             	
+
+                                                                                             	
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               		
+
+                                                                                               			
+
+                                                                                               			
+
+                                                                                               			
+
+                                                                                               			
+
+                                                                                               			
+
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                     			 
+                                                                    				 
+                                                                    				 
+                                                                    				 
+                                                                    				 
+                                                                    				 
+                                                                    				 
+
+                                                                   					  
+
+                                                                   					  
+
+                                                                   					  
+
+                                                                   					  
+
+                                                                   					  
+
+                                                                   					  
+
+                                                                  						   
+
+                                                                  						   
+
+                                                                  						   
+
+                                                                  						   
+
+                                                                 							     
+
+                                                                 							     
+
+                                                                 							     
+
+                                                                 							     
+
+                                                                 							     
+
+                                                            								     
+
+                                                            								     
+
+                                                            								     
+
+                                                            								     
+
+                                                           									      
+
+                                                           									      
+
+                                                           									      
+
+                                                          										       
+
+                                                          										       
+
+                                                         											        
+
+                                                         											        
+
+                                                        												         												         												         												         												        													        	
+													        	
+													        	
+													        	
+													        	
+													        	
+													        	
+													        	
+												        				
+												        				
+												        				
+												        				
+												        				        				        				        				        				        				        				        				        				        				        				        				        				        				        				        				        				        			        			        			        			        			        			    			    			    			    			    			    			    			    			    			    			  			  			  			  			  			  			  			  			 			 			 			 			 			 			 			 			 			 			 			 			 				 				 				 				 				 				 				 				 				  				  				  				  				  				  				   				   				   				   				   				   				    				    				    				    				    				    				     				     				     				     				     				     				       				       				       				       				       				       				       				       				           				           				           				           				           				           				           			               			               			               			               			               			               			               			                			    			    			    			    			    			    			     			    			  			  			  			  			   			    				 				 				 				  				    					  					  					   					    						   						   						    						    						    						     						    							    					    					    					    					    					    					    					    					    				    				    				    				    				    				    				    				    				    				    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173003
+     - Topic: Onboarding
+     - Question number: 6
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Onboarding with 6 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "ONBOARDING_SURVEY_4E2B8A7F-5B6D-4F70-9F8D-C9BAAC8B9F3C",
+                "NAME": "New Employee Onboarding Feedback",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7C2A1D5E-2DAA-4E2A-BBB6-A4B501F4C5C1",
+                        "NAME": "How would you rate the clarity of the information provided before your first day?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very unclear"},
+                            {"ANSWER": "Somewhat unclear"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Somewhat clear"},
+                            {"ANSWER": "Very clear"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_9FA3B5EE-0EFA-4D19-BD5E-A4B501F6C7D2",
+                        "NAME": "Which of the following onboarding resources did you find useful? (Select all that apply)",
+                        "TYPE_ID": 2,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER":"Employee handbook"},
+                            {"ANSWER":"Orientation sessions"},
+                            {"ANSWER":"Mentorship program"},
+                            {"ANSWER":"Training modules"},
+                            {"ANSWER":"Company policies document"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_A1BC23DE-EF45-46DF-B56A-A4B501F7D8E3",
+                        "NAME":"Did you feel welcomed by your team on your first day?",
+                        "TYPE_ID" : 1,
+                        "DISPLAY_ORDER" : 3,
+                         "_TF_ANSWERS":[
+                             {"ANSWER":"Yes, very welcomed"},
+                             {"ANSWER":"Somewhat welcomed"},
+                             {"ANSWER":"Neutral feelings"},
+                             {"ANSWER":"Not very welcomed"},
+                             {"ANSWER":"Not at all welcomed"}
+                         ]
+                    },
+                    {
+                      	"CODE" :	"Q4_B21DC30E-F36A-4110-A88A-A4B501F8EA14",
+                      	"NAME" :	"What suggestions do you have for improving the onboarding process?",
+                      	"TYPE_ID" : 4,
+                      	"DISPLAY_ORDER" : 4,
+                      	"_TF_ANSWERS":[
+                          	{"ANSWER":""}
+                      	]
+                  	},
+                  	{
+                     	 	"CODE" :	"Q5_C31ED40F-F47B-4221-B99A-A4B501F91025",
+                     	 	"NAME" :	"How effective was the orientation in helping you understand your role and responsibilities?",
+                     	 	"TYPE_ID" : 3,
+                     	 	"DISPLAY_ORDER" : 5,
+                     	 	"_TF_ANSWERS":[
+                         	 	{"ANSWER":"Not effective at all"},
+                         	 	{"ANSWER":"Slightly effective"},
+                         	 	{"ANSWER":"Moderately effective"},
+                         	 	{"ANSWER":"Very effective"},
+                         	 	{"ANSWER":"Extremely effective"}
+                     	  ]
+                   },
+                   {
+                    	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   	  	   
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	    	
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                	        
+                	        
+                	        
+                	        
+                	        
+                	        
+                	        
+                	        
+                	        
+                	        
+            	            
+            	            
+            	            
+            	            
+            	            
+            	            
+            	            
+            	            
+            	            
+            	            
+        	                
+        	                
+        	                
+        	                
+        	                
+        	                
+        	                
+        	                
+        	                
+        	                
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+    	                    
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+  	                        
+		                      
+		                      
+		                      
+		                      
+		                      
+		                      
+		                      
+		                      
+		                      
+		                      
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                              
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+
+
+
+
+
+
+
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+
+                 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+    
+                    
+    
+                    
+    
+                    
+    
+                    
+    
+                    
+    
+                    
+    
+                
+    
+    
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+         
+        
+        
+         
+        
+        
+         
+        
+        
+         
+        
+        
+         
+        
+        
+         
+        
+        
+         
+        
+        
+         
+         
+       
+       
+       
+       
+       
+       
+       
+       
+       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+     
+    
+    
+     
+    
+    
+     
+    
+    
+     
+    
+    
+     
+    
+    
+     
+    
+    
+     
+    
+    
+     
+
+     
+
+     
+
+     
+
+     
+
+     
+
+     
+
+     
+
+     
+
+    
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+    
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+ 
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+      
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         
+         
+         
+         
+         
+         
+         
+         
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+ 
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+
+
+  
+   
+   
+   
+   
+   
+   
+   
+   
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+  
+  
+  
+
+
+
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+   
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+    
+     
+     
+     
+     
+     
+     
+     
+     
+    
+    
+
+
+
+
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+ 
+ 
+
+
+
+
+
+
+
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+       
+
+       
+
+       
+
+       
+
+       
+
+       
+
+       
+
+       
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+         
+         
+         
+         
+         
+         
+          
+           
+           
+           
+           
+           
+           
+             
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+              
+            
+               
+               
+               
+               
+               
+                
+
+                
+
+                
+
+                
+
+                
+
+                
+
+                
+
+                
+
+                 
+                 
+                 
+                   
+                   
+                   
+                   
+                   
+                   
+                       
+                         
+                         
+                         
+                         
+                         
+                         
+                           
+                             
+                             
+                             
+                             
+                             
+                               
+                                  
+                                  
+                                                                 	  
+                                	  
+                                	  
+                                	  
+                                	  
+                                	  
+                                	  
+                                	  
+                                  	 
+                                  	 
+                                  	 
+                                  	 
+                                  	 
+                                  	 
+                                  	 
+                                   	    
+                                   	    
+                                   	    
+                                   	    
+                                   	    
+                                   	    
+                                     
+                                       
+                                       
+                                       
+                                       
+                                         
+                                           
+                                           
+                                           
+                                           
+                                             
+                                                
+                                                
+                                                
+                                                
+                                                  
+                                                     
+                                                     
+                                                     
+                                                      	  
+                                                      	  
+                                                      	  
+                                                      	  
+                                                      	   
+                                                      	   
+                                                      	   
+                                                      	   
+                                                       	     
+                                                       	     
+                                                       	     
+                                                       	     
+                                                       	       	        
+                                                       	       	        
+                                                       	       	        
+                                                       	       	        
+                                                       	       	        
+                                                       	       	        
+                                                         	           	           	           	           	           	           	           	           	           	           	               	                   	                   	                   	                   	                   	                       	                           	                           	                           	                           	                           	                           	                           	                           	                           	                           	                           	                           	                           	                                                                                                                                                                                                                                                                                                                                                                                                                
+                                
+                                
+                                
+                                
+                                
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                        
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+             
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          
+          
+          
+          
+          
+          
+          
+          
+          
+           
+             
+             
+             
+             
+             
+             
+             
+             
+            
+             
+            
+             
+            
+             
+            
+             
+            
+             
+            
+             
+            
+             
+            
+               
+        
+        
+        
+        
+        	       	        	      	            		            		            		            		            		            		            		            		            		            		            		            		            		            		            		            		            		        		        			        			        			        			        			        			        			        			        			        				        				        				        				        				        				        				        				        				        				        				                                                    	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	    
+ 	    
+ 	    
+ 	    
+ 	    
+ 	    
+ 		    
+ 	   	     	     	     	     	     	     	      	      	      	      	      	      	      	        	        	        	        	        	        	          	          	          	          	          	          	              	              	              	              	              	              	                	                	                	                	                	                	                 	                 	                 	                 	                 	                 	                 	                       	                       	                       	                       	                       	                       	             	             	             	             	             	             	               	               	               	               	               	               	               	                 	                 	                 	                 	                 	                 	                   	                   	                   	                   	                   	                   	                   	                       	                       	                       	                       	                       	                       	             	             	             	             	             	             	               	               	               		               		               		               		               		               		                   		                   		                   		                   		                   		                   		                       		                       		                       
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173004
+     - Topic: Manager feedback
+     - Question number: 3
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Manager feedback with 3 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "MANAGER_FEEDBACK_4e2b5e8f-3bfb-4a6c-a1d7-35c1f54ccf6d",
+                "NAME": "Manager Feedback Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7a8b9c0d-ee52-4db8-a14a-d3e46928d123",
+                        "NAME": "How effective is your manager at providing clear and constructive feedback?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very ineffective"},
+                            {"ANSWER": "Somewhat ineffective"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Somewhat effective"},
+                            {"ANSWER": "Very effective"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_5f6a7b88-c59e-4c09-b68a-e5e4a9b830db",
+                        "NAME": "Please select the qualities that you believe your manager exemplifies. (Select all that apply)",
+                        "TYPE_ID": 2,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Leadership"},
+                            {"ANSWER": "Communication skills"},
+                            {"ANSWER": "Empathy"},
+                            {"ANSWER": "Problem-solving abilities"},
+                            {"ANSWER": "Innovativeness"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_b9c8d7e6-f35a-4b0e-a9fe-d5c162f0fa21",
+                        "NAME":"What improvements would you suggest for your manager to better support the team?",
+                       	"TYPE_ID" : 4,
+                      	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"Open text field for feedback"}
+                      	]
+                    }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1173005
+     - Topic: Employee feedback
+     - Question number: 4
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Employee feedback with 4 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "EMPLOYEE_FEEDBACK_8b9e5d55-6d4b-4cda-a6b6-775046659b2f",
+                "NAME": "Employee Feedback Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7a8f5d44-9cb3-4a1c-b8aa-d2f0a6e5d34c",
+                        "NAME": "How satisfied are you with your current role and responsibilities?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very Unsatisfied"},
+                            {"ANSWER": "Unsatisfied"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Satisfied"},
+                            {"ANSWER": "Very Satisfied"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_9c2ad767-c422-4ec3-a8e0-e59abbd93ae7",
+                        "NAME": "Do you feel that the management team is transparent in communicating important decisions?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Always"},
+                            {"ANSWER": "Often"},
+                            {"ANSWER": "Sometimes"},
+                            {"ANSWER": "Rarely"},
+                            {"ANSWER": "Never"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_b33f7ac0-f0be-4fdb-bb30-c093ce6ff5e5",
+                        "NAME":"What is one thing that the company could do to improve your satisfaction with the workplace?",
+                        "TYPE_ID" : 4,
+                       	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"Open feedback"}
+                      	]
+                    },
+                    {
+                     	"CODE":"Q4_cdb17268-c263-4e02-aee6-df97a29bb6af",
+                      	"NAME":"Considering your overall experience with the company, how likely are you to recommend our company as a good place to work?",
+                      	"TYPE_ID" : 3,
+                      	"DISPLAY_ORDER" : 4,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"Not at all likely"},
+                        	{"ANSWER":"Unlikely"},
+                        	{"ANSWER":"Neutral"},
+                        	{"ANSWER":"Likely"},
+                        	{"ANSWER":"Extremely likely"}
+                      	]
+                    }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1213249
+     - Topic: Training effectiveness
+     - Question number: 2
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Training effectiveness with 2 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "TRAINING_EFFECTIVENESS_SURVEY_4f9b7e2c-8323-4f6a-a8d3-e5d8e49c2b57",
+                "NAME": "Training Effectiveness Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "QUESTION_TRAINING_MATERIAL_QUALITY_d1a5b5f1-9a64-4b28-bcbb-f6e45c467ab3",
+                        "NAME": "How would you rate the quality of the training materials provided?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "1 - Very Poor"},
+                            {"ANSWER": "2 - Poor"},
+                            {"ANSWER": "3 - Average"},
+                            {"ANSWER": "4 - Good"},
+                            {"ANSWER": "5 - Excellent"}
+                        ]
+                    },
+                    {
+                        "CODE": "QUESTION_APPLICABILITY_OF_SKILLS_LEARNED_7e2d0f54-eead-4a09-b788-b9ae2c00df5e",
+                        "NAME": "To what extent are you able to apply the skills learned during the training in your daily work?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER":"Not at all applicable"},
+                            {"ANSWER":"Slightly applicable"},
+                            {"ANSWER":"Moderately applicable"},
+                            {"ANSWER":"Very applicable"},
+                            {"ANSWER":"Extremely applicable"}
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 1433792
+     - Topic: Career
+     - Question number: 10
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Career with 10 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "CAREER_SURVEY_4e2b9f3d-8c64-4b1e-a1c7-14c6e4a50700",
+                "NAME": "Career Development Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_c5d2a1f0-5b69-4e2b-b8a6-fd3a5dbeca80",
+                        "NAME": "Do you feel that your current role aligns with your career goals?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Yes"},
+                            {"ANSWER": "No"},
+                            {"ANSWER": "Partially"},
+                            {"ANSWER": "Not sure"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_7f3c5d9e-c58b-4f15-b755-c9f233bf6aac",
+                        "NAME": "How satisfied are you with the career development opportunities provided by the company?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very satisfied"},
+                            {"ANSWER": "Satisfied"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Dissatisfied"},
+                            {"ANSWER": "Very dissatisfied"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_8aaae5ab-f735-4d23-b65c-d3476590a5bb",
+                        "NAME":"On a scale from 1 to 10, how would you rate your work-life balance?",
+                        "TYPE_ID" : 3,
+                       	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"1"},
+                        	{"ANSWER":"2"},
+                        	{"ANSWER":"3"},
+                        	{"ANSWER":"4"},
+                        	{"ANSWER":"5"},
+                        	{"ANSWER":"6"},
+                        	{"ANSWER":"7"},
+                        	{"ANSWER":"8"},
+                        	{"ANSWER":"9"},
+                        	{"ANSWER":"10"}
+                       ]
+                    },
+                    {
+                    	 	"CODE" : 	"Q4_b0ec314d-e529-4b39-a81b-edebae80da01",
+                    		"NAME" :  	"What skills do you believe are crucial for advancement in your career?",
+                    		"TYPE_ID" : 2,
+                    		"DISPLAY_ORDER" : 4,
+                    		"_TF_ANSWERS":[
+                    			{"ANSWER":"Leadership abilities"}, 
+                    			{"ANSWER":"Technical expertise"}, 
+                    			{"ANSWER":"Communication skills"}, 
+                    			{"ANSWER":"Problem-solving skills"}, 
+                    			{"ANSWER":"Time management"}, 
+                    			{"ANSWER":"Other (Please specify)"}
+                    	 ]
+                   },
+                   {
+                     	 	 	 	 	 	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                     	 	          	 
+                   }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 5100002
+     - Topic: Training to professional users
+     - Question number: 12
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Training to professional users with 12 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "TRAINING_PRO_USERS_"  ,
+                "NAME": "Training Effectiveness for Professional Users",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_",
+                        "NAME": "Did the training content meet your expectations?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Exceeded expectations"},
+                            {"ANSWER": "Met expectations"},
+                            {"ANSWER": "Below expectations"},
+                            {"ANSWER": "Did not meet expectations at all"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_",
+                        "NAME": "How would you rate the expertise of the trainer?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER":"1"},
+                            {"ANSWER":"2"},
+                            {"ANSWER":"3"},
+                            {"ANSWER":"4"},
+                            {"ANSWER":"5"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_",
+                        "NAME":  "",
+                        "_TF_ANSWERS":[]
+                    },
+                    {
+                        
+                    },
+                    
+                {
+                    
+                }
+                    
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 5100003
+     - Topic: Learner feedback after a course session
+     - Question number: 8
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Learner feedback after a course session with 8 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "COURSE_FEEDBACK_4E2BDEFF-5B68-4A1E-B557-9C0D7F91E9AF",
+                "NAME": "Learner Feedback - Post Course Session",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7A8B9CDA-5F3B-4D87-AF2A-5E9E4C2DB99A",
+                        "NAME": "How would you rate the overall quality of the course content?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "1 - Poor"},
+                            {"ANSWER": "2 - Fair"},
+                            {"ANSWER": "3 - Good"},
+                            {"ANSWER": "4 - Very Good"},
+                            {"ANSWER": "5 - Excellent"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_6BCDEFA0-E8CF-4EBD-BD73-A21A6E92F42C",
+                        "NAME": "Was the course relevant to your current skill level and learning objectives?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Yes, it was perfectly aligned."},
+                            {"ANSWER":"Somewhat, but could be better tailored."},
+                            {"ANSWER":"No, it was not relevant to my needs."}
+                        ]
+                    },
+                    {
+                        "CODE":"Q3_8ACBD7EF-1234-40AB-CDEF-426B67890DEF",
+                        "NAME":"Which topics covered in the course were most beneficial to you?",
+                        "TYPE_ID": 2,
+                        "DISPLAY_ORDER": 3,
+                        "_TF_ANSWERS":[
+                            {"ANSWER":"Topic A"},
+                            {"ANSWER":"Topic B"},
+                            {"ANSWER":"Topic C"},
+                            {"ANSWER":"Topic D"},
+                            {"ANSWER":"None were particularly beneficial"}
+                        ]
+                    },
+                    {
+                        "CODE":"Q4_ABC12345-D678-F90G-H12I-J34KL56MN78O",
+                        "NAME":"How do you plan to apply what you have learned in this course?",
+                        "TYPE_ID": 4,
+                        "DISPLAY_ORDER": 4,
+                         "_TF_ANSWERS":[]
+                    },
+                    {
+                      	"CODE":"Q5_ABC98EDC-V76W-X54Y-Z32U-T10SRQPO987M",
+                      	"NAME":"Please rate the instructor's effectiveness.",
+                      	"TYPE_ID" : 3,
+                      	"DISPLAY_ORDER" : 5,
+                      	"_TF_ANSWERS":[
+                          	{"ANSWER" : "- Not effective at all."},
+                          	{"ANSWER" : "- Slightly effective."},
+                          	{"ANSWER" : "- Moderately effective."},
+                          	{"ANSWER" : "- Very effective."},
+                          	{"ANSWER" : "- Extremely effective."}
+                      	]
+                  	},
+                  	{
+                      	"CODE":"Q6_ABC88EDC-V66W-X44Y-Z22U-T00SRQPO876L",
+                      	"NAME":"How convenient were the time and location of the course session?",
+                      	"TYPE_ID" : 1,
+                      	"DISPLAY_ORDER" : 6,
+                      	"_TF_ANSWERS":[
+                          	{"ANSWER" : "- Very inconvenient."},
+                          	{"ANSWER" : "- Inconvenient."},
+                          	{"ANSWER" : "- Neutral."},
+                          	{"ANSWER" : "- Convenient."},
+                          	{"ANSWER" : "- Very convenient."}
+                      ]
+                   },
+                   {
+                     	 	 	 	 	
+                     	 	 	 	 	
+                     	 	 	 	 }
+                ]
+            }
+        ]
+    }
+}
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 500000002
+     - Topic: Employee experience
+     - Question number: 16
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Employee experience with 16 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "EMPLOYEE_EXPERIENCE_SURVEY_4E2B8A7F-3C64-4B1B-9FEB-D6E5288AC9A1",
+                "NAME": "Employee Experience Survey",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_7D9C0F5E-5EAB-4A90-BACF-A8D1D5B0A65B",
+                        "NAME": "Do you find your work environment to be positive and supportive?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Yes"},
+                            {"ANSWER": "No"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_3FA7EE8D-E18F-4F2D-A9EF-C6C3DA6A8B67",
+                        "NAME": "How satisfied are you with the communication from management?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Very Satisfied"},
+                            {"ANSWER": "Satisfied"},
+                            {"ANSWER": "Neutral"},
+                            {"ANSWER": "Unsatisfied"},
+                            {"ANSWER": "Very Unsatisfied"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_AECC4C85-FBF2-4C58-AADA-EA6DDB850DF0",
+                        "NAME":"On a scale of 1 to 10, how would you rate your overall job satisfaction?",
+                        "TYPE_ID" : 3,
+                       	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"1"},
+                        	{"ANSWER":"2"},
+                        	{"ANSWER":"3"},
+                        	{"ANSWER":"4"},
+                        	{"ANSWER":"5"},
+                        	{"ANSWER":"6"},
+                        	{"ANSWER":"7"},
+                        	{"ANSWER":"8"},
+                        	{"ANSWER":"9"},
+                        	{"ANSWER":"10"}
+                       ]
+                    },
+                    {
+                     	"CODE" : 	"Q4_BDD34CA5-E5AE-4117-B72D-AAAF147CA45A",
+                     	"NAME" :  	"How likely are you to recommend our company as a good place to work?",
+                     	"TYPE_ID" : 3,
+                     	"DISPLAY_ORDER" : 4,
+                      "_TF_ANSWERS":[
+                          {"ANSWER":"Very Likely"},
+                          {"ANSWER":"Likely"}, 
+                          {"ANSWER":"Neutral"}, 
+                          {"ANSWER":"Unlikely"}, 
+                          {"ANSWER":"Very Unlikely"}
+                       ]
+                   },
+                   {
+                    	 	 	 	 	
+                    	 	 	 	 
+                    	 	 	 	 }
+                 ],
+                 "_TF_ANSWERS":[
+                    	
+                    	
+                    	 ]
+                 }
+             ],
+             "_TF_ANSWERS":[
+                	
+                	
+                	 ]
+             }
+         }
+    		 	
+    		 	
+    		 	 
+    		 	 
+    		 	 
+    		 	 
+    		 	 
+    		 	  
+    		 	  
+    		 	  
+    		 	  
+    		 	  
+    		 	  
+    		  	  
+    		  	  
+    		  	  
+    		  	  
+    		  	  
+    		  	  
+    	  	 	 
+    	  	 	 
+    	  	 	 
+    	  	 	 
+    	  	 	 
+    	  	 	 
+    	 	  	 
+    	 	  	 
+    	 	  	 
+    	 	  	 
+    	 	  	 
+    	 	  	 
+    	 	   
+    	 	   
+    	 	   
+    	 	   
+    	 	   
+    	 	   
+    	    
+    	   
+    	   
+    	   
+    	   
+    	   
+    	   
+    	    
+    	    
+    	    
+    	    
+    	    
+    	    
+    	    
+    	   
+    	   
+    	   
+    	   
+    	   
+    	   
+    	   
+    
+    
+    
+    
+    
+    
+   
+   
+   
+   
+   
+   
+   
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+    
+   
+   
+   
+   
+   
+   
+   
+   
+    
+     
+     
+     
+     
+     
+     
+     
+      
+       
+       
+       
+       
+       
+       
+       
+      
+        
+         
+         
+         
+         
+         
+         
+         
+        
+          
+           
+           
+           
+           
+           
+           
+            
+             
+             
+             
+             
+              
+               
+               
+               
+                
+                 
+                 
+                  
+                   
+                   
+                    
+                     
+                     
+                      
+                       
+                       
+                        
+                         
+                         
+                          
+                           
+                           
+                            
+                             
+                             
+                              
+                               
+                               
+                                
+                                  
+                                   
+                                   
+                                     
+                                      
+                                           
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 500000003
+     - Topic: Employee potential
+     - Question number: 8
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Employee potential with 8 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+    "data": {
+        "TF_QUESTIONNAIRES": [
+            {
+                "CODE": "EMPLOYEE_POTENTIAL_SURVEY_4E2B6A7F-5F93-4D58-AAD9-F5B601C9C7E1",
+                "NAME": "Employee Potential Assessment",
+                "_TF_QUESTIONS": [
+                    {
+                        "CODE": "Q1_8D3C5B36-4D6F-4AB3-BD1F-D5ECC17B3A64",
+                        "NAME": "Do you feel that your current role allows you to fully utilize your skills and abilities?",
+                        "TYPE_ID": 1,
+                        "DISPLAY_ORDER": 1,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Yes"},
+                            {"ANSWER": "No"},
+                            {"ANSWER": "Partially"},
+                            {"ANSWER": "Not sure"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q2_7FA20DC9-E8CF-4B15-B2A2-0E5CABCC4F27",
+                        "NAME": "How often do you take on tasks outside of your job description?",
+                        "TYPE_ID": 3,
+                        "DISPLAY_ORDER": 2,
+                        "_TF_ANSWERS": [
+                            {"ANSWER": "Always"},
+                            {"ANSWER": "Often"},
+                            {"ANSWER": "Sometimes"},
+                            {"ANSWER": "Rarely"},
+                            {"ANSWER": "Never"}
+                        ]
+                    },
+                    {
+                        "CODE": "Q3_AE8A65EB-F0BE-44D9-B875-FBE3AC3418BF",
+                        "NAME":"Rate your willingness to learn new skills that could affect your career progression.",
+                        "TYPE_ID" : 3,
+                       	"DISPLAY_ORDER" : 3,
+                      	"_TF_ANSWERS":[
+                        	{"ANSWER":"Very willing"},
+                        	{"ANSWER":"Willing"},
+                        	{"ANSWER":"Somewhat willing"},
+                        	{"ANSWER":"Not very willing"},
+                        	{"ANSWER":"Not willing at all"}
+                      	]
+                    },
+                    {
+                    	"CODE":"Q4_BFBB18FE-9D04-4C91-AA64-C2CAAF80C835",
+                    	"NAME":"Select the areas where you believe you have the potential to develop further.",
+                    	"TYPE_ID" : 2,
+                    	"DISPLAY_ORDER" : 4,
+                    	"_TF_ANSWERS":[
+                      	  {"ANSWER":"Leadership skills"},
+                      	  {"ANSWER":"Technical skills"},
+                      	  {"ANSWER":"Project management"},
+                      	  {"ANSWER":"Communication skills"},
+                          {"ANSWER":"Strategic thinking"}
+                    	]
+                   },
+                   {
+                     	"CODE":"Q5_C6BC245E-AFE9-41AC-B9DA-C12ED52871A1",
+                     	"NAME":"How do you prefer to receive feedback on your performance?",
+                     	"TYPE_ID" : 1,
+                     	"DISPLAY_ORDER" : 5,
+                      "_TF_ANSWERS":[
+                          {"ANSWER":"In-person meetings with my manager/supervisor."},
+                          {"ANSWER":"Written reports or email summaries."},
+                          {"ANSWER":"Through a peer review process."},
+                          {"ANSWER":"Via formal performance appraisal systems."}
+                      ]
+                   },
+                   {
+                     	"CODE":"Q6_0DB29220-D566-48CB-A317-D739CE87AF67",
+                     	"NAME":"How comfortable are you with taking calculated risks to achieve better results?",
+                     	"TYPE_ID" : 3,
+                     	"DISPLAY_ORDER" : 6,
+                      "_TF_ANSWERS":[
+                          {"ANSWER":"Very comfortable"},
+                          {"ANSWER":"Comfortable"},
+                          {"ANSWER":"Neutral/Unsure"},
+                          {"ANSWER":"Uncomfortable"}, 
+                          {"ANSWER":"Very uncomfortable"}
+                      ]
+                   },
+                   {
+                    	 	
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	      
+                    	
+                    
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                     
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                 
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+               
+               
+               
+               
+               
+               
+               
+               
+              
+              
+              
+              
+              
+              
+              
+             
+             
+             
+             
+             
+             
+             
+             
+             
+             
+            
+            
+           
+           
+           
+           
+          
+          
+         
+         
+         
+         
+         
+         
+         
+         
+         
+        
+        
+        
+        
+        
+        
+        
+        
+       
+       
+       
+       
+      
+      
+      
+      
+      
+      
+     
+     
+     
+     
+     
+     
+     
+     
+    
+    
+    
+    
+    
+    
+   
+   
+   
+   
+  
+  
+  
+  
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+ 
+  
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+   
+
+
+
+
+
+
+   
+
+
+
+
+
+
+   
+
+
+
+
+
+
+   
+
+
+
+
+
+
+   
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           
+
+           
+
+           
+
+           
+
+           
+
+           
+
+           
+
+          
+
+
+
+          
+
+
+
+          
+
+
+
+          
+
+
+
+          
+
+
+
+          
+
+
+
+          
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+             
+
+
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+              
+
+
+
+
+
+
+
+
+
+
+               
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+                
+
+
+
+
+
+
+
+
+
+                 
+
+
+
+
+
+
+                 
+
+
+
+
+
+
+                 
+
+
+
+
+
+
+                 
+
+
+
+
+
+
+                 
+
+
+
+
+
+
+                  
+
+
+
+
+
+                   
+
+
+
+
+
+                   
+
+
+
+
+
+                   
+
+
+
+
+
+                   
+
+
+
+
+
+                   
+
+
+
+
+
+                    
+
+
+
+
+                    
+
+
+
+
+                    
+
+
+
+
+                    
+
+
+
+
+                    
+
+
+
+
+                     
+
+
+
+                      
+
+
+
+                      
+
+
+
+                      
+
+
+
+                      
+
+
+
+                       
+                        
+                        
+                        
+                        
+                        
+                         
+                         
+                         
+                         
+                         
+                          
+                          
+                          
+                          
+                          
+                           
+                           
+                           
+                           
+                           
+                            
+                            
+                            
+                            
+                            
+                             
+                             
+                             
+                             
+                             
+                              
+                              
+                              
+                              
+                              
+                               
+                               
+                               
+                               
+                               
+                                
+                                
+                                
+                                
+                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                
+                                                                 
+                                                                 
+                                                                 
+                                                                 
+                                                                 
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                  
+                                                                   
+                                                                   
+                                                                   
+                                                                   
+ 
+                                                                   
+ 
+                                                                   
+ 
+                                                                   
+ 
+                                                                   
+ 
+                                                                    	
+                                                                    	
+                                                                    	
+                                                                    	
+                                                                    	
+                                                                     		
+                                                                     		
+                                                                     		
+                                                                     		
+                                                                     		
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                      			
+                                                                       				
+                                                                       				
+                                                                       				
+                                                                       				
+                                                                       				
+                                                                        					
+                                                                        					
+                                                                        					
+                                                                        					
+                                                                        					
+                                                                             						
+                                                                             						
+                                                                             						
+                                                                             						
+                                                                             						
+                                                                              							
+                                                                              							
+                                                                              							
+                                                                              							
+                                                                              							
+                                                                               								
+                                                                               								
+                                                                               								
+                                                                               								
+                                                                               								
+                                                                                									
+                                                                                									
+                                                                                									
+                                                                                									
+                                                                                									
+                                                                                 										
+                                                                                 										
+                                                                                 										
+                                                                                 										
+                                                                                 										
+                                                                                                                                					
+                                                                                                                                					
+                                                                                                                                					
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                   											
+                                                                                   											
+                                                                                   											
+                                                                                   											
+                                                                                   											
+                                                                                       												
+                                                                                       												
+                                                                                       												
+                                                                                       												
+                                                                                       												
+                                                                                       												
+                                                                                               											
+                                                                                               											
+                                                                                               											
+                                                                                               											
+                                                                                               											
+                                                                                               					    
+                                                                                               					    
+                                                                                               					    
+                                                                                               					    
+                                                                                               					    
+                                                                                               					    
+                                                                                           							    
+                                                                                           							    
+                                                                                           							    
+                                                                                           							    
+                                                                                           							    
+                                                                                           						        
+                                                                                           						        
+                                                                                           						        
+                                                                                           						        
+                                                                                           						        
+                                                                                       									        
+                                                                                       									        
+                                                                                       									        
+                                                                                       									        
+                                                                                       									        
+                                                                                       										            
+                                                                                       										            
+                                                                                       										            
+                                                                                       										            
+                                                                                       										            
+                                                                            												                
+                                                                            												                
+                                                                            												                
+                                                                            												                
+                                                                            												                
+                                                                         													                    
+                                                                         													                    
+                                                                         													                    
+                                                                         													                    
+                                                                         													                    
+                                                                      														                        
+                                                                      														                        
+                                                                      														                        
+                                                                      														                        
+                                                                      														                        
+                                                                  															                            
+                                                                  															                            
+                                                                  															                            
+                                                                  															                            
+                                                                  															                            
+                                                             																								
+                                                             																								
+                                                             																								
+                                                             																								
+                                                             																								
+                                                        																		  
+                                                        																		  
+                                                        																		  
+                                                        																		  
+                                                        																		  
+                                                   																				    	
+                                                   																				    	
+                                                   																				    	
+                                                   																				    	
+                                                   																				    	
+                                              																							
+                                              																							
+                                              																							
+                                              																							
+                                              																							
+                                         																									    
+                                         																									    
+                                         																									    
+                                         																									    
+                                         																									    
+                                    																											  	
+                                    																											  	
+                                    																											  	
+                                    																											  	
+                                    																											  	
+                               																													    		
+                               																													    		
+                               																													    		
+                                                                                                																			    		
+                                                                                                																			    		
+                          																			    			    				    		    		
+                          																			    			    				    		    		
+                          																			    			    				    		    		
+                          																			    			    				    		    		
+                          																			    			    				    		    		
+                     																	    				    			    	    					    	    		
+                     																	    				    			    	    					    	    		
+                     																	    				    			    	    					    	    		
+                     																	    				    			    	    					    	    		
+                     																	    				    			    	    					    	    		
+                															        				        			        			        		        		        		        	
+                															        				        			        			        		        		        		        	
+                															        				        			        			        		        		        		        	
+                															        				        			        			        		        		        		        	
+                															        				        			        			        		        		        		        	
+           														        			       			        			       			        			       			        	
+           														        			       			        			       			        			       			        	
+           														        			       			        			       			        			       			        	
+           														        			       			        			       			        			       			        	
+           														        			       			        			       			        			       			        	
+      												            		            		            		            		            		        	        	        	        	        	        	        	        	        	        	        	      	            	            	            	            	            	            	            	            	            	            	            	            	            	                	                	                	                	                	                	                	                	                	                	                	                	                	              	              	              	              	              	              	              	              	              	              	              	              	               	               	               	               	               	               	               	               	               	               	               	               	                	                	                	                	                	                	                	                	                	                	                 	                 	                 	                 	                 	                 	                 	                 	                 	                 	                   	                   	                   	                   	                   	                   	                   	                   	                   	                   	                   	                       	                       	                       	                       	                       	                       	                       	                       	                       	                       	                           	                           	                           	                           	                           	                           	                           	                           	                           	                           	       	       	       	       	       	       	       	       	       	       	       	       	           	           	           	           	           	           	           	           	           	           	            	            	            	            	            	            	            	            	            	     	     	     	     	     	     	     	     	     	      	      	      	      	      	      	      	      	      	        	        	        	        	        	        	        	        	          	          	          	          	          	          	          	          	         	         	         	         	         	         	         		         		         		         		         		         		         		          		          		          				  		  		  		  		  		   		   		   		   		   		    		    		    		    		     		     		     		     		      		      		      		       		       		       		        		        		        		            		            		            			              			              			               			               			               			           			           			            			       				       				       				       				     				     				     				      				      				       				     				     				      				 	  			 	  			 	  			 	  		 		  		 		  		  	      	      	      	     	     	     	   	   	   	 	  	  	  	 	 	 	 	  	  	  	   	   	   	    	    	    	     	     	     	      	      	      	   	   	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    	    	   	    		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 	      		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 		   		 	   	    		    			    		    			    		    			    		    			    		    			    		    			    		    			    		    			    		    			    		    			    			         	    			         	    			         	    			         	    			         	    			         	    			         	    			         	    			         	    			         	    			         	    		               		               		               		               		               		               		               		               		               		               		               		               		                   		                   		                   		                   		                   		                   		                   		                   		                   		                   		                   		                   		                       		                       		                       		                       		                       		                       		                       		                       		                       		                       		                       		                       		                        		                        		                        		                        		                        		                        		                        		                        		                        		                        		                        		                            		                            		                            		                            		                            		                            		                            		                            		 		 		 		 		 		 		 			 			 			 			 			 			    				    				    				    				    				    		 			 			 			 			 			 			  				  				  				  				  				  				 	  	  	  	  	  	   	   	   	   	   	   	  	    	    	    	    	    	    	   	    	    	    	    	    	    	        	      	      	      	     	     	     	   	   	   	  	  	  		 	 	 	  	  	  	   	   	   	    	    	    	     	     	     	        		        		        		        		        		        		        		        		        		        		        		        			           		           		           		           		           		           		           		           		           		           		           		           		            		            		            		            		            		            		            		            		            		            		            		        		        		        		        		        		        		        		        		        		       		       		       		       		       		       		      		      		      		      		      		      		      		     		     		     
+-------------------
+=================================================================
+0-SHOT
+With FULL questionnaire parameters
+=================================================================
+
+-------------------
+[TEST] QUESTIONNAIRE_ID: 500000005
+     - Topic: Course feedback
+     - Question number: 5
+-------------------
+[PROMPTS]
+     - System: 
+You are a Questionnaire Generator and you work in the Human Resources Management field.
+The user will ask you to generate a questionnaire specifying the topic and the number of questions.
+If the user does not specify a valid topic, reply with "Sorry I cant help you".
+If the topic is valid, reply with only a JSON, which must respect the following format:
+    - The root of the JSON is an object that contains a single property 'data'.
+    - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
+    - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
+        - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the questionnaire's name.
+        - '_TF_QUESTIONS': An array of objects, each representing a question.
+    - Each question in the '_TF_QUESTIONS' array has the following properties:
+        - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+        - 'NAME': (string) the question's content.
+        - 'TYPE_ID': (int) the question's type.
+        - 'DISPLAY_ORDER': (int) the question's display order.
+        - '_TF_ANSWERS': An array of objects, each representing a possible answer to the question.
+    - Each answer object in the '_TF_ANSWERS' array has a single property 'ANSWER', which is a string representing the content of the answer.
+The admitted question's types are the following: 
+  - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
+  - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
+  - ID: 3, DESCRIPTION: Use this type of question to rate something.
+  - ID: 4, DESCRIPTION: Use this type of question to aquire feedback.
+  - ID: 5, DESCRIPTION: Use this type of question to reorder items.
+  - ID: 6, DESCRIPTION: Use this type of question to disribute weights across several items/options.
+  - ID: 7, DESCRIPTION: Use this type of question to clone questions from a template.
+  - ID: 8, DESCRIPTION: Use this type of question when the answer to be given is a date or a date/time.
+Be creative and avoid using the same structure while generating questions.
+     - User: 
+Generate me a questionnaire on Course feedback with 5 questions
+-------------------
+-------------------
+[LLM ANSWER]
+{
+  "data": {
+    "TF_QUESTIONNAIRES": [
+      {
+        "CODE": "COURSE_FEEDBACK_4E2B8A7F-3C64-4B1B-BC0B-A72E00F4C930",
+        "NAME": "Course Feedback Survey",
+        "_TF_QUESTIONS": [
+          {
+            "CODE": "Q1_7D9A5BC6-5A9E-4D71-8F3B-A72E00F4C931",
+            "NAME": "How would you rate the overall quality of the course content?",
+            "TYPE_ID": 3,
+            "DISPLAY_ORDER": 1,
+            "_TF_ANSWERS": [
+              {"ANSWER": "1 - Poor"},
+              {"ANSWER": "2 - Fair"},
+              {"ANSWER": "3 - Good"},
+              {"ANSWER": "4 - Very Good"},
+              {"ANSWER": "5 - Excellent"}
+            ]
+          },
+          {
+            "CODE": "Q2_8FA88D3D-EFC0-4FEE-BEC0-A72E00F4C932",
+            "NAME": "Was the course material presented in a clear and organized manner?",
+            "TYPE_ID": 1,
+            "DISPLAY_ORDER": 2,
+            "_TF_ANSWERS":[
+              {"ANSWER":"Yes"},
+              {"ANSWER":"No"}
+            ]
+          },
+          {
+            "CODE":"Q3_A12FDAC9-E5AB-48EB-B9AD-A72E00F4C933",
+            "NAME":"Please provide feedback on the instructor's effectiveness.",
+            "TYPE_ID": 4,
+            "DISPLAY_ORDER": 3,
+            "_TF_ANSWERS":[
+              {"ANSWER":"Open Text Feedback"}
+            ]
+          },
+          {
+            	"CODE":"Q4_B21CEBA8-C07D-44E6-BFA7-A72E00F4C934",
+            	"NAME":"Which aspects of the course did you find most valuable?",
+            	"TYPE_ID": 2,
+            	"DISPLAY_ORDER": 4,
+            	"_TF_ANSWERS":[
+              	{"ANSWER":"Lectures"},
+              	{"ANSWER":"Hands-on activities"},
+              	{"ANSWER":"Group discussions"},
+              	{"ANSWER":"Reading materials"},
+              	{"ANSWER":"Assignments"}
+            	]
+           },
+           {
+            	"CODE":"Q5_C30DDCC7-D18C-42FB-BFE8-A72E00F4C935",
+            	"NAME":"How likely are you to recommend this course to a friend or colleague?",
+            	"TYPE_ID": 6,
+            	"DISPLAY_ORDER": 5,
+            	"_TF_ANSWERS":[
+              	{"ANSWER":"0% - Definitely not recommending"},
+              	{"ANSWER":"25% - Probably not recommending"},
+              	{"ANSWER":"50% - Might or might not recommend"},
+              	{"ANSWER":"75% - Probably recommending"},
+              	{"ANSWER":"100% - Definitely recommending"}
+            	  ]
+           }
+        ]
+      }
+    ]
+  }
+}
+-------------------
