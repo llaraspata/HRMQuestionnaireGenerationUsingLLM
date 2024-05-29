@@ -1,5 +1,5 @@
 """
-This class is used for the generation of prompts w.r.t. to roles.
+This class is used for the generation of prompts w.r.t. to roles for the Prediction task.
 """
 from src.prompts.prediction_prompts import PredictionSystemPrompt as SystemPrompt
 from src.prompts.prediction_prompts import PredictionUserPrompt as UserPrompt

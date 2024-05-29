@@ -3,7 +3,7 @@ This module contains all classes need to build prompts for the Prediction task.
 """
 
 class PredictionSystemPrompt:
-    ROLE_DEFINITION = """You are a Questionnaire Generator and you work in the Human Resources Management field."""
+    ROLE_DEFINITION = """You are a Questionnaire Generator in the Human Resource Management field."""
 
     INPUT_FORMAT_DEFINITION_WITH_ALL_PARAMS = """\nThe user will ask you to generate a questionnaire specifying the topic and the number of questions."""
     INPUT_FORMAT_DEFINITION_WITH_ONLY_TOPIC = """\nThe user will ask you to generate a questionnaire about a specified topic."""
