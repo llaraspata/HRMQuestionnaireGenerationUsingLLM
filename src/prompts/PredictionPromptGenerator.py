@@ -1,11 +1,11 @@
 """
 This class is used for the generation of prompts w.r.t. to roles.
 """
-import src.prompts.system_conf as sys_conf
-import src.prompts.user_conf as usr_conf
-import src.prompts.assistant_conf as as_conf
+from src.prompts.prediction_prompts import PredictionSystemPrompt as SystemPrompt
+from src.prompts.prediction_prompts import PredictionUserPrompt as UserPrompt
+from src.prompts.prediction_prompts import PredictionAssistantPrompt as AssistantPrompt
 
-class PromptGenerator:
+class PredictionPromptGenerator:
     # ------------
     # Constructor
     # ------------
@@ -63,19 +63,19 @@ class PromptGenerator:
             Returns:
                 - str: The formatted prompt.
         """
-        self.prompt = sys_conf.ROLE_DEFINITION
+        self.prompt = SystemPrompt.ROLE_DEFINITION
         
         if has_full_params:
-            self.prompt += sys_conf.INPUT_FORMAT_DEFINITION_WITH_ALL_PARAMS
+            self.prompt += SystemPrompt.INPUT_FORMAT_DEFINITION_WITH_ALL_PARAMS
         else:
-            self.prompt += sys_conf.INPUT_FORMAT_DEFINITION_WITH_ONLY_TOPIC
+            self.prompt += SystemPrompt.INPUT_FORMAT_DEFINITION_WITH_ONLY_TOPIC
 
-        self.prompt += sys_conf.ERROR_MESSAGE
-        self.prompt += sys_conf.TASK_DEFINITION
-        self.prompt += sys_conf.OUTPUT_FORMAT_DEFINITION
+        self.prompt += SystemPrompt.ERROR_MESSAGE
+        self.prompt += SystemPrompt.TASK_DEFINITION
+        self.prompt += SystemPrompt.OUTPUT_FORMAT_DEFINITION
 
-        self.prompt += sys_conf.QUESTION_TYPES_DESCRIPTION % (self._format_question_types(question_types_data))
-        self.prompt += sys_conf.STYLE_COMMAND
+        self.prompt += SystemPrompt.QUESTION_TYPES_DESCRIPTION % (self._format_question_types(question_types_data))
+        self.prompt += SystemPrompt.STYLE_COMMAND
 
 
     def _generate_user_prompt(self, has_full_params, topic, question_nuber):
@@ -91,9 +91,9 @@ class PromptGenerator:
                 - str: The formatted prompt.
         """
         if has_full_params:
-            self.prompt = usr_conf.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber)
+            self.prompt = UserPrompt.STANDARD_USER_WITH_ALL_PARAMS % (topic, question_nuber)
         else:
-            self.prompt = usr_conf.STANDARD_USER_WITH_ONLY_TOPIC % (topic)
+            self.prompt = UserPrompt.STANDARD_USER_WITH_ONLY_TOPIC % (topic)
 
 
     def _generate_assistant_prompt(self, json):
@@ -106,7 +106,7 @@ class PromptGenerator:
             Returns:
                 - str: The formatted prompt.
         """
-        self.prompt = as_conf.RESPONSE % (json)
+        self.prompt = AssistantPrompt.RESPONSE % (json)
 
 
     def _format_question_types(self, df):
@@ -122,6 +122,6 @@ class PromptGenerator:
         result = ""
 
         for _, row in df.iterrows():
-            result += sys_conf.SINGLE_QUESTION_TYPE_DESCRIPTION % (row["ID"], row["DESCRIPTION"])
+            result += SystemPrompt.SINGLE_QUESTION_TYPE_DESCRIPTION % (row["ID"], row["DESCRIPTION"])
 
         return result

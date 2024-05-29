@@ -1,13 +1,12 @@
-from src.prompts.PromptGenerator import PromptGenerator
+from src.prompts.PredictionPromptGenerator import PredictionPromptGenerator
 
-class ScenarioGenerator:
+class PredictionScenarioGenerator:
 
     def __init__(self, experiment_config, dataset, full_log=True):
-
         self.experiment_config = experiment_config
-        self.system_prompt_generator = PromptGenerator("system")
-        self.user_prompt_generator = PromptGenerator("user")
-        self.assistant_prompt_generator = PromptGenerator("assistant")
+        self.system_prompt_generator = PredictionPromptGenerator("system")
+        self.user_prompt_generator = PredictionPromptGenerator("user")
+        self.assistant_prompt_generator = PredictionPromptGenerator("assistant")
         self.full_log = full_log
         self.question_types = dataset.get_question_types()
 
@@ -17,9 +16,6 @@ class ScenarioGenerator:
             Generate prompts for a given scenario, incorporating k-shot variations.
 
             Parameters:
-                - experiment_conf (dict): Configuration for the current experiment, where the following information is used in this context:
-                    - "k": Number of shots.
-                    - "has_full_params": Whether the prompts include all the questionnaire parameters.
                 - log_file (str): The path to the log file.
                 - current_questionnaire_id (int): The questionnaire identifier to be used as test.
                 - dataset (TFQuestionnairesDataset): The dataset containing the questionnaires.
@@ -31,7 +27,6 @@ class ScenarioGenerator:
                 - user prompt (str): Prompt for the test user.
                 - sample_questionnaires_ids (list<int>): List of the sample questionnaires identifiers.
         """
-        # TODO: when implementing RAG, remember to switch accorfingly to the prompt technique
         system_prompt, sample_user_prompts, assistant_prompts, user_prompt, sample_questionnaires_ids = self.generate_k_shot_scenario(log_file,
                                                                                                                                       current_questionnaire_id, dataset)
 

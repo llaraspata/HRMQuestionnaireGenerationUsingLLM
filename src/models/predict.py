@@ -9,7 +9,7 @@ from openai import AzureOpenAI
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
-from src.prompts.ScenarioGenerator import ScenarioGenerator
+from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
 
 
 # -----------------
@@ -74,7 +74,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
     print(f"Running experiment: {conf['id']}")
 
     # Set the scenario for the current experiment
-    scenario = ScenarioGenerator(experiment_config=conf, dataset=dataset)
+    scenario = PredictionScenarioGenerator(experiment_config=conf, dataset=dataset)
 
     # Create the DataFrame for the predictions and other statistics
     predictions_df = pd.DataFrame(columns=PREDICTION_COLUMNS)
