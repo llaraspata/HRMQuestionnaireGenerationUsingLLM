@@ -221,7 +221,12 @@ class TFQuestionnairesDataset:
     
 
     def get_questionnaire_topic(self, questionnaire_id):
-        return self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"].values[0]
+        topic = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"].values[0]
+
+        if topic is None or topic == "":
+            topic = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["NAME"].values[0]
+
+        return topic
     
     def get_questionnaire_topic_by_id(project_root, questionnaire_id):
         dataset = TFQuestionnairesDataset()
