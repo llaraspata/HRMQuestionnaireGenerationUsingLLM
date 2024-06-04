@@ -14,12 +14,12 @@ class PredictionSystemPrompt:
         - The root of the JSON is an object that contains a single property 'data'.
         - The 'data' property is an object that contains a single property 'TF_QUESTIONNAIRES'.
         - 'TF_QUESTIONNAIRES' is an array of only one element, which represents a questionnaire. It has the following properties:
-            - 'CODE': (string) the questionnaire's code. It ends with the character '_' followed by a new random GUID.
+            - 'CODE': (string) the questionnaire's code.
             - 'NAME': (string) the questionnaire's name.
             - 'TYPE_ID': (int) which is equal to 3.
             - '_TF_QUESTIONS': An array of objects, each representing a question.
         - Each question in the '_TF_QUESTIONS' array has the following properties:
-            - 'CODE': (string) the question's unique code. It ends with the character '_' followed by a new generated GUID.
+            - 'CODE': (string) the question's unique code.
             - 'NAME': (string) the question's content.
             - 'TYPE_ID': (int) the question's type.
             - 'DISPLAY_ORDER': (int) the question's display order.
@@ -29,7 +29,7 @@ class PredictionSystemPrompt:
     QUESTION_TYPES_DESCRIPTION = """\nThe admitted question's types are the following: %s"""
     SINGLE_QUESTION_TYPE_DESCRIPTION = """\n  - ID: %d, DESCRIPTION: %s"""
 
-    STYLE_COMMAND = """\nBe creative and vary the syntax of your questions to avoid repetition."""
+    STYLE_COMMAND = """\nBe creative and vary the syntax of your questions to enhance user engagement."""
 
 
 class PredictionUserPrompt:
