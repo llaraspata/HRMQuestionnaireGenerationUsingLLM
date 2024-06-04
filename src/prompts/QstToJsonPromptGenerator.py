@@ -1,10 +1,10 @@
 """
 This class is used for the generation of prompts w.r.t. to roles for the Topic Modeling task.
 """
-from src.prompts.topic_modeling_prompts import TopicModelingSystemPrompt as SystemPrompt
-from src.prompts.topic_modeling_prompts import TopicModelingUserPrompt as UserPrompt
+from src.prompts.qst_to_json_prompts import QstToJsonSystemPrompt as SystemPrompt
+from src.prompts.qst_to_json_prompts import QstToJsonUserPrompt as UserPrompt
 
-class TopicModelingPromptGenerator:
+class QstToJsonPromptGenerator:
     # ------------
     # Constructor
     # ------------
@@ -53,16 +53,17 @@ class TopicModelingPromptGenerator:
         self.prompt += SystemPrompt.TASK_DEFINITION
 
         self.prompt += SystemPrompt.OUTPUT_FORMAT_DEFINITION
+        self.prompt += SystemPrompt.QUESTION_TYPES_DESCRIPTION
 
 
-    def _generate_user_prompt(self, question):
+    def _generate_user_prompt(self, questionnaire):
         """
             Generate the user's prompt.
 
             Parameters:
-                - question (str): The question whose topic will be extracted.
+                - questionnaire (str): The questionnaire text to be converted.
 
             Returns:
                 - str: The formatted prompt.
         """
-        self.prompt = UserPrompt.STANDARD_USER % (question)
+        self.prompt = UserPrompt.STANDARD_USER % (questionnaire)

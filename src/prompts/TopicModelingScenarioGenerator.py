@@ -10,7 +10,7 @@ class PredictionScenarioGenerator:
 
     def generate_scenario(self, question):
         """
-            Generate prompts for a given scenario, incorporating k-shot variations.
+            Generate prompts for a given scenario.
 
             Parameters:
                 - question (str): The question whose topic will be extracted.
