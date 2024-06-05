@@ -79,7 +79,7 @@ def _run_experiment(questionnaire_id, scenario, client, qst_text, run_dir, log_f
     with open(log_path, "a") as log_file: 
         try:
             # Generate prompts
-            system_prompt, user_prompt = scenario.generate_scenario(questionnaire=qst_text)
+            system_prompt, user_prompt, demo_user_prompt, assistant_prompt = scenario.generate_scenario(questionnaire=qst_text)
         
             log_file.write("\n-------------------")
             log_file.write("\n[PROMPTS]")
@@ -88,7 +88,7 @@ def _run_experiment(questionnaire_id, scenario, client, qst_text, run_dir, log_f
             log_file.write("\n-------------------")
 
             # Build messages and get LLM's response
-            messages = _build_messages(system_prompt, user_prompt)
+            messages = _build_messages(system_prompt, user_prompt, demo_user_prompt, assistant_prompt)
 
             # Record the start time
             start_time = time.time()
@@ -135,13 +135,17 @@ def _run_experiment(questionnaire_id, scenario, client, qst_text, run_dir, log_f
     return conversions_df
 
 
-def _build_messages(system_prompt, user_prompt):
+def _build_messages(system_prompt, user_prompt, demo_user_prompt, assistant_prompt):
     """
         Builds the messages to be sent to the LLM.
     """
     messages = []
 
     messages.append({"role": "system", "content": system_prompt})
+
+    messages.append({"role": "user", "content": demo_user_prompt})
+    messages.append({"role": "assistant", "content": assistant_prompt})
+    
     messages.append({"role": "user", "content": user_prompt})
 
     return messages

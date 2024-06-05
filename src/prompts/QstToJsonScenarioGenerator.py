@@ -5,6 +5,7 @@ class QstToJsonScenarioGenerator:
     def __init__(self):
         self.system_prompt_generator = QstToJsonPromptGenerator("system")
         self.user_prompt_generator = QstToJsonPromptGenerator("user")
+        self.demo_user_prompt_generator = QstToJsonPromptGenerator("user")
         self.assistant_prompt_generator = QstToJsonPromptGenerator("assistant")
 
 
@@ -22,8 +23,10 @@ class QstToJsonScenarioGenerator:
         system_prompt = self.system_prompt_generator.generate_prompt()
 
         user_prompt = self.user_prompt_generator.generate_prompt(questionnaire)
+        demo_user_prompt = self.demo_user_prompt_generator.generate_prompt()
+        assistant_prompt = self.assistant_prompt_generator.generate_prompt()
 
-        return system_prompt, user_prompt
+        return system_prompt, user_prompt, demo_user_prompt, assistant_prompt
 
 
     

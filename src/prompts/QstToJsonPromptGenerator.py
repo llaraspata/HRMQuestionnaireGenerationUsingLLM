@@ -3,6 +3,7 @@ This class is used for the generation of prompts w.r.t. to roles for the Topic M
 """
 from src.prompts.qst_to_json_prompts import QstToJsonSystemPrompt as SystemPrompt
 from src.prompts.qst_to_json_prompts import QstToJsonUserPrompt as UserPrompt
+from src.prompts.qst_to_json_prompts import QstToJsonAssistantPrompt as AssistantPrompt
 
 class QstToJsonPromptGenerator:
     # ------------
@@ -37,6 +38,12 @@ class QstToJsonPromptGenerator:
         elif self.role == "user":
             self._generate_user_prompt(question)
 
+        elif self.role == "assistant":
+            self._generate_assistant_prompt()
+
+        elif self.role == "sample_user":
+            self._generate_demo_user_prompt()
+
         return self.prompt
 
 
@@ -69,3 +76,24 @@ class QstToJsonPromptGenerator:
                 - str: The formatted prompt.
         """
         self.prompt = UserPrompt.STANDARD_USER % (questionnaire)
+
+    
+    def _generate_demo_user_prompt(self):
+        """
+            Generate the demo user's prompt.
+            The questionnaire to be converted is a fixed one for semplicity.
+            
+            Returns:
+                - str: The formatted prompt.
+        """
+        self.prompt = UserPrompt.STANDARD_USER % (UserPrompt.SAMPLE_QUESTIONNAIRE_TXT)
+
+    
+    def _generate_assistant_prompt(self):
+        """
+            Generate the assistant prompt.
+
+            Returns:
+                - str: The formatted prompt.
+        """
+        self.prompt = AssistantPrompt.SAMPLE_CONVERTED_JSON
