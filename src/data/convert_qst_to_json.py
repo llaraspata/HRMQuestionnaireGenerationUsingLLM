@@ -76,7 +76,7 @@ def _run_experiment(questionnaire_id, scenario, client, qst_text, run_dir, log_f
     count_reported_exceptions = 0
 
     log_path = os.path.join(run_dir, log_filename)
-    with open(log_path, "w") as log_file: 
+    with open(log_path, "a") as log_file: 
         try:
             # Generate prompts
             system_prompt, user_prompt = scenario.generate_scenario(questionnaire=qst_text)

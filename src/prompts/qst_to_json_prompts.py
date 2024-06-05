@@ -28,8 +28,13 @@ class QstToJsonSystemPrompt:
         - ID: 1, DESCRIPTION: Use this type of question to choose one answer from a list.
         - ID: 2, DESCRIPTION: Use this type of question to choose one or more answer from a list.
         - ID: 3, DESCRIPTION: Use this type of question to rate something.
-        - ID: 4, DESCRIPTION: Use this type of question to aquire feedback for open questions.
-"""
+        - ID: 4, DESCRIPTION: Use this type of question to aquire feedback for open questions."""
+
+    FURTHER_SPECIFICATIONS = """
+The enumeration of questions can be broken, so fix it while converting it.
+The '[ ]' does not stand for a multi-choise question, so use the meaning of the question to decide its type.
+The '______________________" stands for an open question. 
+When the question is open, then '_TF_ANSWERS' is an empty string."""
 
 
 class QstToJsonUserPrompt:

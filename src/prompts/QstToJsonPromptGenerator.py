@@ -54,6 +54,8 @@ class QstToJsonPromptGenerator:
 
         self.prompt += SystemPrompt.OUTPUT_FORMAT_DEFINITION
         self.prompt += SystemPrompt.QUESTION_TYPES_DESCRIPTION
+        
+        self.prompt += SystemPrompt.FURTHER_SPECIFICATIONS
 
 
     def _generate_user_prompt(self, questionnaire):
