@@ -222,9 +222,11 @@ class TFQuestionnairesDataset:
 
     def get_questionnaire_topic(self, questionnaire_id):
         topic = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["TOPIC"].values[0]
+        print("TOPIC: ", topic)
 
-        if topic is None or topic == "":
+        if pd.isna(topic):
             topic = self.questionnaires[self.questionnaires["ID"] == questionnaire_id]["NAME"].values[0]
+            print("NAME: ", topic)
 
         return topic
     
