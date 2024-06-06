@@ -29,7 +29,7 @@ class PredictionSystemPrompt:
     QUESTION_TYPES_DESCRIPTION = """\nThe admitted question's types are the following: %s"""
     SINGLE_QUESTION_TYPE_DESCRIPTION = """\n  - ID: %d, DESCRIPTION: %s"""
 
-    STYLE_COMMAND = """\nBe creative and vary the syntax of your questions to enhance user engagement."""
+    STYLE_COMMAND = """\nBe creative and vary the syntax of your questions to enhance user engagement. Reply only with the JSON."""
 
 
 class PredictionUserPrompt:
