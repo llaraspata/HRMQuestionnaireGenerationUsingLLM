@@ -72,6 +72,8 @@ class QuestionnairesEvaluator:
     TOPIC_SIMILARITY_WEIGHT = 0.3
 
 
+
+
     # ------------
     # Constructor
     # ------------
@@ -106,6 +108,13 @@ class QuestionnairesEvaluator:
         self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
 
         self.question_semantic_scores = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
+
+        self.client = AzureOpenAI(
+            api_key = os.getenv("AZURE_OPENAI_KEY"),  
+            api_version = "2024-02-01",
+            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
+        )
+
 
     
     # ------------
@@ -738,16 +747,11 @@ class QuestionnairesEvaluator:
         if not os.path.exists(semsim_scores_path):
             os.makedirs(semsim_scores_path)
 
-        client = AzureOpenAI(
-            api_key = os.getenv("AZURE_OPENAI_KEY"),  
-            api_version = "2024-02-01",
-            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
-        )
-
+        
         for pred in self.predictions.iterrows():
             id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
-            self._compute_semantic_similarity(project_root, pred[1], client)
+            self._compute_semantic_similarity(project_root, pred[1])
 
             if not self.question_semantic_scores.empty:
                 question_filename = f"questions__QST_{id}.csv"
@@ -758,7 +762,7 @@ class QuestionnairesEvaluator:
         self.compute_semantic_similarity_for_questionnaires(results_dir)
         
     
-    def _compute_semantic_similarity(self, project_root, pred, client):
+    def _compute_semantic_similarity(self, project_root, pred):
         try:
             ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
@@ -767,9 +771,9 @@ class QuestionnairesEvaluator:
                 qst_id = generated.questions["ID"][i]
                 qst_text = generated.questions["NAME"][i]
 
-                question_embedding = QuestionnairesEvaluator.get_text_embedding(client, qst_text)
+                question_embedding = QuestionnairesEvaluator.get_text_embedding(self.client, qst_text)
 
-                new_rows = self._compute_question_semantic_similarity(project_root, client, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
+                new_rows = self._compute_question_semantic_similarity(project_root, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
 
                 self.question_semantic_scores = pd.concat([self.question_semantic_scores, new_rows], ignore_index=True)
 
@@ -788,16 +792,16 @@ class QuestionnairesEvaluator:
         return response_json[0]["embedding"]
 
 
-    def _compute_question_semantic_similarity(self, project_root, client, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
+    def _compute_question_semantic_similarity(self, project_root, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
         df = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         for j in range(len(ground_truth_questions)):
-            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(client, ground_truth_questions[j])
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.client, ground_truth_questions[j])
             questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
             deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
             
             topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, self.questionnaire_id)
-            topic_embedding = QuestionnairesEvaluator.get_text_embedding(client, topic)
+            topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.client, topic)
             topic_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, topic_embedding)
 
             weight_sum = self.QUESTIONS_SIMILARITY_WEIGHT + self.TOPIC_SIMILARITY_WEIGHT
