@@ -74,7 +74,7 @@ class QuestionnairesEvaluator:
 
     SERENDIPITY_COLUMNS = ["QUESTIONNAIRE_ID", "SERENDIPITY_SCORE"]
     SERENDIPITY_FILENAME = "Serendipity_Scores.csv"
-    SERENDIPITY_RELEVANCE_THRESHOLD = 0.65
+    SERENDIPITY_RELEVANCE_THRESHOLD = 0.4
 
     TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"
     TOPIC_TEMPERATURE_SERENDIPITY = 0
@@ -933,8 +933,6 @@ class QuestionnairesEvaluator:
 
 
     def compute_serendipity(self, project_root, results_dir):
-        serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
-
         dataset = TFQuestionnairesDataset()
         dataset.load_data(project_root=project_root)
 
@@ -942,9 +940,9 @@ class QuestionnairesEvaluator:
             id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
             self._compute_serendipity(pred[1], project_root, dataset)
-            
+
         if not self.serendipity_scores.empty:
-            serendipity_scores.to_csv(os.path.join(results_dir, self.SERENDIPITY_FILENAME), index=False)
+            self.serendipity_scores.to_csv(os.path.join(results_dir, self.SERENDIPITY_FILENAME), index=False)
     
 
     def _compute_serendipity(self, pred, project_root, dataset):
@@ -952,9 +950,9 @@ class QuestionnairesEvaluator:
             generated = pred["PREDICTED_JSON"]
 
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated)
-
-            pd.concat([self.serendipity_scores, self._compute_serendipity_scores(generated.questions["NAME"], dataset)], ignore_index=True)
-        
+            questions = generated.questions[generated.questions["NAME"].notna()]["NAME"]
+            
+            self.serendipity_scores = pd.concat([self.serendipity_scores, self._compute_serendipity_scores(questions, dataset)], ignore_index=True)
         except Exception as e:
             return
     
@@ -962,18 +960,23 @@ class QuestionnairesEvaluator:
     def _compute_serendipity_scores(self, generated_questions, dataset):
         n = 0
         R = len(generated_questions)
-        C = dataset.get_questionnaire_subtopics(self.questionnaire_id)
+        subtopics = dataset.get_questionnaire_subtopics(self.questionnaire_id)
+        C = len(subtopics)
 
         questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
+        subtopics.append(questionnaire_topic)
         questionnaire_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, questionnaire_topic)
+        
+        subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
+        subtopics_embs.append(questionnaire_topic_emb)        
 
         for question in generated_questions:
             question_topic = self.predict_question_topic(question)
+            
             question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
 
-            topic_similarity = QuestionnairesEvaluator.compute_cosine_similarity(question_topic_emb, questionnaire_topic_emb)
+            topic_similarity = QuestionnairesEvaluator.compute_most_similar_subtopic(question_topic_emb, subtopics_embs)
 
-            print(f"\n  {question_topic} - {questionnaire_topic}  ==>   Sim: {topic_similarity}")
             if topic_similarity >= self.SERENDIPITY_RELEVANCE_THRESHOLD:
                n += 1 
             else:
@@ -987,7 +990,16 @@ class QuestionnairesEvaluator:
         })
         
         return new_row
-    
+
+
+    def get_subtopics_embeddings(client_emb, subtopics):
+        embeddings = []
+        
+        for subtopic in subtopics:
+            embeddings.append(QuestionnairesEvaluator.get_text_embedding(client_emb, subtopic))
+        
+        return embeddings
+
 
     def predict_question_topic(self, question):
         scenario = TopicModelingScenarioGenerator()
@@ -1008,3 +1020,12 @@ class QuestionnairesEvaluator:
 
         return response.choices[0].message.content
 
+
+    def compute_most_similar_subtopic(question_topic, subtopics):
+        similarities = []
+
+        for subtopic in subtopics:
+            similarity = QuestionnairesEvaluator.compute_cosine_similarity(question_topic, subtopic)
+            similarities.append(similarity)
+
+        return np.max(similarities)
