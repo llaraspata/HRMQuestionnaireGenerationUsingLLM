@@ -7,6 +7,7 @@ import numpy as np
 from openai import AzureOpenAI
 import json
 from sklearn.metrics.pairwise import cosine_similarity
+from src.prompts.TopicModelingScenarioGenerator import TopicModelingScenarioGenerator
 
 
 class QuestionnairesEvaluator:
@@ -71,6 +72,15 @@ class QuestionnairesEvaluator:
     QUESTIONS_SIMILARITY_WEIGHT = 0.7
     TOPIC_SIMILARITY_WEIGHT = 0.3
 
+    SERENDIPITY_COLUMNS = ["QUESTIONNAIRE_ID", "SERENDIPITY_SCORE"]
+    SERENDIPITY_FILENAME = "Serendipity_Scores.csv"
+    SERENDIPITY_RELEVANCE_THRESHOLD = 0.65
+
+    TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"
+    TOPIC_TEMPERATURE_SERENDIPITY = 0
+    TOPIC_MAX_TOKENS_SERENDIPITY = 100
+    TOPIC_FREQUENCY_PENALTY_SERENDIPITY = 0
+
 
     # ------------
     # Constructor
@@ -106,6 +116,21 @@ class QuestionnairesEvaluator:
         self.answer_rouge_scores = pd.DataFrame(columns=self.ROUGE_COLUMNS_ANSWER)
 
         self.question_semantic_scores = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
+
+        self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
+
+        self.client_emb = AzureOpenAI(
+            api_key = os.getenv("AZURE_OPENAI_KEY"),  
+            api_version = "2024-02-01",
+            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
+        )
+
+        self.client_gpt = AzureOpenAI(
+            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
+            api_key=os.getenv("AZURE_OPENAI_KEY"),  
+            api_version="2024-02-15-preview"
+        )
+
 
     
     # ------------
@@ -738,16 +763,11 @@ class QuestionnairesEvaluator:
         if not os.path.exists(semsim_scores_path):
             os.makedirs(semsim_scores_path)
 
-        client = AzureOpenAI(
-            api_key = os.getenv("AZURE_OPENAI_KEY"),  
-            api_version = "2024-02-01",
-            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
-        )
-
+        
         for pred in self.predictions.iterrows():
             id = pred[1]["QUESTIONNAIRE_ID"]
             self.set_questionnaire_id(id)
-            self._compute_semantic_similarity(project_root, pred[1], client)
+            self._compute_semantic_similarity(project_root, pred[1])
 
             if not self.question_semantic_scores.empty:
                 question_filename = f"questions__QST_{id}.csv"
@@ -758,7 +778,7 @@ class QuestionnairesEvaluator:
         self.compute_semantic_similarity_for_questionnaires(results_dir)
         
     
-    def _compute_semantic_similarity(self, project_root, pred, client):
+    def _compute_semantic_similarity(self, project_root, pred):
         try:
             ground_truth = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["GROUND_TRUTH_JSON"])
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
@@ -767,9 +787,9 @@ class QuestionnairesEvaluator:
                 qst_id = generated.questions["ID"][i]
                 qst_text = generated.questions["NAME"][i]
 
-                question_embedding = QuestionnairesEvaluator.get_text_embedding(client, qst_text)
+                question_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, qst_text)
 
-                new_rows = self._compute_question_semantic_similarity(project_root, client, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
+                new_rows = self._compute_question_semantic_similarity(project_root, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
 
                 self.question_semantic_scores = pd.concat([self.question_semantic_scores, new_rows], ignore_index=True)
 
@@ -788,16 +808,16 @@ class QuestionnairesEvaluator:
         return response_json[0]["embedding"]
 
 
-    def _compute_question_semantic_similarity(self, project_root, client, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
+    def _compute_question_semantic_similarity(self, project_root, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
         df = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         for j in range(len(ground_truth_questions)):
-            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(client, ground_truth_questions[j])
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, ground_truth_questions[j])
             questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
             deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
             
             topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, self.questionnaire_id)
-            topic_embedding = QuestionnairesEvaluator.get_text_embedding(client, topic)
+            topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, topic)
             topic_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, topic_embedding)
 
             weight_sum = self.QUESTIONS_SIMILARITY_WEIGHT + self.TOPIC_SIMILARITY_WEIGHT
@@ -910,3 +930,81 @@ class QuestionnairesEvaluator:
         scores_df["SIMILARITY_WITH_TOPIC_VAR"] = distribution["topic_similarity"]['variance']
 
         return scores_df
+
+
+    def compute_serendipity(self, project_root, results_dir):
+        serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
+
+        dataset = TFQuestionnairesDataset()
+        dataset.load_data(project_root=project_root)
+
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
+            self.set_questionnaire_id(id)
+            self._compute_serendipity(pred[1], project_root, dataset)
+            
+        if not self.serendipity_scores.empty:
+            serendipity_scores.to_csv(os.path.join(results_dir, self.SERENDIPITY_FILENAME), index=False)
+    
+
+    def _compute_serendipity(self, pred, project_root, dataset):
+        try:
+            generated = pred["PREDICTED_JSON"]
+
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated)
+
+            pd.concat([self.serendipity_scores, self._compute_serendipity_scores(generated.questions["NAME"], dataset)], ignore_index=True)
+        
+        except Exception as e:
+            return
+    
+
+    def _compute_serendipity_scores(self, generated_questions, dataset):
+        n = 0
+        R = len(generated_questions)
+        C = dataset.get_questionnaire_subtopics(self.questionnaire_id)
+
+        questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
+        questionnaire_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, questionnaire_topic)
+
+        for question in generated_questions:
+            question_topic = self.predict_question_topic(question)
+            question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
+
+            topic_similarity = QuestionnairesEvaluator.compute_cosine_similarity(question_topic_emb, questionnaire_topic_emb)
+
+            print(f"\n  {question_topic} - {questionnaire_topic}  ==>   Sim: {topic_similarity}")
+            if topic_similarity >= self.SERENDIPITY_RELEVANCE_THRESHOLD:
+               n += 1 
+            else:
+               continue
+
+        serendipity_score = n / np.min([R, C])
+
+        new_row = pd.DataFrame({
+            "QUESTIONNAIRE_ID": [self.questionnaire_id],
+            "SERENDIPITY_SCORE": [serendipity_score]
+        })
+        
+        return new_row
+    
+
+    def predict_question_topic(self, question):
+        scenario = TopicModelingScenarioGenerator()
+        
+        system_prompt, user_prompt = scenario.generate_scenario(question)
+
+        messages = []
+        messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_prompt})
+
+        response = self.client_gpt.chat.completions.create(
+            model = self.TOPIC_MODEL_SERENDIPITY,
+            messages=messages,
+            temperature=self.TOPIC_TEMPERATURE_SERENDIPITY,
+            max_tokens=self.TOPIC_MAX_TOKENS_SERENDIPITY,
+            frequency_penalty=self.TOPIC_FREQUENCY_PENALTY_SERENDIPITY
+        )
+
+        return response.choices[0].message.content
+

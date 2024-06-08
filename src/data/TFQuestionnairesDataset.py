@@ -12,12 +12,13 @@ class TFQuestionnairesDataset:
     QUESTIONS_FILENAME = "TF_QST_QUESTIONS.csv"
     QUESTION_TYPES_FILENAME = "TF_QST_QUESTION_TYPES.csv"
     ANSWERS_FILENAME = "TF_QST_ANSWERS.csv"
+    SUBTOPICS_FILENAME = "SUBTOPICS.csv"
 
     ESSENTIAL_COLUMNS_QUESTIONNAIRES = ["ID", "CODE", "NAME"]
     ESSENTIAL_COLUMNS_QUESTIONS = ["ID", "TYPE_ID", "QUESTIONNAIRE_ID", "CODE", "NAME", "DISPLAY_ORDER"]
     ESSENTIAL_COLUMNS_QUESTION_TYPES = ["ID", "CODE", "NAME", "DESCRIPTION"]
     ESSENTIAL_COLUMNS_ANSWERS = ["ID", "QUESTION_ID", "ANSWER"]
-
+    
     QUESTIONNAIRES_PROMPT_COLUMNS = ["CODE", "NAME"]
     QUESTIONS_PROMPT_COLUMNS = ["CODE", "NAME", "TYPE_ID", "DISPLAY_ORDER"]
     ANSWERS_PROMPT_COLUMNS = ["ANSWER"]
@@ -45,11 +46,13 @@ class TFQuestionnairesDataset:
         questions_path = os.path.join(data_dir_path, self.QUESTIONS_FILENAME)
         question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
         answer_path = os.path.join(data_dir_path, self.ANSWERS_FILENAME)
+        subtopics_path = os.path.join(data_dir_path, self.SUBTOPICS_FILENAME)
 
         self.questionnaires = pd.read_csv(questionnaires_path, encoding='latin1')
         self.questions = pd.read_csv(questions_path, encoding='latin1')
         self.question_types = pd.read_csv(question_types_path, encoding='latin1')
         self.answers = pd.read_csv(answer_path, encoding='latin1')
+        self.subtopics = pd.read_csv(subtopics_path, encoding='latin1')
 
 
     def load_question_types(self, project_root):
@@ -274,3 +277,7 @@ class TFQuestionnairesDataset:
 
         return self.questionnaires["ID"][random_index]
     
+
+    def get_questionnaire_subtopics(self, questionnaire_id):
+        topic = self.get_questionnaire_topic(questionnaire_id)
+        return self.subtopics[self.subtopics["QST_TOPIC"] == topic.upper()]["SUBTOPICS_COUNT"].values[0]

@@ -8,7 +8,7 @@ class TopicModelingSystemPrompt:
     INPUT_FORMAT_DEFINITION = """\nThe user will ask you to extract the topic of a question."""
 
     TASK_DEFINITION = """\nYou must reply with only the topic of the question. """
-    OUTPUT_FORMAT_DEFINITION = """Use at most 3 words to describe the topic of the question."""
+    OUTPUT_FORMAT_DEFINITION = """Use at most 3 words to describe the topic of the question. Reply only with the topic."""
 
 
 class TopicModelingUserPrompt:
