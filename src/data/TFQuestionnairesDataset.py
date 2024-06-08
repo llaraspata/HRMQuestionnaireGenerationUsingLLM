@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import itertools
 import random
+import ast
 
 class TFQuestionnairesDataset:
     # ------------
@@ -280,4 +281,6 @@ class TFQuestionnairesDataset:
 
     def get_questionnaire_subtopics(self, questionnaire_id):
         topic = self.get_questionnaire_topic(questionnaire_id)
-        return self.subtopics[self.subtopics["QST_TOPIC"] == topic.upper()]["SUBTOPICS_COUNT"].values[0]
+        list_str = self.subtopics[self.subtopics["QST_TOPIC"] == topic.upper()]["SUBTOPICS_LIST"].values[0]
+
+        return ast.literal_eval(list_str)
