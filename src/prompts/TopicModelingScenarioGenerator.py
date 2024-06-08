@@ -1,11 +1,10 @@
 from src.prompts.TopicModelingPromptGenerator import TopicModelingPromptGenerator
 
-class PredictionScenarioGenerator:
+class TopicModelingScenarioGenerator:
 
     def __init__(self):
         self.system_prompt_generator = TopicModelingPromptGenerator("system")
         self.user_prompt_generator = TopicModelingPromptGenerator("user")
-        self.assistant_prompt_generator = TopicModelingPromptGenerator("assistant")
 
 
     def generate_scenario(self, question):
