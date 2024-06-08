@@ -279,4 +279,5 @@ class TFQuestionnairesDataset:
     
 
     def get_questionnaire_subtopics(self, questionnaire_id):
-        return self.subtopics[self.subtopics["QUESTIONNAIRE_ID"] == questionnaire_id]["SUBTOPICS_COUNT"].values[0]
+        topic = self.get_questionnaire_topic(questionnaire_id)
+        return self.subtopics[self.subtopics["QST_TOPIC"] == topic.upper()]["SUBTOPICS_COUNT"].values[0]

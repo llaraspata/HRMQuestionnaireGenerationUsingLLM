@@ -74,7 +74,7 @@ class QuestionnairesEvaluator:
 
     SERENDIPITY_COLUMNS = ["QUESTIONNAIRE_ID", "SERENDIPITY_SCORE"]
     SERENDIPITY_FILENAME = "Serendipity_Scores.csv"
-    SERENDIPITY_RELEVANCE_THRESHOLD = 0.75
+    SERENDIPITY_RELEVANCE_THRESHOLD = 0.65
 
     TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"
     TOPIC_TEMPERATURE_SERENDIPITY = 0
@@ -952,7 +952,6 @@ class QuestionnairesEvaluator:
             generated = pred["PREDICTED_JSON"]
 
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated)
-            topic = dataset.get_questionnaire_topic(self.questionnaire_id)
 
             pd.concat([self.serendipity_scores, self._compute_serendipity_scores(generated.questions["NAME"], dataset)], ignore_index=True)
         
@@ -964,7 +963,7 @@ class QuestionnairesEvaluator:
         n = 0
         R = len(generated_questions)
         C = dataset.get_questionnaire_subtopics(self.questionnaire_id)
-        
+
         questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
         questionnaire_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, questionnaire_topic)
 
@@ -973,7 +972,9 @@ class QuestionnairesEvaluator:
             question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
 
             topic_similarity = QuestionnairesEvaluator.compute_cosine_similarity(question_topic_emb, questionnaire_topic_emb)
-            if topic_similarity >= self.TOPIC_SIMILARITY_THRESHOLD:
+
+            print(f"\n  {question_topic} - {questionnaire_topic}  ==>   Sim: {topic_similarity}")
+            if topic_similarity >= self.SERENDIPITY_RELEVANCE_THRESHOLD:
                n += 1 
             else:
                continue
