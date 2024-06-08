@@ -95,16 +95,16 @@ class QuestionnairesEvaluator:
         self.conversion_error = False
         self.is_json = True
         self.error_message = ""
-        self.generated_questionnaires = -1
+        self.generated_questionnaires = 0
 
-        self.generated_question_number = -1
-        self.question_number_deviation = -1
+        self.generated_question_number = 0
+        self.question_number_deviation = 0
         self.question_number_deviation_from_sample = -1
-        self.questions_with_missing_answers = -1
-        self.not_unique_question_codes = -1
+        self.questions_with_missing_answers = 0
+        self.not_unique_question_codes = 0
         
-        self.avg_generated_answer_number = -1
-        self.avg_answer_number_deviation = -1
+        self.avg_generated_answer_number = 0
+        self.avg_answer_number_deviation = 0
         
         self.statistics = pd.DataFrame(columns=self.STATISTICS_COLUMNS)
         
@@ -159,16 +159,16 @@ class QuestionnairesEvaluator:
         self.conversion_error = False
         self.is_json = True
         self.error_message = ""
-        self.generated_questionnaires = -1
+        self.generated_questionnaires = 0
 
-        self.generated_question_number = -1
-        self.question_number_deviation = -1
+        self.generated_question_number = 0
+        self.question_number_deviation = 0
         self.question_number_deviation_from_sample = -1
-        self.questions_with_missing_answers = -1
-        self.not_unique_question_codes = -1
+        self.questions_with_missing_answers = 0
+        self.not_unique_question_codes = 0
 
-        self.avg_generated_answer_number = -1
-        self.avg_answer_number_deviation = -1
+        self.avg_generated_answer_number = 0
+        self.avg_answer_number_deviation = 0
         
         self.question_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_QUESTION)
         self.answer_bleu_scores = pd.DataFrame(columns=self.BLEU_COLUMNS_ANSWER)
