@@ -60,19 +60,10 @@ class GlobalResultVisualizer:
         return bw_errors_df
     
 
-    def plot_result_heatmap(self):
+    def plot_errors_heatmap(self):
         self._plot_result_heatmap(self.errors, "CONVERSION_ERROR_RATE", "Conversion error-rate", cmap="RdYlGn_r")
         self._plot_result_heatmap(self.errors, "JSON_ERROR_RATE", "JSON error-rate", cmap="RdYlGn_r")
-        self._plot_result_heatmap(self.intraquestionnaire_similarity, "INTRAQSTN_ROUGE_L_F1_SCORE", "Intraquestionnaire Syntactic Similarity", cmap="RdYlGn_r")
-        self._plot_result_heatmap(self.semantic_metrics, "FINAL_SCORE", "Semantic Similarity")
-        self._plot_result_heatmap(self.serendipity_scores, "AVG_SERENDIPITY_SCORE", "Serendipity Score")
-
-        self._plot_result_heatmap(self.errors, "CONVERSION_ERROR_RATE", "Conversion error-rate", cmap="viridis_r")
-        self._plot_result_heatmap(self.errors, "JSON_ERROR_RATE", "JSON error-rate", cmap="viridis_r")
-        self._plot_result_heatmap(self.intraquestionnaire_similarity, "INTRAQSTN_ROUGE_L_F1_SCORE", "Intraquestionnaire Syntactic Similarity", cmap="viridis_r")
-        self._plot_result_heatmap(self.semantic_metrics, "FINAL_SCORE", "Semantic Similarity", cmap="viridis")
-        self._plot_result_heatmap(self.serendipity_scores, "AVG_SERENDIPITY_SCORE", "Serendipity Score", cmap="viridis")
-
+        
     
     def _plot_result_heatmap(self, df, column, title, cmap="RdYlGn", model="", has_full_params=-1, technique=""):
         metrics_dict = {(fp, t): [] for fp in self.FREQUENCY_PENALTY_VALUES for t in self.TEMPERATURE_VALUES}
