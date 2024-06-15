@@ -21,8 +21,7 @@ def main():
     for subfolder in os.listdir(models_path):
         experiment_path = os.path.join(models_path, subfolder)
         
-        gpt4 = ["0s_FULL_gpt-4-dev_4000MT_0.25T_0FP_JSON"]
-        if os.path.isdir(experiment_path) and subfolder in gpt4:
+        if os.path.isdir(experiment_path):
             questionnaires_evaluator = QuestionnairesEvaluator()
             questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             

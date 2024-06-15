@@ -258,7 +258,12 @@ class TFQuestionnairesDataset:
 
 
     def get_not_unique_question_codes(self):
-        not_unique = len(self.questions["CODE"]) - len(self.questions["CODE"].unique())
+        codes = []
+
+        for _, row in self.questions.iterrows():
+            codes.append(str(row["CODE"]))
+        
+        not_unique = len(codes) - len(set(codes))
         
         return not_unique
 
