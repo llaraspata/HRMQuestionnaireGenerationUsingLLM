@@ -86,7 +86,7 @@ class PredictionScenarioGenerator:
 
             if self.full_log:
                 log_file.write("\n\n-------------------")
-                log_file.write(f"\n[SAMPLE] QUESTIONNAIRE_ID: {current_questionnaire_id}")
+                log_file.write(f"\n[SAMPLE] QUESTIONNAIRE_ID: {sample_questionnaire_id}")
                 log_file.write(f"\n     - Topic: {topic}")
                 log_file.write(f"\n     - Question number: {question_number}")
 
