@@ -75,6 +75,7 @@ class QuestionnairesEvaluator:
     SERENDIPITY_COLUMNS = ["QUESTIONNAIRE_ID", "SERENDIPITY_SCORE"]
     SERENDIPITY_FILENAME = "Serendipity_Scores.csv"
     SERENDIPITY_RELEVANCE_THRESHOLD = 0.5
+    SERENDIPITY_DUPLICATE_THRESHOLD = 0.85
 
     TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"
     TOPIC_TEMPERATURE_SERENDIPITY = 0
@@ -968,7 +969,9 @@ class QuestionnairesEvaluator:
         questionnaire_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, questionnaire_topic)
         
         subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
-        subtopics_embs.append(questionnaire_topic_emb)        
+        subtopics_embs.append(questionnaire_topic_emb)
+
+        generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.client_emb, generated_questions)
 
         for question in generated_questions:
             question_topic = self.predict_question_topic(question)
@@ -1029,3 +1032,21 @@ class QuestionnairesEvaluator:
             similarities.append(similarity)
 
         return np.max(similarities)
+    
+
+    def remove_duplicate_questions(client, generated_questions):
+        final_questions = generated_questions.copy()
+
+        for i in range(len(generated_questions)):
+            qst_emb_i = QuestionnairesEvaluator.get_text_embedding(client, generated_questions[i])
+
+            for j in range(i + 1, len(generated_questions)):
+                qst_emb_j = QuestionnairesEvaluator.get_text_embedding(client, generated_questions[j])
+
+                sim = QuestionnairesEvaluator.compute_cosine_similarity(qst_emb_i, qst_emb_j)
+                if sim >= QuestionnairesEvaluator.SERENDIPITY_DUPLICATE_THRESHOLD:
+                    final_questions[j] = ""
+        
+        final_questions = list(filter(lambda x: x != "", final_questions))
+
+        return final_questions
