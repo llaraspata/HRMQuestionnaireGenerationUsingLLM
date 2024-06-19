@@ -21,7 +21,7 @@ def main():
     for subfolder in os.listdir(models_path):
         experiment_path = os.path.join(models_path, subfolder)
         
-        if os.path.isdir(experiment_path):
+        if subfolder.__contains__("gpt-4") and os.path.isdir(experiment_path):
             questionnaires_evaluator = QuestionnairesEvaluator()
             questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             
@@ -31,27 +31,27 @@ def main():
                 os.makedirs(exp_results_path)
             
             print(f"Experiment ID: {subfolder}")
-            print("\t 1. Computing statistics...")
-            questionnaires_evaluator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
-            print("\t 2. Computing BLEU scores...")
-            questionnaires_evaluator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
-            print("\t 3. Computing BLEU scores distribution...")
-            questionnaires_evaluator.compute_bleu_score_distribution(results_dir=exp_results_path)
-
-            print("\t 4. Computing ROUGE scores...")
-            questionnaires_evaluator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
-            print("\t 5. Computing ROUGE-L (F1) scores distribution...")
-            questionnaires_evaluator.compute_rouge_score_distribution(results_dir=exp_results_path)
-
-            print("\t 6. Computing Syntactic Similarity...")
-            questionnaires_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
-            print("\t 7. Computing Semantic Similarity...")
-            questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
-
+            # print("\t 1. Computing statistics...")
+            # questionnaires_evaluator.compute_statistics(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+# 
+            # print("\t 2. Computing BLEU scores...")
+            # questionnaires_evaluator.compute_bleu_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+# 
+            # print("\t 3. Computing BLEU scores distribution...")
+            # questionnaires_evaluator.compute_bleu_score_distribution(results_dir=exp_results_path)
+# 
+            # print("\t 4. Computing ROUGE scores...")
+            # questionnaires_evaluator.compute_rouge_scores(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+# 
+            # print("\t 5. Computing ROUGE-L (F1) scores distribution...")
+            # questionnaires_evaluator.compute_rouge_score_distribution(results_dir=exp_results_path)
+# 
+            # print("\t 6. Computing Syntactic Similarity...")
+            # questionnaires_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+# 
+            # print("\t 7. Computing Semantic Similarity...")
+            # questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+# 
             print("\t 8. Computing Serendipity...")
             questionnaires_evaluator.compute_serendipity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
