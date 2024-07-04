@@ -966,10 +966,8 @@ class QuestionnairesEvaluator:
 
         questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
         subtopics.append(questionnaire_topic)
-        questionnaire_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, questionnaire_topic)
         
         subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
-        subtopics_embs.append(questionnaire_topic_emb)
 
         generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.client_emb, generated_questions)
 
