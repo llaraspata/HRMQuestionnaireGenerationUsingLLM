@@ -21,7 +21,7 @@ def main():
     for subfolder in os.listdir(models_path):
         experiment_path = os.path.join(models_path, subfolder)
         
-        if subfolder.__contains__("gpt-4") and os.path.isdir(experiment_path):
+        if os.path.isdir(experiment_path):
             questionnaires_evaluator = QuestionnairesEvaluator()
             questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
             
@@ -58,6 +58,7 @@ def main():
     print("-----------------------------------")
     print("Globally evaluating the model...")
     model_evaluator.evaluate()
+    model_evaluator.compute_time_token_cost(project_root=PROJECT_ROOT, models_path=models_path, results_dir=results_path)
     
     print("=================================================")
     print("                 END OF EVALUATION               ")

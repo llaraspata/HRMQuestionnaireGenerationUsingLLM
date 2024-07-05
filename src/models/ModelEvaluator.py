@@ -29,6 +29,9 @@ class ModelEvaluator:
     SERENDIPITY_COLUMNS = ["EXPERIMENT_ID", "AVG_SERENDIPITY_SCORE"]
     SERENDIPITY_FILENAME = "serendipity_scores.csv"
 
+    TIME_TOKENS_COLUMNS = ["EXPERIMENT_ID", "RESPONSE_TIME", "TOTAL_TOKENS", "PROMPT_TOKENS", "COMPLETITION_TOKENS"]
+    TIME_TOKENS_FILENAME = "time_tokens.csv"
+
 
     # ------------
     # Constructor
@@ -40,6 +43,7 @@ class ModelEvaluator:
         self.syntactic_symilarity = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_COLUMNS)
         self.semantic_metrics = pd.DataFrame(columns=self.SEMANTIC_METRICS_COLUMNS)
         self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
+        self.time_tokens = pd.DataFrame(columns=self.TIME_TOKENS_COLUMNS)
 
 
     # ------------
@@ -204,3 +208,34 @@ class ModelEvaluator:
             self.serendipity_scores = pd.concat([self.serendipity_scores, exp_scores], ignore_index=True)
         except:
             return
+        
+    def compute_time_token_cost(self, project_root, models_path, results_dir):
+        for subfolder in os.listdir(models_path):
+            experiment_path = os.path.join(models_path, subfolder)
+            
+            if os.path.isdir(experiment_path):
+                predictions = self.load_data(project_root, subfolder)
+                avg_response_time = predictions["RESPONSE_TIME"].mean()
+                avg_total_tokens = predictions["TOTAL_TOKENS"].mean()
+                avg_prompt_tokens = predictions["PROMPT_TOKENS"].mean()
+                avg_completition_tokens = predictions["COMPLETITION_TOKENS"].mean()
+
+                exp_time_tokens = pd.DataFrame({
+                    "EXPERIMENT_ID": [subfolder],
+                    "RESPONSE_TIME": [avg_response_time],
+                    "TOTAL_TOKENS": [avg_total_tokens],
+                    "PROMPT_TOKENS": [avg_prompt_tokens],
+                    "COMPLETITION_TOKENS": [avg_completition_tokens]
+                })
+
+                self.time_tokens = pd.concat([self.time_tokens, exp_time_tokens], ignore_index=True)    
+
+        if not self.time_tokens.empty:
+            self.time_tokens.to_csv(os.path.join(results_dir, self.TIME_TOKENS_FILENAME), index=False)
+
+
+    def load_data(self, project_root, experiment_id):
+        result_dir_path = os.path.join(project_root, "models", experiment_id)
+
+        predictions_path = os.path.join(result_dir_path, "predictions.pkl")
+        return pd.read_pickle(predictions_path)
