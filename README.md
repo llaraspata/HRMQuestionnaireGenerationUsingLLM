@@ -1,7 +1,69 @@
 HRM Questionnaire Generation by using LLMs
 ==============================
+[![python](https://img.shields.io/badge/Python-3.11.5-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
-Leveraging LLMs capabilities in Questionnaire Generation for Human Resources Management
+This repository contains all the code, datasets, and supplementary materials to perform the Questionnaire Generation task in the Human Resource Management (HRM) domain by leveraging LLMs.
+
+We used such a repository to run our experiments for the research paper "Enhancing human capital management through GPT-driven questionnaire generation" submitted (not yet accepted) to the 8th Workshop on Natural Language for Artificial Intelligence (NL4AI).
+
+It is possible to distinguish questionnaires in different types, depending on their characteristics. At the moment we focued on Surveys, that typically lack right/wrong or scored answers. Specifically, survey questionnaires are instrumental in gathering continuous feedback and opinions from employees, enabling organizations to monitor and enhance various aspects such as employee satisfaction, value alignment, performance, engagement, and potential assessment.
+
+Given the lack of adequate datasets, we built a new collection of HR Surveys. Details aboyt the dataset can be found in the [Data Card](data/README.md).
+We tested two GPT models (GPT-3.5-Turbo and GPT-4-Turbo) with different setting, in order to catch which are the factors that most contribute to an higher survey quality. Such details can be found in the [Model Card](models/README.md).
+
+In our work, we designed a novel framework to automatically evaluate the generated content, due to the limitation of traditional metrics like raw ROUGE and BLEU. Thus, our metrics are able to estimate the quality of the surveys in terms of engagement, internal thematic variability, and flow. Further details are ported in the [Result Card](results/README.md).
+
+
+[Notebooks](notebooks) show statistics on the new dataset, code sample usage, and the obtained results.
+
+
+
+## Getting started
+
+We recommend to use [Python 3.11.5](https://python.domainunion.de/downloads/release/python-3115/) to run our code, due to possible incompatibiities with newr versions.
+
+### Installation
+The installation process is described below:
+
+1. Clone this repository:
+   ```
+   git clone https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM.git
+   ```
+2. Create a virtual environment and activate it:
+   ```
+   python -m venv your_venv_name
+   source your_venv_name/bin/activate  # On Windows, use: your_venv_name\Scripts\activate
+   ```
+3. Install all the project dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+### Experiments
+To run the configured experimental settings follow the steps below:
+
+1. TODO
+
+### Evaluation
+To run the the evaluation part follow the steps below:
+
+1. TODO
+
+
+
+## Citation
+
+```bibtex
+@misc{laraspata2024SurveyGeneration4HCM,
+author = {Lucrezia Laraspata and Fabio Cardilli and Giovanna Castellano and Gennaro Vessio},
+title = {Enhancing human capital management through GPT-driven questionnaire generation},
+year = {2024},
+url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
+}
+```
+
+
+
 
 Project Organization
 ------------
@@ -10,10 +72,11 @@ Project Organization
     ├── Makefile           <- Makefile with commands like `make data` or `make train`
     ├── README.md          <- The top-level README for developers using this project.
     ├── data
-    │   ├── external       <- Data from third party sources.
-    │   ├── interim        <- Intermediate data that has been transformed.
+    │   ├── external       <- Raw questionnaires derived from the augmentation process.
+    │   ├── interim        <- Intermediate augmented data that has been transformed to JSON.
     │   ├── processed      <- The final, canonical data sets for modeling.
-    │   └── raw            <- The original, immutable data dump.
+    │   └── raw            <- The data used as starting point from this project
+    │                         (taken from Talentia Software HCM).
     │
     ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
@@ -23,28 +86,39 @@ Project Organization
     │                         the creator's initials, and a short `-` delimited description, e.g.
     │                         `1.0-jqp-initial-data-exploration`.
     │
-    ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-    │
-    ├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-    │   └── figures        <- Generated graphics and figures to be used in reporting
-    │
     ├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
     │                         generated with `pip freeze > requirements.txt`
     │
     ├── setup.py           <- makes project pip installable (pip install -e .) so src can be imported
+    │
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
     │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   │   ├── convert_qst_to_json.py
+    │   │   └── TFQuestionnairesDataset.py
     │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
+    │   ├── prompts        <- Catalog of the employed prompts
+    │   │   ├── qst_to_json_prompts.py
+    │   │   ├── QstToJsonPromptGenerator.py
+    │   │   ├── QstToJsonScenarioGenerator.py
+    │   │   │
+    │   │   ├── prediction_prompts.py
+    │   │   ├── PredictionPromptGenerator.py
+    │   │   ├── PredictionScenarioGenerator.py
+    │   │   │
+    │   │   ├── topic_modeling_prompts.py
+    │   │   ├── TopicModelingPromptGenerator.py
+    │   │   └── TopicModelingScenarioGenerator.py
     │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
+    │   ├── models         <- Scripts to run experiments and evaluations
+    │   │   ├── experiment_config.json
+    │   │   │
+    │   │   ├── predict.py
+    │   │   │
+    │   │   ├── QuestionnairesEvaluator.py
+    │   │   ├── ModelEvaluator.py
+    │   │   └── evaluate.py
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       └── visualize.py

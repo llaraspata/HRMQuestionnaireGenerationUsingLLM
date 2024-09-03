@@ -110,14 +110,22 @@ class GlobalResultVisualizer:
                 T_idx = self.TEMPERATURE_VALUES.index(t)
                 metrics_matrix[FP_idx, T_idx] = np.mean(metrics)
 
-        plt.figure(figsize=(8, 6))
+        plt.figure(figsize=(12, 9))
         plt.imshow(metrics_matrix, extent=[min(self.TEMPERATURE_VALUES), max(self.TEMPERATURE_VALUES), min(self.FREQUENCY_PENALTY_VALUES), max(self.FREQUENCY_PENALTY_VALUES)],
                    origin='lower', aspect='auto', cmap=cmap)
-        plt.colorbar(label='Values')
-        plt.xlabel("Temperature")
-        plt.ylabel("Frequency Penalty")
+        cbar = plt.colorbar()
+        cbar.ax.tick_params(labelsize=20)
+        plt.xlabel("Temperature",fontsize=30)
+        plt.ylabel("Frequency Penalty", fontsize=30)
         plt.title(title)
-        plt.xticks(self.TEMPERATURE_VALUES)
-        plt.yticks(self.FREQUENCY_PENALTY_VALUES)
+        plt.xticks(self.TEMPERATURE_VALUES, fontsize=20)
+        plt.yticks(self.FREQUENCY_PENALTY_VALUES, fontsize=20)
+
+        # -------------
+        # Uncomment to save the plot as PDF
+        # -------------
+        # pdf_filename = f"{title}.pdf"
+        # plt.savefig(pdf_filename, format='pdf', bbox_inches='tight')
+
         plt.show()
 
