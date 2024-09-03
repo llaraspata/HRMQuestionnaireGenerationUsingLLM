@@ -48,7 +48,7 @@ python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<e
 ```
 
 > [!NOTE]
-> The option ```-W ignore``` allows to not display potential warnings during the script execution. To display them, just remove such an option.
+> The option `-W ignore` allows to not display potential warnings during the script execution. To display them, just remove such an option.
 
 ### Evaluation
 To run the the evaluation step execute the following command:
