@@ -2,13 +2,10 @@ HRM Questionnaire Generation by using LLMs
 ==============================
 [![python](https://img.shields.io/badge/Python-3.11.5-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
 
-This repository contains all the code, datasets, and supplementary materials to perform the Questionnaire Generation task in the Human Resource Management (HRM) domain by leveraging LLMs.
+This repository contains all the datasets, code, and supplementary materials to perform the Questionnaire Generation task in the Human Resource Management (HRM) domain by leveraging LLMs.
+At the moment we focued on Surveys, that typically lack right/wrong or scored answers. Specifically, survey questionnaires are instrumental in gathering continuous feedback and opinions from employees, enabling organizations to monitor and enhance various aspects such as employee satisfaction and potential assessment.
 
-We used such a repository to run our experiments for the research paper "Enhancing human capital management through GPT-driven questionnaire generation" submitted (not yet accepted) to the 8th Workshop on Natural Language for Artificial Intelligence (NL4AI).
-
-It is possible to distinguish questionnaires in different types, depending on their characteristics. At the moment we focued on Surveys, that typically lack right/wrong or scored answers. Specifically, survey questionnaires are instrumental in gathering continuous feedback and opinions from employees, enabling organizations to monitor and enhance various aspects such as employee satisfaction, value alignment, performance, engagement, and potential assessment.
-
-Given the lack of adequate datasets, we built a new collection of HR Surveys. Details aboyt the dataset can be found in the [Data Card](data/README.md).
+Given the lack of adequate datasets, we built a new collection of HR Surveys. Details about the dataset can be found in the [Data Card](data/README.md).
 We tested two GPT models (GPT-3.5-Turbo and GPT-4-Turbo) with different setting, in order to catch which are the factors that most contribute to an higher survey quality. Such details can be found in the [Model Card](models/README.md).
 
 In our work, we designed a novel framework to automatically evaluate the generated content, due to the limitation of traditional metrics like raw ROUGE and BLEU. Thus, our metrics are able to estimate the quality of the surveys in terms of engagement, internal thematic variability, and flow. Further details are ported in the [Result Card](results/README.md).
@@ -39,16 +36,31 @@ The installation process is described below:
    pip install -r requirements.txt
    ```
 
-### Experiments
-To run the configured experimental settings follow the steps below:
 
-1. TODO
+### Experiments
+The several experimental setting are configured in a [JSON file](src/models/experiment_config.json). To run all the configurations use the following command:
+```
+python -W ignore <path_to_repo_folder>/src/models/predict.py
+```
+Otherwise, to run a specific configuration use the following command:
+```
+python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<experiment_id>" 
+```
+
+> [!NOTE]
+> The option ```-W ignore``` allows to not display potential warnings during the script execution. To display them, just remove such an option.
 
 ### Evaluation
-To run the the evaluation part follow the steps below:
+To run the the evaluation step execute the following command:
+```
+python -W ignore <path_to_repo_folder>/src/models/evaluate.py
+```
 
-1. TODO
-
+### Utility
+To perform the automatic conversion of the aumented data from unstructed text to JSON, run the following command:
+```
+python -W ignore <path_to_repo_folder>/src/data/convert_qst_to_json.py
+```
 
 
 ## Citation
@@ -121,7 +133,11 @@ Project Organization
     │   │   └── evaluate.py
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
+    │       ├── experiment_pairs.json
+    │       │
+    │       ├── GlobalResultVisualizer.py
+    │       ├── PairResultVisualizer.py
+    │       └── visualize.py
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
