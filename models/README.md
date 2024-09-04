@@ -104,7 +104,7 @@ The temperature and frequency penalty values variation influences the tokens sam
 
 ### Turing test
 
-We selected 3 pairs of questionnaires to be submitted to HR professionals according to the computed metrics. The employed materials is contained in [this folder](results/turing_test/submitted).
+We selected 3 pairs of questionnaires to be submitted to HR professionals according to the computed metrics. The employed materials is contained in [this folder](/results/turing_test/submitted).
 
 For each pair, participants were given 60 seconds to review the questionnaires and then asked to respond to the following questions:
 
