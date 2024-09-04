@@ -46,7 +46,8 @@ Otherwise, to run a specific configuration use the following command:
 python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<experiment_id>" 
 ```
 > [!CAUTION]
-> Make sure you have a valid (Azure) OpenAI access key, otherwise calling the OpenAI services will be forbidden. Then set it as an environment variable named `AZURE_OPENAI_KEY`
+> Make sure you have a valid (Azure) OpenAI access key, otherwise calling the OpenAI services will be forbidden. Then set it as an environment variable named `AZURE_OPENAI_KEY`.
+>
 > Moreover, note that we used a private deployment, so it cannot be accessed by users external to the Talentia HCM R&D Team.
 
 > [!NOTE]
