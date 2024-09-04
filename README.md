@@ -7,8 +7,7 @@ At the moment we focued on Surveys, that typically lack right/wrong or scored an
 
 Given the lack of adequate datasets, we built a new collection of HR Surveys. Details about the dataset can be found in the [Data Card](data/README.md).
 We tested two GPT models (GPT-3.5-Turbo and GPT-4-Turbo) with different setting, in order to catch which are the factors that most contribute to an higher survey quality. Such details can be found in the [Model Card](models/README.md).
-
-In our work, we designed a novel framework to automatically evaluate the generated content, due to the limitation of traditional metrics like raw ROUGE and BLEU. Thus, our metrics are able to estimate the quality of the surveys in terms of engagement, internal thematic variability, and flow. Further details are ported in the [Result Card](results/README.md).
+In our work, we designed a novel framework to automatically evaluate the generated content, due to the limitation of traditional metrics like raw ROUGE and BLEU. Thus, our metrics are able to estimate the quality of the surveys in terms of engagement, internal thematic variability, and flow. Further details are ported in the [Model Card](results/README.md).
 
 
 [Notebooks](notebooks) show statistics on the new dataset, code sample usage, and the obtained results.
@@ -29,7 +28,7 @@ The installation process is described below:
 2. Create a virtual environment and activate it:
    ```
    python -m venv your_venv_name
-   source your_venv_name/bin/activate  # On Windows, use: your_venv_name\Scripts\activate
+   source <your_venv_name>/bin/activate  # On Windows, use: <your_venv_name>\Scripts\activate
    ```
 3. Install all the project dependencies:
    ```
@@ -92,7 +91,7 @@ Project Organization
     │
     ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
-    ├── models             <- Trained and serialized models, model predictions, or model summaries
+    ├── models             <- Predictions for each run experiments. For each of the a log and a picke file are saved.
     │
     ├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
     │                         the creator's initials, and a short `-` delimited description, e.g.
