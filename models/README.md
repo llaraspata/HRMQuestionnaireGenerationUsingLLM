@@ -79,13 +79,9 @@ An engaging questionnaire typically features high lexical variability, which pre
 
 ### Semantic Similarity
 we specifically designed a score that evaluates the similarity between generated questions, ground-truth questions, and the overall questionnaire topic while penalizing deviations from the ideal question order. The defined score, SemSim, is formalized as follows:
-$$
-    \text{SemSim} = \frac{\alpha \cdot sim(G, H) + \beta \cdot sim(G, T)}{(\alpha + \beta) - dev( pos(G), pos(H))},
-$$
+$$ SemSim = \frac{\alpha \cdot sim(G, H) + \beta \cdot sim(G, T)}{(\alpha + \beta) - dev( pos(G), pos(H))}$$
 where $G$ indicates the generated question, $H$ the human-written question, $T$ the questionnaire topic, $sim( X, Y)$ indicates the semantic similarity between elements $X$ and $Y$, calculated using cosine similarity on their embeddings, $\alpha$ is the weight assigned to the similarity between the generated question $G$ and the human-written question $H$, $\beta$ is the weight assigned to the similarity between the generated question $G$ and the questionnaire topic $T$, $pos(X)$ indicates the position of question $X$ in its respective questionnaire, and $dev( pos(G), pos(H))$ represents the normalized position deviation of the generated question $G$ from the ideal position, given by the human-written question $H$. This deviation is computed as follows:
-$$
-        \frac{|pos(G) - pos(H)|}{\max(N, M)},
-$$
+$$\frac{|pos(G) - pos(H)|}{\max(N, M)}$$
 where $N$ is the number of questions in the generated questionnaire, and $M$ is the number of questions in the ground-truth questionnaire. This deviation ranges from 0 to 1, with scores closer to 0 indicating that the model generated the question in the correct position and scores closer to 1 indicating significant deviation. SemSim ranges between 0 and 1. Lower scores suggest low weighted cosine similarity or high position deviation, while higher scores indicate substantial similarity and minimal deviation.
 
 
