@@ -1,5 +1,8 @@
+import string
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 import pandas as pd
+import numpy as np
 import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
@@ -107,3 +110,87 @@ class PairResultVisualizer:
     # ------------
     # Methods
     # ------------
+    def count_words(sentence):
+        """
+        Counts the number of words in a sentence, ignoring punctuation.
+        """
+        try:
+            sentence = sentence.translate(str.maketrans('', '', string.punctuation))
+            splitted = sentence.split()
+            return len(splitted)
+        except:
+            return 0
+        
+    def plot_length_distribution_comparison(df_0s, df_1s, column, name, element):
+        """
+            Plots the distribution of the length of the reviews for zero and one shot predictions.
+        """
+        lens_0s = [PairResultVisualizer.count_words(sentence) for sentence in df_0s[df_0s[column].notna()][column]]
+        lens_1s = [PairResultVisualizer.count_words(sentence) for sentence in df_1s[df_1s[column].notna()][column]]
+        
+        # mean_lens_0s = np.mean(lens_0s)
+        # max_lens_0s = np.max(lens_0s)
+        # min_lens_0s = np.min(lens_0s)
+
+        # mean_lens_1s = np.mean(lens_1s)
+        # max_lens_1s = np.max(lens_1s)
+        # min_lens_1s = np.min(lens_1s)
+
+        # title = f"""{name} - {element} length distribution 
+        # <br>
+        # 0s -> [Mean: {int(round(mean_lens_0s))}, Max: {max_lens_0s}, Min: {min_lens_0s}]    1s -> [Mean: {int(round(mean_lens_1s))}, Max: {max_lens_1s}, Min: {min_lens_1s}]"""
+
+        fig = go.Figure()
+
+        fig.add_trace(go.Histogram(x=lens_0s, name="Zero-Shot", marker_color="#D0006F", histnorm='probability'))
+        fig.add_trace(go.Histogram(x=lens_1s, name="One-Shot", marker_color="#24135F", histnorm='probability'))
+
+
+        fig.update_layout(
+            title=f"{name} - {element} length distribution",
+            xaxis_title="Length",
+            yaxis_title="Frequency"
+        )
+
+        fig.show()
+
+
+    def plot_length_distribution_comparison_with_ref(df_ref, df_0s, df_1s, column, name, element):
+        """
+            Plots the distribution of the length of the reviews for zero and one shot predictions.
+        """
+        lens_ref = [PairResultVisualizer.count_words(sentence) for sentence in df_ref[df_ref[column].notna()][column]]
+        lens_0s = [PairResultVisualizer.count_words(sentence) for sentence in df_0s[df_0s[column].notna()][column]]
+        lens_1s = [PairResultVisualizer.count_words(sentence) for sentence in df_1s[df_1s[column].notna()][column]]
+
+        # mean_lens_ref = np.mean(lens_ref)
+        # max_lens_ref = np.max(lens_ref)
+        # min_lens_ref = np.min(lens_ref)
+
+        # mean_lens_0s = np.mean(lens_0s)
+        # max_lens_0s = np.max(lens_0s)
+        # min_lens_0s = np.min(lens_0s)
+
+        # mean_lens_1s = np.mean(lens_1s)
+        # max_lens_1s = np.max(lens_1s)
+        # min_lens_1s = np.min(lens_1s)
+
+        # title = f"""{name} - {element} length distribution 
+        # <br>
+        # GT -> [Mean: {int(round(mean_lens_ref))}, Max: {max_lens_ref}, Min: {min_lens_ref}]    0s -> [Mean: {int(round(mean_lens_0s))}, Max: {max_lens_0s}, Min: {min_lens_0s}]    1s -> [Mean: {int(round(mean_lens_1s))}, Max: {max_lens_1s}, Min: {min_lens_1s}]"""
+
+
+        fig = go.Figure()
+
+        fig.add_trace(go.Histogram(x=lens_ref, name="Human-written", marker_color="#89A9EE", histnorm='probability'))
+        fig.add_trace(go.Histogram(x=lens_0s, name="Zero-Shot", marker_color="#D0006F", histnorm='probability'))
+        fig.add_trace(go.Histogram(x=lens_1s, name="One-Shot", marker_color="#24135F", histnorm='probability'))
+
+
+        fig.update_layout(
+            title=f"{name} - {element} length distribution",
+            xaxis_title="Length",
+            yaxis_title="Frequency"
+        )
+
+        fig.show()

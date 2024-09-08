@@ -6,8 +6,6 @@ import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 
-import src.visualization.visualize as vis
-
 
 class GlobalResultVisualizer:
     # ------------
@@ -114,12 +112,12 @@ class GlobalResultVisualizer:
         plt.imshow(metrics_matrix, extent=[min(self.TEMPERATURE_VALUES), max(self.TEMPERATURE_VALUES), min(self.FREQUENCY_PENALTY_VALUES), max(self.FREQUENCY_PENALTY_VALUES)],
                    origin='lower', aspect='auto', cmap=cmap)
         cbar = plt.colorbar()
-        cbar.ax.tick_params(labelsize=20)
-        plt.xlabel("Temperature",fontsize=30)
-        plt.ylabel("Frequency Penalty", fontsize=30)
-        plt.title(title)
-        plt.xticks(self.TEMPERATURE_VALUES, fontsize=20)
-        plt.yticks(self.FREQUENCY_PENALTY_VALUES, fontsize=20)
+        cbar.ax.tick_params(labelsize=12)
+        plt.xlabel("Temperature", fontsize=20)
+        plt.ylabel("Frequency Penalty", fontsize=20)
+        plt.title(title, fontsize=20)
+        plt.xticks(self.TEMPERATURE_VALUES, fontsize=12)
+        plt.yticks(self.FREQUENCY_PENALTY_VALUES, fontsize=12)
 
         # -------------
         # Uncomment to save the plot as PDF
