@@ -29,6 +29,9 @@ class ModelEvaluator:
     SERENDIPITY_COLUMNS = ["EXPERIMENT_ID", "AVG_SERENDIPITY_SCORE"]
     SERENDIPITY_FILENAME = "serendipity_scores.csv"
 
+    QST_TYPE_VARIABILITY_COLUMNS = ["EXPERIMENT_ID", "AVG_QST_TYPE_VARIABILITY"]
+    QST_TYPE_VARIABILITY_FILENAME = "qst_type_variability.csv"
+
     TIME_TOKENS_COLUMNS = ["EXPERIMENT_ID", "RESPONSE_TIME", "TOTAL_TOKENS", "PROMPT_TOKENS", "COMPLETITION_TOKENS"]
     TIME_TOKENS_FILENAME = "time_tokens.csv"
 
@@ -43,6 +46,7 @@ class ModelEvaluator:
         self.syntactic_symilarity = pd.DataFrame(columns=self.SYNTACTIC_SIMILARITY_COLUMNS)
         self.semantic_metrics = pd.DataFrame(columns=self.SEMANTIC_METRICS_COLUMNS)
         self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
+        self.qst_type_variability = pd.DataFrame(columns=self.QST_TYPE_VARIABILITY_COLUMNS)
         self.time_tokens = pd.DataFrame(columns=self.TIME_TOKENS_COLUMNS)
 
 
@@ -69,11 +73,15 @@ class ModelEvaluator:
                 # 5. Serendipity
                 self._evaluate_serendipity(subfolder, experiment_path)
 
+                # 6. Question type variabilty
+                self._evaluate_qst_type_variability(subfolder, experiment_path)
+
         self.syntactic_metrics.to_csv(os.path.join(self.results_dir, self.SYNTACTIC_METRICS_FILENAME), index=False)
         self.semantic_metrics.to_csv(os.path.join(self.results_dir, self.SEMANTIC_METRICS_FILENAME), index=False)
         self.syntactic_symilarity.to_csv(os.path.join(self.results_dir, self.SYNTACTIC_SIMILARITY_FILENAME), index=False)
         self.errors.to_csv(os.path.join(self.results_dir, self.ERRORS_FILENAME), index=False)
         self.serendipity_scores.to_csv(os.path.join(self.results_dir, self.SERENDIPITY_FILENAME), index=False)
+        self.qst_type_variability.to_csv(os.path.join(self.results_dir, self.QST_TYPE_VARIABILITY_FILENAME), index=False)
 
     
     def _evaluate_syntactic_metrics(self, id, experiment_path):
@@ -208,6 +216,21 @@ class ModelEvaluator:
             self.serendipity_scores = pd.concat([self.serendipity_scores, exp_scores], ignore_index=True)
         except:
             return
+        
+    
+    def _evaluate_qst_type_variability(self, id, experiment_path):
+        try:
+            qst_type_variability = pd.read_csv(os.path.join(experiment_path, "Question_Type_Variability.csv"))
+
+            exp_scores = pd.DataFrame({
+                "EXPERIMENT_ID": [id],
+                "AVG_QST_TYPE_VARIABILITY": [np.mean(qst_type_variability["VARIABILITY"])]
+            })
+            
+            self.qst_type_variability = pd.concat([self.qst_type_variability, exp_scores], ignore_index=True)
+        except:
+            return
+
         
     def compute_time_token_cost(self, project_root, models_path, results_dir):
         for subfolder in os.listdir(models_path):
