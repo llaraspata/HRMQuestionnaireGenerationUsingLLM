@@ -15,6 +15,7 @@ class GlobalResultVisualizer:
     SYNTACTIC_SIMILARITY_FILENAME = "syntactic_similarity.csv"
     SEMANTIC_METRICS_FILENAME = "semantic_metrics.csv"
     SERENDIPITY_FILENAME = "serendipity_scores.csv"
+    QST_TYPE_VARIABILITY = "qst_type_variability.csv"
 
     TF_PRIMARY_COLOR_1 = "#D0006F"
     TF_PRIMARY_COLOR_2 = "#24135F"
@@ -31,6 +32,7 @@ class GlobalResultVisualizer:
         self.intraquestionnaire_similarity = pd.read_csv(os.path.join(result_dir, self.SYNTACTIC_SIMILARITY_FILENAME))
         self.semantic_metrics = pd.read_csv(os.path.join(result_dir, self.SEMANTIC_METRICS_FILENAME))
         self.serendipity_scores = pd.read_csv(os.path.join(result_dir, self.SERENDIPITY_FILENAME))
+        self.qst_type_variability = pd.read_csv(os.path.join(result_dir, self.QST_TYPE_VARIABILITY))
         self.errors = pd.read_csv(os.path.join(result_dir, self.ERRORS_FILENAME))
 
         self.experiment_names = self.errors["EXPERIMENT_ID"].unique()
@@ -45,8 +47,9 @@ class GlobalResultVisualizer:
         bw_intraquestionnaire_similarity_df = GlobalResultVisualizer._get_best_and_worst(self.intraquestionnaire_similarity, "INTRAQSTN_ROUGE_L_F1_SCORE")
         bw_semantic_metrics_df = GlobalResultVisualizer._get_best_and_worst(self.semantic_metrics, "FINAL_SCORE")
         bw_serendipity_scores_df = GlobalResultVisualizer._get_best_and_worst(self.serendipity_scores, "AVG_SERENDIPITY_SCORE")
+        bw_qst_type_variability_df = GlobalResultVisualizer._get_best_and_worst(self.qst_type_variability, "AVG_QST_TYPE_VARIABILITY")
 
-        return bw_conversion_errors_df, bw_json_errors_df, bw_intraquestionnaire_similarity_df, bw_semantic_metrics_df, bw_serendipity_scores_df
+        return bw_conversion_errors_df, bw_json_errors_df, bw_intraquestionnaire_similarity_df, bw_semantic_metrics_df, bw_serendipity_scores_df, bw_qst_type_variability_df
 
 
     def _get_best_and_worst(df, column_to_compare):
