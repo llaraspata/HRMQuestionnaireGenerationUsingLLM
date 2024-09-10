@@ -98,6 +98,16 @@ Serendipity can be interpreted as the thematic variability within a single quest
 where $n$ represents the number of generated questions relevant to the questionnaire topic, $C$ is the number of possible subtopics generally relevant to the main topic, and $R$ is the total number of generated questions. The serendipity score ranges from 0 to 1. A score closer to 1 indicates that almost every question addresses a different subtopic, contributing to high thematic variability. Conversely, a score closer to 0 suggests lower variability, increasing the risk of duplicate or redundant questions.
 
 
+### Question type variability
+
+Another factor that reflects creativity and variabiltity is the type of questions, then having a set of diverse questions in terms of their type increases the engagement and the overall quality of the generated questionnaire.
+Inspired by the definition of the serendipity, the question type variability is defined as follows:
+```math
+    \text{QTV} = \frac{n}{\min(T, Q)}
+```
+where $n$ represents the number of distinct generated question types, $T$ is the number of possible types defined in the [dataset](/data/processed/TF_QST_QUESTION_TYPES.csv), and $Q$ is the total number of generated questions. The question type variability score ranges from 0 to 1. A score closer to 1 indicates that almost every question has a different type, or that every defined type was employed. Conversely, a score closer to 0 suggests lower variability, increasing the risk of monotonous and tedious questionnaire.
+
+
 ### Instruction alignment
 
 The temperature and frequency penalty values variation influences the tokens sampled during the generation process. Increasing these values to encourage the model to be more variable and creative can degrade the quality of the generated JSON output. This degradation manifests in the model potentially omitting specified properties or generating text that does not adhere to JSON standards.

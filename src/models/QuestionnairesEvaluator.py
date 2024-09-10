@@ -1083,11 +1083,11 @@ class QuestionnairesEvaluator:
             return
     
 
-    def _compute_qst_type_variability_scores(self, generated_questions, qst_types):
-        R = len(generated_questions)
+    def _compute_qst_type_variability_scores(self, generated_questions, T):
+        Q = len(generated_questions)
         n = len(generated_questions["TYPE_ID"].unique()) 
 
-        variability = n / np.min([R, qst_types])
+        variability = n / np.min([Q, T])
 
         new_row = pd.DataFrame({
             "QUESTIONNAIRE_ID": [self.questionnaire_id],
