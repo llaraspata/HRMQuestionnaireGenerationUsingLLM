@@ -1,8 +1,8 @@
 import os
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
-from src.models.QuestionnairesEvaluator import QuestionnairesEvaluator
-from src.models.ModelEvaluator import ModelEvaluator
+from src.evaluation.QuestionnairesEvaluator import QuestionnairesEvaluator
+from src.evaluation.ModelEvaluator import ModelEvaluator
 
 
 PROJECT_ROOT = os.getcwd()
