@@ -5,11 +5,12 @@ import json
 import os
 from tqdm import tqdm
 import argparse
-from openai import AzureOpenAI
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
+import src.models.utility as ut
+
 
 
 # -----------------
@@ -17,8 +18,7 @@ from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
 # -----------------
 PROJECT_ROOT = os.getcwd()
 CONFIG_FILENAME = "Mistral_experiment_config.json"
-PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
-                      "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS"]
+
 
 
 # -----------------
@@ -27,12 +27,14 @@ PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", "GROUND_T
 def main(args):
 
     experiment_id = args.experiment_id
+    model = "Mistral"
+    task = "Survey"
+    prompt_version = args.prompt_version
 
-    client = AzureOpenAI(
-        azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
-        api_key=os.getenv("AZURE_OPENAI_KEY"),  
-        api_version="2024-02-15-preview"
-    )
+    # Create the prompt version and model directory
+    setting_dir = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
+    if not os.path.exists(setting_dir):
+        os.makedirs(setting_dir)
 
     # Load data
     dataset = TFQuestionnairesDataset()
@@ -49,7 +51,7 @@ def main(args):
             continue
 
         # Create the experiment run directory
-        run_dir = os.path.join(PROJECT_ROOT, "models", conf["id"])
+        run_dir = os.path.join(setting_dir, conf["id"])
         if not os.path.exists(run_dir):
             os.makedirs(run_dir)
         
@@ -61,7 +63,7 @@ def main(args):
         result_df = _run_experiment(client=client, dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
         
         # Save the results
-        _save_df_to_folder(result_df, run_dir, predictions_filename)
+        ut.save_df_to_folder(result_df, run_dir, predictions_filename)
 
 
 
@@ -77,7 +79,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
     scenario = PredictionScenarioGenerator(experiment_config=conf, dataset=dataset)
 
     # Create the DataFrame for the predictions and other statistics
-    predictions_df = pd.DataFrame(columns=PREDICTION_COLUMNS)
+    predictions_df = pd.DataFrame(columns=ut.PREDICTION_COLUMNS)
 
     spent_secs_per_request = []
     count_reported_exceptions = 0
@@ -101,7 +103,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 log_file.write("\n-------------------")
 
                 # Build messages and get LLM's response
-                messages = _build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
+                messages = ut.build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
 
                 # Record the start time
                 start_time = time.time()
@@ -143,7 +145,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 time_spent = end_time - start_time
                 spent_secs_per_request.append(time_spent)
 
-                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
+                predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                  ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
     
@@ -155,7 +157,7 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 spent_secs_per_request.append(time_spent)
 
                 count_reported_exceptions += 1
-                predictions_df = _add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, spent_time=time_spent, reported_exception=e)
+                predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, spent_time=time_spent, reported_exception=e)
                 
     print("-------------------")
     print("[TIME]")
@@ -176,64 +178,14 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
 
     print("================================================")
 
-
     return predictions_df
 
-
-def _build_messages(k, system_prompt, sample_user_prompts, assistant_prompts, user_prompt):
-    """
-        Builds the messages to be sent to the LLM.
-    """
-    messages = []
-
-    messages.append({"role": "system", "content": system_prompt})
-
-    for i in range(k):
-        messages.append({"role": "user", "content": sample_user_prompts[i][0]})
-        messages.append({"role": "assistant", "content": assistant_prompts[i][0]})
-
-    messages.append({"role": "user", "content": user_prompt})
-
-    return messages
-
-
-def _add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], ground_truth="", prediction="", spent_time=0, 
-                    prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):
-    """
-        Adds a prediction to the DataFrame.
-    """
-    new_row = pd.DataFrame({
-        "QUESTIONNAIRE_ID": [questionnaire_id],
-        "SAMPLE_QUESTIONNAIRES_IDS": [sample_questionnaire_ids], 
-        "GROUND_TRUTH_JSON": [ground_truth],
-        "PREDICTED_JSON": [prediction],
-        "REPORTED_EXCEPTION": [reported_exception],
-        "RESPONSE_TIME": [spent_time],
-        "PROMPT_TOKENS": [prompt_tokens],
-        "COMPLETITION_TOKENS": [completition_tokens],
-        "TOTAL_TOKENS": [total_tokens],
-    })
-
-    df = pd.concat([df, new_row], ignore_index=True)
-
-    return df
-
-
-def _save_df_to_folder(df, folder_path, file_name):
-    """
-        Saves a DataFrame to a folder.
-    """
-    if not os.path.exists(folder_path):
-        os.makedirs(folder_path)
-
-    file_path = os.path.join(folder_path, file_name)
-
-    df.to_pickle(file_path)
 
 
 
 if __name__ == '__main__':
     aparser = argparse.ArgumentParser()
+    aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     aparser.add_argument('--experiment-id', type=str, help='Name of the experiment to run')
     
     main(aparser.parse_args())
