@@ -1,4 +1,5 @@
 import os
+import pandas as pd
 
 
 # -----------------
@@ -62,3 +63,7 @@ def add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], ground_tru
     df = pd.concat([df, new_row], ignore_index=True)
 
     return df
+
+
+def load_mistral_llm(model_name):
+    print(f"loaded {model_name}")

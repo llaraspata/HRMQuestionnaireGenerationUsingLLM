@@ -31,6 +31,9 @@ def main(args):
     task = "Survey"
     prompt_version = args.prompt_version
 
+    if prompt_version is None:
+        prompt_version = "1.0"
+
     # Create the prompt version and model directory
     setting_dir = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
     if not os.path.exists(setting_dir):
@@ -46,24 +49,35 @@ def main(args):
         experiment_confs = json.load(f)
     f.close()
 
+    hf_key = os.getenv("HF_MISTRAL_MODELS")
+    # model = AutoModel.from_pretrained("private/model", token=hf_key)
+
+    prev_llm = ""
+
     for conf in experiment_confs["configs"]:
         if experiment_id is not None and conf["id"] != experiment_id:
             continue
+        
+        if prev_llm != conf["model"]:
+            ut.load_mistral_llm(conf["model"])
+            prev_llm = conf["model"]
 
+        
         # Create the experiment run directory
-        run_dir = os.path.join(setting_dir, conf["id"])
-        if not os.path.exists(run_dir):
-            os.makedirs(run_dir)
-        
-        # Set output file names
-        predictions_filename = "predictions.pkl"
-        log_filename = "log.txt"
-    
-        # Run the experiment        
-        result_df = _run_experiment(client=client, dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
-        
-        # Save the results
-        ut.save_df_to_folder(result_df, run_dir, predictions_filename)
+        # run_dir = os.path.join(setting_dir, conf["id"])
+        # if not os.path.exists(run_dir):
+        #     os.makedirs(run_dir)
+        # 
+        # # Set output file names
+        # predictions_filename = "predictions.pkl"
+        # log_filename = "log.txt"
+    # 
+        # # Run the experiment        
+        # result_df = _run_experiment(client=client, dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
+        # 
+        # # Save the results
+        # ut.save_df_to_folder(result_df, run_dir, predictions_filename)
+
 
 
 
