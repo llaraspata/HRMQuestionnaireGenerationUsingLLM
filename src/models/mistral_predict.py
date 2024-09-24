@@ -10,7 +10,7 @@ sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
 import src.models.utility as ut
-
+import ollama
 
 
 # -----------------
@@ -18,7 +18,6 @@ import src.models.utility as ut
 # -----------------
 PROJECT_ROOT = os.getcwd()
 CONFIG_FILENAME = "Mistral_experiment_config.json"
-
 
 
 # -----------------
@@ -50,53 +49,31 @@ def main(args):
     f.close()
 
     
-    prev_llm = ""   # To avoid reloading always the same model
 
     for conf in experiment_confs["configs"]:
         if experiment_id is not None and conf["id"] != experiment_id:
             continue
         
-        if prev_llm != conf["model"]:
-            model, tokenizer = ut.load_mistral_llm(conf["model"])
-            prev_llm = conf["model"]
-
-        messages = [
-            {"role": "system", "content": "You are an AI assistant that advices humans."},
-            {"role": "user", "content": "What is your favourite condiment?"},
-            {"role": "assistant", "content": "Well, I'm quite partial to a good squeeze of fresh lemon juice. It adds just the right amount of zesty flavour to whatever I'm cooking up in the kitchen!"},
-            {"role": "user", "content": "Do you have mayonnaise recipes?"}
-        ]
-
-        encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
-
-        model_inputs = encodeds
-
-        generated_ids = model.generate(model_inputs, max_new_tokens=1000, do_sample=True)
-        decoded = tokenizer.batch_decode(generated_ids)
-        print(decoded[0])
-        
         # Create the experiment run directory
-        # run_dir = os.path.join(setting_dir, conf["id"])
-        # if not os.path.exists(run_dir):
-        #     os.makedirs(run_dir)
-        # 
-        # # Set output file names
-        # predictions_filename = "predictions.pkl"
-        # log_filename = "log.txt"
-    # 
-        # # Run the experiment        
-        # result_df = _run_experiment(client=client, dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
-        # 
-        # # Save the results
-        # ut.save_df_to_folder(result_df, run_dir, predictions_filename)
+        run_dir = os.path.join(setting_dir, conf["id"])
+        if not os.path.exists(run_dir):
+            os.makedirs(run_dir)
+        
+        # Set output file names
+        predictions_filename = "predictions.pkl"
+        log_filename = "log.txt"
 
-
+        # Run the experiment        
+        result_df = _run_experiment(dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
+        
+        # Save the results
+        ut.save_df_to_folder(result_df, run_dir, predictions_filename)
 
 
 # -----------------
 # Helper functions
 # -----------------
-def _run_experiment(client, dataset, conf, run_dir, log_filename):
+def _run_experiment(dataset, conf, run_dir, log_filename):
 
     print("================================================")
     print(f"Running experiment: {conf['id']}")
@@ -135,31 +112,31 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                 start_time = time.time()
 
                 if "response_format" in conf.keys():
-                    response = client.chat.completions.create(
+                    response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
                         temperature=conf["temperature"],
-                        max_tokens=conf["max_tokens"],
-                        frequency_penalty=conf["frequency_penalty"],
-                        response_format=conf["response_format"]
+                        repeat_penalty=conf["frequency_penalty"],
+                        num_predict=conf["max_tokens"],
+                        format=conf["response_format"]
                     )
                 else:
-                    response = client.chat.completions.create(
+                    response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
                         temperature=conf["temperature"],
-                        max_tokens=conf["max_tokens"],
-                        frequency_penalty=conf["frequency_penalty"]
+                        repeat_penalty=conf["frequency_penalty"],
+                        num_predict=conf["max_tokens"],
                     )
 
                 # Record the end time
                 end_time = time.time()
 
                 ground_truth = dataset.to_json(questionnaire_id)
-                prediction = response.choices[0].message.content
+                prediction = response['message']['content']
 
-                prompt_tokens = response.usage.prompt_tokens
-                completition_tokens = response.usage.completion_tokens
+                prompt_tokens = response["prompt_eval_count"]
+                completition_tokens = response["eval_count"]
                 total_tokens = prompt_tokens + completition_tokens
 
                 log_file.write("\n-------------------")
@@ -175,8 +152,6 @@ def _run_experiment(client, dataset, conf, run_dir, log_filename):
                                                  ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
     
-                time.sleep(2)  # sleep for 2 seconds to avoid exceeding the OpenAI API rate limit or other kind of errors
-                    
             except Exception as e:
                 end_time = time.time()
                 time_spent = end_time - start_time
