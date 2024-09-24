@@ -49,19 +49,31 @@ def main(args):
         experiment_confs = json.load(f)
     f.close()
 
-    hf_key = os.getenv("HF_MISTRAL_MODELS")
-    # model = AutoModel.from_pretrained("private/model", token=hf_key)
-
-    prev_llm = ""
+    
+    prev_llm = ""   # To avoid reloading always the same model
 
     for conf in experiment_confs["configs"]:
         if experiment_id is not None and conf["id"] != experiment_id:
             continue
         
         if prev_llm != conf["model"]:
-            ut.load_mistral_llm(conf["model"])
+            model, tokenizer = ut.load_mistral_llm(conf["model"])
             prev_llm = conf["model"]
 
+        messages = [
+            {"role": "system", "content": "You are an AI assistant that advices humans."},
+            {"role": "user", "content": "What is your favourite condiment?"},
+            {"role": "assistant", "content": "Well, I'm quite partial to a good squeeze of fresh lemon juice. It adds just the right amount of zesty flavour to whatever I'm cooking up in the kitchen!"},
+            {"role": "user", "content": "Do you have mayonnaise recipes?"}
+        ]
+
+        encodeds = tokenizer.apply_chat_template(messages, return_tensors="pt")
+
+        model_inputs = encodeds
+
+        generated_ids = model.generate(model_inputs, max_new_tokens=1000, do_sample=True)
+        decoded = tokenizer.batch_decode(generated_ids)
+        print(decoded[0])
         
         # Create the experiment run directory
         # run_dir = os.path.join(setting_dir, conf["id"])

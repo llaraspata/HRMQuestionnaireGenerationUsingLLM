@@ -1,6 +1,7 @@
 import os
 import pandas as pd
-
+from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+import torch
 
 # -----------------
 # Global variables
@@ -66,4 +67,35 @@ def add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], ground_tru
 
 
 def load_mistral_llm(model_name):
-    print(f"loaded {model_name}")
+    hf_key = os.getenv("HF_MISTRAL_MODELS")
+
+    config = AutoConfig.from_pretrained(model_name, trust_remote_code=True, token=hf_key)
+
+    config.max_position_embeddings = 8096
+
+    quantization_config = BitsAndBytesConfig(
+        bnb_4bit_quant_type='nf4',
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        load_in_4bit=True
+    )
+
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        torch_dtype=torch.bfloat16,
+        low_cpu_mem_usage=True,
+        config=config,
+        trust_remote_code=True,
+        quantization_config=quantization_config,
+        token=hf_key
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name) 
+    # OSError: Can't load tokenizer for 'mistralai/Mistral-7B-Instruct-v0.2'. 
+    # If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. 
+    # Otherwise, make sure 'mistralai/Mistral-7B-Instruct-v0.2' is the correct path to a directory containing all relevant files for a LlamaTokenizerFast tokenizer.
+    # (.env) llaraspata3@gandalf:~/HRMQuestionnaireGenerationUsingLLM$ 
+
+    print(f"Loaded -> {model_name}!")
+
+    return model, tokenizer
