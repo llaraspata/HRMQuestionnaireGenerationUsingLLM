@@ -12,6 +12,7 @@ from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
 from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
 from src.models.gpt_predict import main as gpt
 from src.models.mistral_predict import main as mistral
+from src.models.llama_predict import main as llama
 
 
 
@@ -26,6 +27,8 @@ def main(args):
     if model == "gpt" or model == "GPT":
         gpt(experiment_id)
     elif model == "mistral" or model == "Mistral":
+        mistral(experiment_id)
+    elif model == "llama" or model == "LLaMa":
         mistral(experiment_id)
     else:
         print(f"Specify a valid model name. '{model}' is not a supported.")
