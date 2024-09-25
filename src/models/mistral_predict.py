@@ -25,29 +25,39 @@ CONFIG_FILENAME = "Mistral_experiment_config.json"
 # -----------------
 def main(args):
 
-    experiment_id = args.experiment_id
+    if args is not None and args.experiment_id is not None:
+        experiment_id = args.experiment_id
+    else:
+        experiment_id = None
+
     model = "Mistral"
     task = "Survey"
-    prompt_version = args.prompt_version
 
-    if prompt_version is None:
+    if args is not None and args.prompt_version is not None:
+        prompt_version = args.prompt_version
+    else:
         prompt_version = "1.0"
+
 
     # Create the prompt version and model directory
     setting_dir = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
     if not os.path.exists(setting_dir):
         os.makedirs(setting_dir)
+    print("- Model directory created!")
+
 
     # Load data
     dataset = TFQuestionnairesDataset()
     dataset.load_data(project_root=PROJECT_ROOT)
+    print("- Dataset loaded!")
+
 
     # Read the experiment configuration to be tested
     config_path = os.path.join(PROJECT_ROOT, "src", "models", CONFIG_FILENAME)
     with open(config_path, "r") as f:
         experiment_confs = json.load(f)
     f.close()
-
+    print(f"- {len(experiment_confs['configs'])} Configuration read!")
     
 
     for conf in experiment_confs["configs"]:
@@ -68,7 +78,7 @@ def main(args):
         
         # Save the results
         ut.save_df_to_folder(result_df, run_dir, predictions_filename)
-
+        break
 
 # -----------------
 # Helper functions
@@ -115,22 +125,28 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                     response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
-                        temperature=conf["temperature"],
-                        repeat_penalty=conf["frequency_penalty"],
-                        num_predict=conf["max_tokens"],
-                        format=conf["response_format"]
+                        options={
+                            "temperature": conf["temperature"]/2,
+                            "repeat_penalty": conf["frequency_penalty"],
+                            "num_predict": conf["max_tokens"]
+                        },
+                        format=conf["response_format"]                        
                     )
                 else:
                     response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
-                        temperature=conf["temperature"],
-                        repeat_penalty=conf["frequency_penalty"],
-                        num_predict=conf["max_tokens"],
+                        options={
+                            "temperature": conf["temperature"]/2,
+                            "repeat_penalty": conf["frequency_penalty"],
+                            "num_predict": conf["max_tokens"]
+                        }
                     )
 
                 # Record the end time
                 end_time = time.time()
+
+                print(response)
 
                 ground_truth = dataset.to_json(questionnaire_id)
                 prediction = response['message']['content']
@@ -153,6 +169,7 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
     
             except Exception as e:
+                print(e)
                 end_time = time.time()
                 time_spent = end_time - start_time
                 spent_secs_per_request.append(time_spent)

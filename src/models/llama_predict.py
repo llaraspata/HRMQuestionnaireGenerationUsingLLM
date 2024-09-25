@@ -25,12 +25,17 @@ CONFIG_FILENAME = "LLaMa_experiment_config.json"
 # -----------------
 def main(args):
 
-    experiment_id = args.experiment_id
+    if args is not None and args.experiment_id is not None:
+        experiment_id = args.experiment_id
+    else:
+        experiment_id = None
+
     model = "LLaMa"
     task = "Survey"
-    prompt_version = args.prompt_version
 
-    if prompt_version is None:
+    if args is not None and args.prompt_version is not None:
+        prompt_version = args.prompt_version
+    else:
         prompt_version = "1.0"
 
     # Create the prompt version and model directory
@@ -109,24 +114,31 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                 messages = ut.build_messages(conf["k"], system_prompt, sample_user_prompts, assistant_prompts, user_prompt)
 
                 # Record the start time
-                start_time = time.time()
+                start_time = time.time()                    
 
                 if "response_format" in conf.keys():
                     response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
-                        temperature=conf["temperature"],
-                        repeat_penalty=conf["frequency_penalty"],
-                        num_predict=conf["max_tokens"],
-                        format=conf["response_format"]
+                        options={
+                            "temperature": conf["temperature"]/2,
+                            "repeat_penalty": conf["frequency_penalty"],
+                            "num_predict": conf["max_tokens"]
+                        },
+                        format=conf["response_format"],
+                        stream=False
                     )
+
                 else:
                     response = ollama.chat(
                         model = conf["model"],
                         messages=messages,
-                        temperature=conf["temperature"],
-                        repeat_penalty=conf["frequency_penalty"],
-                        num_predict=conf["max_tokens"],
+                        options={
+                            "temperature": conf["temperature"]/2,
+                            "repeat_penalty": conf["frequency_penalty"],
+                            "num_predict": conf["max_tokens"]
+                        },
+                        stream=False
                     )
 
                 # Record the end time

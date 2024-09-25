@@ -29,7 +29,7 @@ def main(args):
     elif model == "mistral" or model == "Mistral":
         mistral(experiment_id)
     elif model == "llama" or model == "LLaMa":
-        mistral(experiment_id)
+        llama(experiment_id)
     else:
         print(f"Specify a valid model name. '{model}' is not a supported.")
 
