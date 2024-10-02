@@ -141,6 +141,8 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                         stream=False
                     )
 
+                print(response)
+
                 # Record the end time
                 end_time = time.time()
 
@@ -163,7 +165,9 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                 predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                  ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
-    
+
+                time.sleep(2)
+                
             except Exception as e:
                 end_time = time.time()
                 time_spent = end_time - start_time
