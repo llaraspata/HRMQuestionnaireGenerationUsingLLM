@@ -141,18 +141,21 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                         stream=False
                     )
 
-                print(response)
-
                 # Record the end time
                 end_time = time.time()
 
                 ground_truth = dataset.to_json(questionnaire_id)
                 prediction = response['message']['content']
 
-                prompt_tokens = response["prompt_eval_count"]
-                completition_tokens = response["eval_count"]
-                total_tokens = prompt_tokens + completition_tokens
-
+                if response["done"]:
+                    prompt_tokens = response["prompt_eval_count"]
+                    completition_tokens = response["eval_count"]
+                    total_tokens = prompt_tokens + completition_tokens
+                else:
+                    prompt_tokens = -1
+                    completition_tokens = -1
+                    total_tokens = -1
+                    
                 log_file.write("\n-------------------")
                 log_file.write("\n[LLM ANSWER]\n")
                 log_file.write(prediction)
@@ -166,7 +169,7 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                                                  ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
 
-                time.sleep(2)
+                time.sleep(10)
                 
             except Exception as e:
                 end_time = time.time()

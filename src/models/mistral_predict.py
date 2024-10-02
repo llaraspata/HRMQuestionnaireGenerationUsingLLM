@@ -130,7 +130,8 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                             "repeat_penalty": conf["frequency_penalty"],
                             "num_predict": conf["max_tokens"]
                         },
-                        format=conf["response_format"]                        
+                        format=conf["response_format"],
+                        stream=False
                     )
                 else:
                     response = ollama.chat(
@@ -140,20 +141,24 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                             "temperature": conf["temperature"]/2,
                             "repeat_penalty": conf["frequency_penalty"],
                             "num_predict": conf["max_tokens"]
-                        }
+                        },
+                        stream=False
                     )
 
                 # Record the end time
                 end_time = time.time()
 
-                print(response)
-
                 ground_truth = dataset.to_json(questionnaire_id)
                 prediction = response['message']['content']
 
-                prompt_tokens = response["prompt_eval_count"]
-                completition_tokens = response["eval_count"]
-                total_tokens = prompt_tokens + completition_tokens
+                if response["done"]:
+                    prompt_tokens = response["prompt_eval_count"]
+                    completition_tokens = response["eval_count"]
+                    total_tokens = prompt_tokens + completition_tokens
+                else:
+                    prompt_tokens = -1
+                    completition_tokens = -1
+                    total_tokens = -1
 
                 log_file.write("\n-------------------")
                 log_file.write("\n[LLM ANSWER]\n")
@@ -167,7 +172,8 @@ def _run_experiment(dataset, conf, run_dir, log_filename):
                 predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                  ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
                                                  prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
-    
+                time.sleep(10)
+
             except Exception as e:
                 print(e)
                 end_time = time.time()
