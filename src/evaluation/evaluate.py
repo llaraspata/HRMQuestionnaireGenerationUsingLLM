@@ -9,12 +9,26 @@ PROJECT_ROOT = os.getcwd()
 
 def main():
 
+    models = ["GPT", "LLaMa", "Mistral"]
+    tasks = ["Survey"]
+    prompt_versions = ["1.0", "2.0"]
+
+    for task in tasks:
+        for prompt_version in prompt_versions:
+            for model in models:
+                if model == "GPT":
+                    continue
+                evaluate(task, prompt_version, model)
+
+
+def evaluate(task, prompt_version, model):
+
     print("=================================================")
-    print("                 MODEL EVALUATION                ")
+    print(f"                 {model} EVALUATION              ")
     print("=================================================")
 
-    models_path = os.path.join(PROJECT_ROOT, "models")
-    results_path = os.path.join(PROJECT_ROOT, "results")
+    models_path = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
+    results_path = os.path.join(PROJECT_ROOT, "results", task, prompt_version, model)
 
     model_evaluator = ModelEvaluator(results_dir=results_path)
 
@@ -23,7 +37,7 @@ def main():
         
         if os.path.isdir(experiment_path):
             questionnaires_evaluator = QuestionnairesEvaluator()
-            questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, experiment_id=subfolder)
+            questionnaires_evaluator.load_data(project_root=PROJECT_ROOT, task=task, prompt_version=prompt_version, model=model, experiment_id=subfolder)
             
             exp_results_path = os.path.join(results_path, subfolder)
 
@@ -63,7 +77,7 @@ def main():
     print("=================================================")
     print("                 END OF EVALUATION               ")
     print("=================================================")
-    
+
 
 if __name__ == '__main__':
     main()

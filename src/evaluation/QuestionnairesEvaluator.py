@@ -137,9 +137,9 @@ class QuestionnairesEvaluator:
     # ------------
     # Methos
     # ------------
-    def load_data(self, project_root, experiment_id):
+    def load_data(self, project_root, experiment_id, task="Survey", prompt_version="1.0", model="GPT"):
         self.experiment_id = experiment_id
-        result_dir_path = os.path.join(project_root, "models", experiment_id)
+        result_dir_path = os.path.join(project_root, "models", task, prompt_version, model, experiment_id)
 
         predictions_path = os.path.join(result_dir_path, self.PREDICTIONS_FILENAME)
         self.predictions = pd.read_pickle(predictions_path)
