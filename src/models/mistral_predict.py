@@ -78,7 +78,7 @@ def main(args):
         
         # Save the results
         ut.save_df_to_folder(result_df, run_dir, predictions_filename)
-        break
+
 
 # -----------------
 # Helper functions
