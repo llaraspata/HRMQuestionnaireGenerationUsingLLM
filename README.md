@@ -48,7 +48,7 @@ python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<e
 > [!CAUTION]
 > Make sure you have a valid (Azure) OpenAI access key, otherwise calling the OpenAI services will be forbidden. Then set it as an environment variable named `AZURE_OPENAI_KEY`.
 >
-> Moreover, note that we used a private deployment, so it cannot be accessed by users external to the Talentia HCM R&D Team.
+> Moreover, note that we used a private deployment, so it cannot be accessed by users external to the Talentia HCM R&D Team. Thus, we recommed to substitue the `azure_endpoint` parameter value with a valid one in the API call.
 
 > [!NOTE]
 > The option `-W ignore` allows to not display potential warnings during the script execution. To display them, just remove such an option.
