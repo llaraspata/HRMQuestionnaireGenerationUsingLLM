@@ -82,6 +82,9 @@ class QuestionnairesEvaluator:
     TOPIC_MAX_TOKENS_SERENDIPITY = 100
     TOPIC_FREQUENCY_PENALTY_SERENDIPITY = 0
 
+    QST_TYPE_VARIABILITY_COLUMNS = ["QUESTIONNAIRE_ID", "VARIABILITY"]
+    QST_TYPE_VARIABILITY_FILENAME = "Question_Type_Variability.csv"
+
 
     # ------------
     # Constructor
@@ -119,6 +122,9 @@ class QuestionnairesEvaluator:
         self.question_semantic_scores = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
+        
+        self.qst_type_variability = pd.DataFrame(columns=self.QST_TYPE_VARIABILITY_COLUMNS)
+
 
         self.client_emb = AzureOpenAI(
             api_key = os.getenv("AZURE_OPENAI_KEY"),  
@@ -1048,3 +1054,44 @@ class QuestionnairesEvaluator:
         final_questions = list(filter(lambda x: x != "", final_questions))
 
         return final_questions
+    
+
+    def compute_qst_type_variability(self, project_root, results_dir):
+        dataset = TFQuestionnairesDataset()
+        dataset.load_data(project_root=project_root)
+
+        qst_types = len(dataset.question_types)
+
+        for pred in self.predictions.iterrows():
+            id = pred[1]["QUESTIONNAIRE_ID"]
+            self.set_questionnaire_id(id)
+            self._compute_qst_type_variability(pred[1], project_root, dataset, qst_types)
+
+        if not self.qst_type_variability.empty:
+            self.qst_type_variability.to_csv(os.path.join(results_dir, self.QST_TYPE_VARIABILITY_FILENAME), index=False)
+
+
+    def _compute_qst_type_variability(self, pred, project_root, dataset, qst_types):
+        try:
+            generated = pred["PREDICTED_JSON"]
+
+            generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated)
+            questions = generated.questions[generated.questions["NAME"].notna()]
+            
+            self.qst_type_variability = pd.concat([self.qst_type_variability, self._compute_qst_type_variability_scores(questions, qst_types)], ignore_index=True)
+        except Exception as e:
+            return
+    
+
+    def _compute_qst_type_variability_scores(self, generated_questions, T):
+        Q = len(generated_questions)
+        n = len(generated_questions["TYPE_ID"].unique()) 
+
+        variability = n / np.min([Q, T])
+
+        new_row = pd.DataFrame({
+            "QUESTIONNAIRE_ID": [self.questionnaire_id],
+            "VARIABILITY": [variability]
+        })
+        
+        return new_row

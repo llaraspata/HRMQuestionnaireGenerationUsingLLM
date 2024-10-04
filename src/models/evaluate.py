@@ -55,6 +55,9 @@ def main():
             print("\t 8. Computing Serendipity...")
             questionnaires_evaluator.compute_serendipity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
+            print("\t 9. Computing Question Type Variability...")
+            questionnaires_evaluator.compute_qst_type_variability(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+
     print("-----------------------------------")
     print("Globally evaluating the model...")
     model_evaluator.evaluate()
