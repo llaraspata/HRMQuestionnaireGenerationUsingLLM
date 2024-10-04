@@ -14,11 +14,11 @@ In our work, we designed a novel framework to automatically evaluate the generat
 
 
 
-## Getting started
+## 🚀 Getting started
 
 We recommend to use [Python 3.11.5](https://python.domainunion.de/downloads/release/python-3115/) to run our code, due to possible incompatibiities with newr versions.
 
-### Installation
+### 📥 Installation
 The installation process is described below:
 
 1. Clone this repository:
@@ -36,7 +36,7 @@ The installation process is described below:
    ```
 
 
-### Experiments
+### 🧪 Experiments
 The several experimental setting are configured in a [JSON file](src/models/experiment_config.json). To run all the configurations use the following command:
 ```
 python -W ignore <path_to_repo_folder>/src/models/predict.py
@@ -53,20 +53,20 @@ python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<e
 > [!NOTE]
 > The option `-W ignore` allows to not display potential warnings during the script execution. To display them, just remove such an option.
 
-### Evaluation
+### 📊 Evaluation
 To run the the evaluation step execute the following command:
 ```
 python -W ignore <path_to_repo_folder>/src/models/evaluate.py
 ```
 
-### Utility
+### 🛠️ Utility
 To perform the automatic conversion of the aumented data from unstructed text to JSON, run the following command:
 ```
 python -W ignore <path_to_repo_folder>/src/data/convert_qst_to_json.py
 ```
 
 
-## Citation
+## 🖋️ Citation
 
 ```bibtex
 @misc{laraspata2024SurveyGeneration4HCM,
@@ -80,7 +80,7 @@ url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
 
 
 
-Project Organization
+📂 Project Organization
 ------------
 
     ├── LICENSE
