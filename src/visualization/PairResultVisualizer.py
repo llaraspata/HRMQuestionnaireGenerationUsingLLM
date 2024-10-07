@@ -60,7 +60,7 @@ class PairResultVisualizer:
 
 
     def load_data(self, project_root, task="Survey", prompt_version="1.0", model="GPT"):
-        predictions_dir = os.path.join(project_root, "models", prompt_version, task, model)
+        predictions_dir = os.path.join(project_root, "models", task, prompt_version, model)
         zero_shot_dir = os.path.join(predictions_dir, self.exp_zero_shot)
         one_shot_dir = os.path.join(predictions_dir, self.exp_one_shot)
         zero_shot_full_dir = os.path.join(predictions_dir, self.exp_zero_shot_full)
