@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
 from src.evaluation.QuestionnairesEvaluator import QuestionnairesEvaluator
@@ -11,7 +12,7 @@ def main():
 
     models = ["GPT", "LLaMa", "Mistral"]
     tasks = ["Survey"]
-    prompt_versions = ["1.0", "2.0"]
+    prompt_versions = ["1.0"]
 
     for task in tasks:
         for prompt_version in prompt_versions:
@@ -43,6 +44,8 @@ def evaluate(task, prompt_version, model):
 
             if not os.path.exists(exp_results_path):
                 os.makedirs(exp_results_path)
+            else:
+                clean_folder(exp_results_path)
             
             print(f"Experiment ID: {subfolder}")
             print("\t 1. Computing statistics...")
@@ -80,6 +83,18 @@ def evaluate(task, prompt_version, model):
     print("=================================================")
     print("                 END OF EVALUATION               ")
     print("=================================================")
+
+
+def clean_folder(folder_path):
+    for file in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(e)
 
 
 if __name__ == '__main__':
