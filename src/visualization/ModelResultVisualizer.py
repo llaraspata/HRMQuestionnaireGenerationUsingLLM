@@ -92,7 +92,30 @@ class ModelResultVisualizer:
         
     
     def _plot_heatmap_by_t_fp(self, df, column, title, cmap="RdYlGn", model="", has_full_params=-1, technique=""):
-        metrics_dict = {(fp, t): [] for fp in self.FREQUENCY_PENALTY_VALUES for t in self.TEMPERATURE_VALUES}
+        metrics_matrix = ModelResultVisualizer.compute_metrics_matrix(df, column, model, has_full_params, technique)
+
+        plt.figure(figsize=(8, 6))     # For a bigger plot -> plt.figure(figsize=(12, 9))
+        
+        plt.imshow(metrics_matrix, extent=[min(self.TEMPERATURE_VALUES), max(self.TEMPERATURE_VALUES), min(self.FREQUENCY_PENALTY_VALUES), max(self.FREQUENCY_PENALTY_VALUES)],
+                   origin='lower', aspect='auto', cmap=cmap)
+        cbar = plt.colorbar()
+        cbar.ax.tick_params(labelsize=12)
+        plt.xlabel("Temperature", fontsize=20)
+        plt.ylabel("Frequency Penalty", fontsize=20)
+        plt.title(title, fontsize=20)
+        plt.xticks(self.TEMPERATURE_VALUES, fontsize=12)
+        plt.yticks(self.FREQUENCY_PENALTY_VALUES, fontsize=12)
+
+        # -------------
+        # Uncomment to save the plot as PDF
+        # -------------
+        # pdf_filename = f"{title}.pdf"
+        # plt.savefig(pdf_filename, format='pdf', bbox_inches='tight')
+
+        plt.show()
+
+    def compute_metrics_matrix(df, column, model="", has_full_params=-1, technique=""):
+        metrics_dict = {(fp, t): [] for fp in ModelResultVisualizer.FREQUENCY_PENALTY_VALUES for t in ModelResultVisualizer.TEMPERATURE_VALUES}
 
         for _, row in df[df[column].notna()].iterrows():
             exp_id = row["EXPERIMENT_ID"]
@@ -120,40 +143,28 @@ class ModelResultVisualizer:
                 T_value = float(parts[3][:-1])
                 FP_value = float(parts[4][:-2])
 
+            if not exp_id.__contains__("gpt"):
+                if FP_value == 0.9:
+                    FP_value = 1
+                elif FP_value == 0.1:
+                    FP_value = 0
+
             metrics_dict[(FP_value, T_value)].append(metric)
 
-        metrics_matrix = np.zeros((len(self.FREQUENCY_PENALTY_VALUES), len(self.TEMPERATURE_VALUES)))
+        metrics_matrix = np.zeros((len(ModelResultVisualizer.FREQUENCY_PENALTY_VALUES), len(ModelResultVisualizer.TEMPERATURE_VALUES)))
         
-        for fp, t in self.NOT_PERFORMED:
-            FP_idx = self.FREQUENCY_PENALTY_VALUES.index(fp)
-            T_idx = self.TEMPERATURE_VALUES.index(t)
+        for fp, t in ModelResultVisualizer.NOT_PERFORMED:
+            FP_idx = ModelResultVisualizer.FREQUENCY_PENALTY_VALUES.index(fp)
+            T_idx = ModelResultVisualizer.TEMPERATURE_VALUES.index(t)
             metrics_matrix[FP_idx, T_idx] = np.nan
 
         for (fp, t), metrics in metrics_dict.items():
             if metrics:
-                FP_idx = self.FREQUENCY_PENALTY_VALUES.index(fp)
-                T_idx = self.TEMPERATURE_VALUES.index(t)
+                FP_idx = ModelResultVisualizer.FREQUENCY_PENALTY_VALUES.index(fp)
+                T_idx = ModelResultVisualizer.TEMPERATURE_VALUES.index(t)
                 metrics_matrix[FP_idx, T_idx] = np.mean(metrics)
 
-        plt.figure(figsize=(8, 6))     # For a bigger plot -> plt.figure(figsize=(12, 9))
-        
-        plt.imshow(metrics_matrix, extent=[min(self.TEMPERATURE_VALUES), max(self.TEMPERATURE_VALUES), min(self.FREQUENCY_PENALTY_VALUES), max(self.FREQUENCY_PENALTY_VALUES)],
-                   origin='lower', aspect='auto', cmap=cmap)
-        cbar = plt.colorbar()
-        cbar.ax.tick_params(labelsize=12)
-        plt.xlabel("Temperature", fontsize=20)
-        plt.ylabel("Frequency Penalty", fontsize=20)
-        plt.title(title, fontsize=20)
-        plt.xticks(self.TEMPERATURE_VALUES, fontsize=12)
-        plt.yticks(self.FREQUENCY_PENALTY_VALUES, fontsize=12)
-
-        # -------------
-        # Uncomment to save the plot as PDF
-        # -------------
-        # pdf_filename = f"{title}.pdf"
-        # plt.savefig(pdf_filename, format='pdf', bbox_inches='tight')
-
-        plt.show()
+        return metrics_matrix
 
 
     def plot_general_correlation_matrix(self):

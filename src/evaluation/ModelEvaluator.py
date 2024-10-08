@@ -232,12 +232,12 @@ class ModelEvaluator:
             return
 
         
-    def compute_time_token_cost(self, project_root, models_path, results_dir):
+    def compute_time_token_cost(self, project_root, models_path, results_dir, task="Survey", prompt_version="1.0", model="GPT"):
         for subfolder in os.listdir(models_path):
             experiment_path = os.path.join(models_path, subfolder)
             
             if os.path.isdir(experiment_path):
-                predictions = self.load_data(project_root, subfolder)
+                predictions = self.load_data(project_root, subfolder, task, prompt_version, model)
                 avg_response_time = predictions["RESPONSE_TIME"].mean()
                 avg_total_tokens = predictions["TOTAL_TOKENS"].mean()
                 avg_prompt_tokens = predictions["PROMPT_TOKENS"].mean()
@@ -257,8 +257,8 @@ class ModelEvaluator:
             self.time_tokens.to_csv(os.path.join(results_dir, self.TIME_TOKENS_FILENAME), index=False)
 
 
-    def load_data(self, project_root, experiment_id):
-        result_dir_path = os.path.join(project_root, "models", experiment_id)
+    def load_data(self, project_root, experiment_id, task="Survey", prompt_version="1.0", model="GPT"):
+        result_dir_path = os.path.join(project_root, "models", task, prompt_version, model, experiment_id)
 
         predictions_path = os.path.join(result_dir_path, "predictions.pkl")
         return pd.read_pickle(predictions_path)
