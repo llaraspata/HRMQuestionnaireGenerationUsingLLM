@@ -37,15 +37,21 @@ The installation process is described below:
 
 
 ### 🧪 Experiments
-The several experimental setting are configured in a [JSON file](src/models/experiment_config.json). To run all the configurations use the following command:
+We tested models from GPT, LLaMa, and Mistral families. For each model family, we listed the experimental settings in the following JSON files: [GPT](src/models/GPT_experiment_config.json), [LLaMa](src/models/LLaMa_experiment_config.json), [Mistral](src/models/Mistral_experiment_config.json).
+
+
+To run all the experiments for a model you can use the following command: 
 ```
-python -W ignore <path_to_repo_folder>/src/models/predict.py
+python -W ignore <path_to_repo_folder>/src/models/predict.py --model "<model_name>"
 ```
-Otherwise, to run a specific configuration use the following command:
+Otherwise you can run single experiments using the command below:
 ```
-python -W ignore <path_to_repo_folder>/src/models/predict.py --experiment-id "<experiment_id>" 
+python -W ignore <path_to_repo_folder>/src/models/predict.py --model "<model_name>" --experiment-id "<experiment_id>"
 ```
+The `model` option is always mandatory and it can be equal to one of the following: `GPT` (or `gpt`), `LLaMa` (or `llama`), and `Mistral` (or `mistral`).
+
 > [!CAUTION]
+> **For GPT models**
 > Make sure you have a valid (Azure) OpenAI access key, otherwise calling the OpenAI services will be forbidden. Then set it as an environment variable named `AZURE_OPENAI_KEY`.
 >
 > Moreover, note that we used a private deployment, so it cannot be accessed by users external to the Talentia HCM R&D Team. Thus, we recommed to substitue the `azure_endpoint` parameter value with a valid one in the API call.
@@ -58,6 +64,8 @@ To run the the evaluation step execute the following command:
 ```
 python -W ignore <path_to_repo_folder>/src/models/evaluate.py
 ```
+> [!NOTE]
+> The command will launch the evaluation for all the experiments run for every model family.
 
 ### 🛠️ Utility
 To perform the automatic conversion of the aumented data from unstructed text to JSON, run the following command:
