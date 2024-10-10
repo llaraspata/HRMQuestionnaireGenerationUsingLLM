@@ -69,11 +69,12 @@ python -W ignore <path_to_repo_folder>/src/data/convert_qst_to_json.py
 ## Citation
 
 ```bibtex
-@misc{laraspata2024SurveyGeneration4HCM,
+@inproceedings{laraspata2024SurveyGeneration4HCM,
 author = {Lucrezia Laraspata and Fabio Cardilli and Giovanna Castellano and Gennaro Vessio},
 title = {Enhancing human capital management through GPT-driven questionnaire generation},
 year = {2024},
-url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
+booktitle={Proceedings of the Eighth Workshop on Natural Language for Artificial Intelligence (NL4AI 2024) co-located with 23th International Conference of the Italian Association for Artificial Intelligence (AI*IA 2024)},
+year={2024}
 }
 ```
 
