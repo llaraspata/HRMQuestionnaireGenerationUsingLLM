@@ -52,6 +52,7 @@ The `model` option is always mandatory and it can be equal to one of the followi
 
 > [!CAUTION]
 > **For GPT models**
+>
 > Make sure you have a valid (Azure) OpenAI access key, otherwise calling the OpenAI services will be forbidden. Then set it as an environment variable named `AZURE_OPENAI_KEY`.
 >
 > Moreover, note that we used a private deployment, so it cannot be accessed by users external to the Talentia HCM R&D Team. Thus, we recommed to substitue the `azure_endpoint` parameter value with a valid one in the API call.
@@ -103,7 +104,9 @@ url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
     │
     ├── docs               <- A default Sphinx project; see sphinx-doc.org for details
     │
-    ├── models             <- Predictions for each run experiments. For each of the a log and a picke file are saved.
+    ├── models             <- Predictions for each run experiments. For each of them a log and a picke file are saved.
+    │
+    ├── results            <- Evaluation results computed for each experiment.
     │
     ├── notebooks          <- Jupyter notebooks used to illustrate class usage, dataset insights, and experimental results.
     │
@@ -131,14 +134,24 @@ url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
     │   │   ├── TopicModelingPromptGenerator.py
     │   │   └── TopicModelingScenarioGenerator.py
     │   │
-    │   ├── models         <- Scripts to run experiments and evaluations
-    │   │   ├── experiment_config.json
-    │   │   │
+    │   ├── models         <- Scripts to run experiments
     │   │   ├── predict.py
+    │   │   ├── utility.py
+    │   │   │
+    │   │   ├── GPT_experiment_config.json
+    │   │   ├── gpt_predict.py
+    │   │   │
+    │   │   ├── LLaMa_experiment_config.json
+    │   │   ├── llama_predict.py
+    │   │   │
+    │   │   ├── Mistral_experiment_config.json
+    │   │   └── mistral_predict.py
+    │   │
+    │   ├── evaluation     <- Scripts to run evaluations
+    │   │   ├── evaluate.py
     │   │   │
     │   │   ├── QuestionnairesEvaluator.py
-    │   │   ├── ModelEvaluator.py
-    │   │   └── evaluate.py
+    │   │   └── ModelEvaluator.py
     │   │
     │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
     │       ├── experiment_pairs.json
