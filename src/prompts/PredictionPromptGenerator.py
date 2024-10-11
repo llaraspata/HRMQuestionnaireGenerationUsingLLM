@@ -1,9 +1,9 @@
 """
 This class is used for the generation of prompts w.r.t. to roles for the Prediction task.
 """
-from src.prompts.prediction_prompts import PredictionSystemPrompt as SystemPrompt
-from src.prompts.prediction_prompts import PredictionUserPrompt as UserPrompt
-from src.prompts.prediction_prompts import PredictionAssistantPrompt as AssistantPrompt
+from src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
+from src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
+from src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
 
 class PredictionPromptGenerator:
     # ------------
