@@ -69,7 +69,7 @@ def main(args):
         log_filename = "log.txt"
 
         # Run the experiment        
-        result_df = _run_experiment(dataset=dataset, conf=conf, run_dir=run_dir, log_filename=log_filename)
+        result_df = _run_experiment(dataset=dataset, conf=conf, prompt_version=prompt_version, run_dir=run_dir, log_filename=log_filename)
         
         # Save the results
         ut.save_df_to_folder(result_df, run_dir, predictions_filename)
@@ -78,13 +78,13 @@ def main(args):
 # -----------------
 # Helper functions
 # -----------------
-def _run_experiment(dataset, conf, run_dir, log_filename):
+def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
 
     print("================================================")
     print(f"Running experiment: {conf['id']}")
 
     # Set the scenario for the current experiment
-    scenario = PredictionScenarioGenerator(experiment_config=conf, dataset=dataset)
+    scenario = PredictionScenarioGenerator(project_root=PROJECT_ROOT, prompt_version=prompt_version, experiment_config=conf, dataset=dataset)
 
     # Create the DataFrame for the predictions and other statistics
     predictions_df = pd.DataFrame(columns=ut.PREDICTION_COLUMNS)
@@ -205,5 +205,6 @@ if __name__ == '__main__':
     aparser = argparse.ArgumentParser()
     aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     aparser.add_argument('--experiment-id', type=str, help='Name of the experiment to run')
+    aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     
     main(aparser.parse_args())

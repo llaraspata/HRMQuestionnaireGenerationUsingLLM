@@ -44,7 +44,6 @@ class PredictionUserPrompt:
             
             if self.prompt_version != "2.0" and row[1]["TASK"] != "CONVERT":
                 break
-
            
         if len(params) > 0:
             prompt = prompt % tuple(params)

@@ -1,12 +1,16 @@
-from src.prompts.PredictionPromptGenerator import PredictionPromptGenerator
+from src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
+from src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
+from src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
 
 class PredictionScenarioGenerator:
 
-    def __init__(self, experiment_config, dataset, full_log=True):
+    def __init__(self, project_root, experiment_config, dataset, prompt_version="1.0", task="Survey", full_log=True):
         self.experiment_config = experiment_config
-        self.system_prompt_generator = PredictionPromptGenerator("system")
-        self.user_prompt_generator = PredictionPromptGenerator("user")
-        self.assistant_prompt_generator = PredictionPromptGenerator("assistant")
+        self.prompt_version = prompt_version
+        self.task = task
+        self.system_prompt = SystemPrompt(project_root=project_root, prompt_version=prompt_version, task=task)
+        self.user_prompt = UserPrompt(project_root=project_root, prompt_version=prompt_version, task=task)
+        self.assistant_prompt = AssistantPrompt(project_root=project_root, prompt_version=prompt_version, task=task)
         self.full_log = full_log
         self.question_types = dataset.get_question_types()
 
@@ -31,6 +35,7 @@ class PredictionScenarioGenerator:
                                                                                                                                       current_questionnaire_id, dataset)
 
         return system_prompt, sample_user_prompts, assistant_prompts, user_prompt, sample_questionnaires_ids
+
 
     def generate_k_shot_scenario(self, log_file, current_questionnaire_id, dataset):
         """
@@ -69,7 +74,7 @@ class PredictionScenarioGenerator:
         # -------------------
         # SYSTEM PROMPT
         # -------------------
-        system_prompt = self.system_prompt_generator.generate_prompt(has_full_params=has_full_params, question_types_data=self.question_types)
+        system_prompt = self.system_prompt.build_prompt(has_full_params=has_full_params, qst_types_df=self.question_types)
 
         # -------------------
         # SAMPLE USER AND ASSISTANT PROMPTS
@@ -90,11 +95,15 @@ class PredictionScenarioGenerator:
                 log_file.write(f"\n     - Topic: {topic}")
                 log_file.write(f"\n     - Question number: {question_number}")
 
-            # Build sample user and assistant prompts
-            sample_user_prompt = self.user_prompt_generator.generate_prompt(has_full_params=has_full_params, topic=topic,
-                                                                            question_number=question_number)
+            if has_full_params:
+                params = [topic, question_number]
+            else:
+                params = [topic]
 
-            assistant_prompt = self.assistant_prompt_generator.generate_prompt(json=formatted_json)
+            # Build sample user and assistant prompts
+            sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params, qst_types_df=self.question_types)
+
+            assistant_prompt = self.assistant_prompt.build_prompt(params=[formatted_json])
 
             all_sample_user_prompts.append([sample_user_prompt])
             all_assistant_prompts.append([assistant_prompt])
@@ -111,9 +120,13 @@ class PredictionScenarioGenerator:
         if self.full_log:
             log_file.write(f"\n     - Topic: {topic}")
             log_file.write(f"\n     - Question number: {question_number}")
+        
+        if has_full_params:
+            params = [topic, question_number]
+        else:
+            params = [topic]
 
-        user_prompt = self.user_prompt_generator.generate_prompt(has_full_params=has_full_params, topic=topic,
-                                                                 question_number=question_number)
+        user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params, qst_types_df=self.question_types)
 
         return system_prompt, all_sample_user_prompts, all_assistant_prompts, user_prompt, sample_questionnaires_ids
 

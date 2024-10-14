@@ -1,35 +1,25 @@
 import os
-import pandas as pd
-import time
-import json
-import os
-from tqdm import tqdm
 import argparse
-from openai import AzureOpenAI
 import sys
 sys.path.append('\\'.join(os.getcwd().split('\\')[:-1])+'\\src')
-from src.data.TFQuestionnairesDataset import TFQuestionnairesDataset
-from src.prompts.PredictionScenarioGenerator import PredictionScenarioGenerator
 from src.models.gpt_predict import main as gpt
 from src.models.mistral_predict import main as mistral
 from src.models.llama_predict import main as llama
 
-
-
 PROJECT_ROOT = os.getcwd()
-
 
 def main(args):
 
     model = args.model
     experiment_id = args.experiment_id
+    prompt_version = args.prompt_version
 
     if model == "gpt" or model == "GPT":
-        gpt(experiment_id)
+        gpt(experiment_id, prompt_version)
     elif model == "mistral" or model == "Mistral":
-        mistral(experiment_id)
+        mistral(experiment_id, prompt_version)
     elif model == "llama" or model == "LLaMa":
-        llama(experiment_id)
+        llama(experiment_id, prompt_version)
     else:
         print(f"Specify a valid model name. '{model}' is not a supported.")
 
