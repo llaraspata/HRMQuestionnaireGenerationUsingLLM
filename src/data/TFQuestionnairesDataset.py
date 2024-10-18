@@ -283,3 +283,25 @@ class TFQuestionnairesDataset:
         list_str = self.subtopics[self.subtopics["QST_TOPIC"] == topic.upper()]["SUBTOPICS_LIST"].values[0]
 
         return ast.literal_eval(list_str)
+
+
+    def to_text(self, questionnaire_id):
+        text = ""
+        
+        questions = self.questions[self.questions["QUESTIONNAIRE_ID"] == questionnaire_id]
+        answers = self.answers[self.answers["QUESTION_ID"].isin(questions["ID"])]
+
+        for question in questions.iterrows():
+            qst_id = question[1]["ID"]
+            qst_answers = answers[answers["QUESTION_ID"] == qst_id]
+
+            text += f"**{question[1]['NAME']}**\n"
+
+            for answer in qst_answers.iterrows():
+                text += f"  - {answer[1]['ANSWER']}\n"
+
+            text += "\n"
+
+        return text
+        
+
