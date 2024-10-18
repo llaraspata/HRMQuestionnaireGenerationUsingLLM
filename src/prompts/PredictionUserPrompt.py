@@ -22,18 +22,18 @@ class PredictionUserPrompt:
         prompts_df = prompts_df[prompts_df["TYPE"] == 'U']
         self.prompts_df = prompts_df[prompts_df["VERSION"] == np.float64(self.prompt_version)][self.ESSENTIAL_COLUMNS].sort_values(by="ORDER")
 
-    
-    def build_prompt(self, has_full_params=True, params=[], qst_types_df=None):
+
+    def build_prompt(self, has_full_params=True, params=[], qst_types_df=None, prompt_task=""):
         prompt = ""
 
         for row in self.prompts_df.iterrows():
 
-            if self.prompt_version != "2.0":
-                if has_full_params and row[1]["TASK"] == "ONLY_TOPIC":
-                    continue
-                elif not has_full_params and row[1]["TASK"] == "FULL":
-                    continue
-            elif row[1]["TASK"] == "ONLY_TOPIC" or row[1]["TASK"] == "FULL":
+            if has_full_params and row[1]["TASK"] == "ONLY_TOPIC":
+                continue
+            elif not has_full_params and row[1]["TASK"] == "FULL":
+                continue
+            
+            if self.prompt_version == "2.0" and prompt_task == "CONVERT" and row[1]["TASK"] != "CONVERT":
                 continue
 
             if row[1]["CODE"] == "SINGLE_QUESTION_TYPE_DESCRIPTION":
@@ -42,9 +42,9 @@ class PredictionUserPrompt:
             else:        
                 prompt += row[1]["PROMPT_PART"] + "\n"
             
-            if self.prompt_version != "2.0" and row[1]["TASK"] != "CONVERT":
+            if row[1]["TASK"] != "CONVERT":
                 break
-           
+
         if len(params) > 0:
             prompt = prompt % tuple(params)
 

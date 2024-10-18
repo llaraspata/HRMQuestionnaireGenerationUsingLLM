@@ -23,14 +23,20 @@ class PredictionAssistantPrompt:
         self.prompts_df = prompts_df[prompts_df["VERSION"] == np.float64(self.prompt_version)][self.ESSENTIAL_COLUMNS].sort_values(by="ORDER")
 
     
-    def build_prompt(self, params=[], qst_types_df=None):
+    def build_prompt(self, params=[], prompt_task=""):
         prompt = ""
 
         if self.prompts_df is None or len(self.prompts_df) == 0:
             prompt = "%s"
         else:
             for row in self.prompts_df.iterrows():       
+                if self.prompt_version == "2.0" and row[1]["TASK"] != prompt_task:
+                    continue
+
                 prompt += row[1]["PROMPT_PART"] + "\n"
+
+                if self.prompt_version == "2.0" and row[1]["TASK"] != "CONVERT":
+                    break
 
         if len(params) > 0:
             prompt = prompt % tuple(params)
