@@ -99,14 +99,30 @@ class PredictionScenarioGenerator:
                 params = [topic, question_number]
             else:
                 params = [topic]
+            
+            if self.prompt_version != "2.0":
+                # Build sample user and assistant prompts
+                sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params, qst_types_df=self.question_types)
+                assistant_prompt = self.assistant_prompt.build_prompt(params=[formatted_json])
 
-            # Build sample user and assistant prompts
-            sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params, qst_types_df=self.question_types)
+                all_sample_user_prompts.append([sample_user_prompt])
+                all_assistant_prompts.append([assistant_prompt])
+            else:
+                # Build sample user and assistant prompts
+                # 1. Generate content
+                sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params)
+                free_text = dataset.to_text(sample_questionnaire_id)
+                assistant_prompt = self.assistant_prompt.build_prompt(params=[free_text])
 
-            assistant_prompt = self.assistant_prompt.build_prompt(params=[formatted_json])
+                all_sample_user_prompts.append([sample_user_prompt])
+                all_assistant_prompts.append([assistant_prompt])
 
-            all_sample_user_prompts.append([sample_user_prompt])
-            all_assistant_prompts.append([assistant_prompt])
+                # 2. Convert to JSON
+                sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, qst_types_df=self.question_types, prompt_task="CONVERT")
+                assistant_prompt = self.assistant_prompt.build_prompt(params=[formatted_json])
+
+                all_sample_user_prompts.append([sample_user_prompt])
+                all_assistant_prompts.append([assistant_prompt])
 
         # -------------------
         # TEST USER PROMPT
