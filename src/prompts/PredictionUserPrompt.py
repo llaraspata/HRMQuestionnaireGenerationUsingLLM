@@ -4,6 +4,7 @@ import numpy as np
 
 class PredictionUserPrompt:
     ESSENTIAL_COLUMNS = ["CODE", "ORDER", "TASK", "PROMPT_PART"]
+    VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
 
     TASK_FILENAMES = {
           "Survey": "survey_generation.csv"
@@ -33,7 +34,7 @@ class PredictionUserPrompt:
             elif not has_full_params and row[1]["TASK"] == "FULL":
                 continue
             
-            if self.prompt_version == "2.0" and prompt_task == "CONVERT" and row[1]["TASK"] != "CONVERT":
+            if self.VERSION_WITH_CONVERSATION.__contains__(self.prompt_version) and prompt_task == "CONVERT" and row[1]["TASK"] != "CONVERT":
                 continue
 
             if row[1]["CODE"] == "SINGLE_QUESTION_TYPE_DESCRIPTION":

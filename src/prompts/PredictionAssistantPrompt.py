@@ -4,6 +4,7 @@ import numpy as np
 
 class PredictionAssistantPrompt:
     ESSENTIAL_COLUMNS = ["CODE", "ORDER", "TASK", "PROMPT_PART"]
+    VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
 
     TASK_FILENAMES = {
           "Survey": "survey_generation.csv"
@@ -30,12 +31,12 @@ class PredictionAssistantPrompt:
             prompt = "%s"
         else:
             for row in self.prompts_df.iterrows():       
-                if self.prompt_version == "2.0" and row[1]["TASK"] != prompt_task:
+                if self.VERSION_WITH_CONVERSATION.__contains__(self.prompt_version) and row[1]["TASK"] != prompt_task:
                     continue
 
                 prompt += row[1]["PROMPT_PART"] + "\n"
 
-                if self.prompt_version == "2.0" and row[1]["TASK"] != "CONVERT":
+                if self.VERSION_WITH_CONVERSATION.__contains__(self.prompt_version) and row[1]["TASK"] != "CONVERT":
                     break
 
         if len(params) > 0:

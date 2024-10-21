@@ -4,6 +4,8 @@ from src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
 
 class PredictionScenarioGenerator:
 
+    VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
+
     def __init__(self, project_root, experiment_config, dataset, prompt_version="1.0", task="Survey", full_log=True):
         self.experiment_config = experiment_config
         self.prompt_version = prompt_version
@@ -100,7 +102,7 @@ class PredictionScenarioGenerator:
             else:
                 params = [topic]
             
-            if self.prompt_version != "2.0":
+            if not self.VERSION_WITH_CONVERSATION.__contains__(self.prompt_version):
                 # Build sample user and assistant prompts
                 sample_user_prompt = self.user_prompt.build_prompt(has_full_params=has_full_params, params=params, qst_types_df=self.question_types)
                 assistant_prompt = self.assistant_prompt.build_prompt(params=[formatted_json])
