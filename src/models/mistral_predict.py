@@ -18,7 +18,7 @@ import ollama
 # -----------------
 PROJECT_ROOT = os.getcwd()
 CONFIG_FILENAME = "Mistral_experiment_config.json"
-
+VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
 
 # -----------------
 # Main function
@@ -155,7 +155,7 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                 ground_truth_content = ""
                 prediction_json = ""
 
-                if prompt_version == "2.0":
+                if VERSION_WITH_CONVERSATION.__contains__(prompt_version):
                     convert_user_prompt = scenario.generate_last_user()
                     messages = ut.append_messages(messages=messages, assistant_reply=prediction, user_prompt=convert_user_prompt)
 
@@ -205,7 +205,7 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                 log_file.write("\n[LLM ANSWER]\n")
                 log_file.write(prediction)
 
-                if prompt_version == "2.0":
+                if VERSION_WITH_CONVERSATION.__contains__(prompt_version):
                     log_file.write(f"\n     - User: \n{user_prompt}")
                     log_file.write(f"\n[LLM ANSWER] -> JSON \n{prediction}")
                 
@@ -214,7 +214,7 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                 # Compute the spent time
                 spent_secs_per_request.append(time_spent)
 
-                if prompt_version != "2.0":
+                if not VERSION_WITH_CONVERSATION.__contains__(prompt_version):
                     predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                        ground_truth_json=ground_truth, prediction_json=prediction, spent_time=time_spent,
                                                        prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
