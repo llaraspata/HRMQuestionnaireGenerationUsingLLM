@@ -73,11 +73,10 @@ def main(args):
         ut.save_df_to_folder(result_df, run_dir, predictions_filename)
 
 
-
 # -----------------
 # Helper functions
 # -----------------
-def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
+def _run_experiment(client, dataset, conf, prompt_version, run_dir, log_filename):
 
     print("================================================")
     print(f"Running experiment: {conf['id']}")
@@ -138,6 +137,40 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
 
                 ground_truth = dataset.to_json(questionnaire_id)
                 prediction = response.choices[0].message.content
+                time_spent = end_time - start_time
+                
+                ground_truth_content = ""
+                prediction_json = ""
+
+                if prompt_version == "2.0":
+                    convert_user_prompt = scenario.generate_last_user()
+                    messages = ut.append_messages(messages=messages, assistant_reply=prediction, user_prompt=convert_user_prompt)
+
+                    start_time = time.time()
+                    
+                    if "response_format" in conf.keys():
+                        response = client.chat.completions.create(
+                            model = conf["model"],
+                            messages=messages,
+                            temperature=conf["temperature"],
+                            max_tokens=conf["max_tokens"],
+                            frequency_penalty=conf["frequency_penalty"],
+                            response_format=conf["response_format"]
+                        )
+                    else:
+                        response = client.chat.completions.create(
+                            model = conf["model"],
+                            messages=messages,
+                            temperature=conf["temperature"],
+                            max_tokens=conf["max_tokens"],
+                            frequency_penalty=conf["frequency_penalty"]
+                        )
+
+                    end_time = time.time()
+
+                    time_spent = time_spent + (end_time - start_time)
+                    ground_truth_content = dataset.to_text(questionnaire_id)
+                    prediction_json = response.choices[0].message.content
 
                 prompt_tokens = response.usage.prompt_tokens
                 completition_tokens = response.usage.completion_tokens
@@ -146,16 +179,26 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                 log_file.write("\n-------------------")
                 log_file.write("\n[LLM ANSWER]\n")
                 log_file.write(prediction)
+
+                if prompt_version == "2.0":
+                    log_file.write(f"\n     - User: \n{user_prompt}")
+                    log_file.write(f"\n[LLM ANSWER] -> JSON \n{prediction}")
+
                 log_file.write("\n-------------------")
     
                 # Compute the spent time
-                time_spent = end_time - start_time
                 spent_secs_per_request.append(time_spent)
 
-                predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
-                                                 ground_truth=ground_truth, prediction=prediction, spent_time=time_spent, 
-                                                 prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
-    
+                if prompt_version != "2.0":
+                    predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
+                                                       ground_truth_json=ground_truth, prediction_json=prediction, spent_time=time_spent,
+                                                       prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
+                else:
+                    predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
+                                                       ground_truth_content=ground_truth_content, prediction_content=prediction,
+                                                       ground_truth_json=ground_truth, prediction_json=prediction_json,
+                                                       spent_time=time_spent, prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
+                
                 time.sleep(2)  # sleep for 2 seconds to avoid exceeding the OpenAI API rate limit or other kind of errors
                     
             except Exception as e:
@@ -185,10 +228,7 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
 
     print("================================================")
 
-
     return predictions_df
-
-
 
 
 if __name__ == '__main__':

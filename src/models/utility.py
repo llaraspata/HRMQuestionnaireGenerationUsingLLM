@@ -5,7 +5,10 @@ import pandas as pd
 # -----------------
 # Global variables
 # -----------------
-PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", "GROUND_TRUTH_JSON", "PREDICTED_JSON", "REPORTED_EXCEPTION", 
+PREDICTION_COLUMNS = ["QUESTIONNAIRE_ID", "SAMPLE_QUESTIONNAIRES_IDS", 
+                      "GROUND_TRUTH_CONTENT", "PREDICTED_CONTENT", 
+                      "GROUND_TRUTH_JSON", "PREDICTED_JSON", 
+                      "REPORTED_EXCEPTION", 
                       "RESPONSE_TIME", "PROMPT_TOKENS", "COMPLETITION_TOKENS", "TOTAL_TOKENS"]
 
 
@@ -42,17 +45,29 @@ def build_messages(k, system_prompt, sample_user_prompts, assistant_prompts, use
     return messages
 
 
+def append_messages(messages, assistant_reply, user_prompt):
+    """
+        Appends the LLM reply and the next user request messages to an existing collection.
+    """
+    messages.append({"role": "assistant", "content": assistant_reply})
+    messages.append({"role": "user", "content": user_prompt})
 
-def add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], ground_truth="", prediction="", spent_time=0, 
-                    prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):
+    return messages
+
+
+def add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], 
+                   ground_truth_json="", prediction_json="", ground_truth_content="", prediction_content="",
+                   spent_time=0, prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):
     """
         Adds a prediction to the DataFrame.
     """
     new_row = pd.DataFrame({
         "QUESTIONNAIRE_ID": [questionnaire_id],
         "SAMPLE_QUESTIONNAIRES_IDS": [sample_questionnaire_ids], 
-        "GROUND_TRUTH_JSON": [ground_truth],
-        "PREDICTED_JSON": [prediction],
+        "GROUND_TRUTH_CONTENT": [ground_truth_content],
+        "PREDICTED_CONTENT": [prediction_content],
+        "GROUND_TRUTH_JSON": [ground_truth_json],
+        "PREDICTED_JSON": [prediction_json],
         "REPORTED_EXCEPTION": [reported_exception],
         "RESPONSE_TIME": [spent_time],
         "PROMPT_TOKENS": [prompt_tokens],
