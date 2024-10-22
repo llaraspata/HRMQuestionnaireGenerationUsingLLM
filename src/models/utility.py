@@ -55,6 +55,17 @@ def append_messages(messages, assistant_reply, user_prompt):
     return messages
 
 
+def extract_explanation_and_json(response_text):
+    """
+        Extracts the explanation and the JSON from the LLM response.
+    """
+    split_index = response_text.find('{')
+    explanation = response_text[:split_index].strip()
+    json_response = response_text[split_index:].strip()
+
+    return explanation, json_response
+
+
 def add_prediction(df, questionnaire_id, sample_questionnaire_ids=[], 
                    ground_truth_json="", prediction_json="", ground_truth_content="", prediction_content="",
                    spent_time=0, prompt_tokens=0, completition_tokens=0, total_tokens=0, reported_exception=""):

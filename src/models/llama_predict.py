@@ -213,6 +213,12 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                     predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                        ground_truth_json=ground_truth, prediction_json=prediction, spent_time=time_spent,
                                                        prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
+                elif prompt_version == "1.1":
+                    explanation, prediction_json = ut.extract_explanation_and_json(response_text=prediction)
+                    predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
+                                                       ground_truth_content=ground_truth_content, prediction_content=explanation,
+                                                       ground_truth_json=ground_truth, prediction_json=prediction_json,
+                                                       spent_time=time_spent, prompt_tokens=prompt_tokens, completition_tokens=completition_tokens, total_tokens=total_tokens)
                 else:
                     predictions_df = ut.add_prediction(df=predictions_df, questionnaire_id=questionnaire_id, sample_questionnaire_ids=sample_questionnaires_ids,
                                                        ground_truth_content=ground_truth_content, prediction_content=prediction,
