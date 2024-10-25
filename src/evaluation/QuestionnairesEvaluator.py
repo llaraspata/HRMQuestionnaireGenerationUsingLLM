@@ -124,19 +124,20 @@ class QuestionnairesEvaluator:
         self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
         
         self.qst_type_variability = pd.DataFrame(columns=self.QST_TYPE_VARIABILITY_COLUMNS)
+        self.client_emb = None
+        self.client_gpt = None
 
-
-        self.client_emb = AzureOpenAI(
-            api_key = os.getenv("AZURE_OPENAI_KEY"),  
-            api_version = "2024-02-01",
-            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
-        )
-
-        self.client_gpt = AzureOpenAI(
-            azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
-            api_key=os.getenv("AZURE_OPENAI_KEY"),  
-            api_version="2024-02-15-preview"
-        )
+        # self.client_emb = AzureOpenAI(
+        #     api_key = os.getenv("AZURE_OPENAI_KEY"),  
+        #     api_version = "2024-02-01",
+        #     azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
+        # )
+# 
+        # self.client_gpt = AzureOpenAI(
+        #     azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
+        #     api_key=os.getenv("AZURE_OPENAI_KEY"),  
+        #     api_version="2024-02-15-preview"
+        # )
 
 
     
