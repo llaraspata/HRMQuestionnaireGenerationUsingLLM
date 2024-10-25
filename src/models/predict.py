@@ -15,11 +15,11 @@ def main(args):
     prompt_version = args.prompt_version
 
     if model == "gpt" or model == "GPT":
-        gpt(experiment_id, prompt_version)
+        gpt(prompt_version, experiment_id)
     elif model == "mistral" or model == "Mistral":
-        mistral(experiment_id, prompt_version)
+        mistral(prompt_version, experiment_id)
     elif model == "llama" or model == "LLaMa":
-        llama(experiment_id, prompt_version)
+        llama(prompt_version, experiment_id)
     else:
         print(f"Specify a valid model name. '{model}' is not a supported.")
 

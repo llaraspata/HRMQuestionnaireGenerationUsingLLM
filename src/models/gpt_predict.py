@@ -23,12 +23,10 @@ VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
 # -----------------
 # Main function
 # -----------------
-def main(args):
+def main(prompt_version, experiment_id):
 
-    experiment_id = args.experiment_id
     model = "GPT"
     task = "Survey"
-    prompt_version = args.prompt_version
 
     # Create the prompt version and model directory
     setting_dir = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
@@ -240,6 +238,6 @@ if __name__ == '__main__':
     aparser = argparse.ArgumentParser()
     aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     aparser.add_argument('--experiment-id', type=str, help='Name of the experiment to run')
-    aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     
-    main(aparser.parse_args())
+    args = aparser.parse_args()
+    main(args.prompt_version, args.experiment_id)

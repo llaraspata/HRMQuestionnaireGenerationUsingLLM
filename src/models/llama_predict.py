@@ -23,20 +23,10 @@ VERSION_WITH_CONVERSATION = ["2.0", "2.1"]
 # -----------------
 # Main function
 # -----------------
-def main(args):
-
-    if args is not None and args.experiment_id is not None:
-        experiment_id = args.experiment_id
-    else:
-        experiment_id = None
+def main(prompt_version, experiment_id):
 
     model = "LLaMa"
     task = "Survey"
-
-    if args is not None and args.prompt_version is not None:
-        prompt_version = args.prompt_version
-    else:
-        prompt_version = "1.0"
 
     # Create the prompt version and model directory
     setting_dir = os.path.join(PROJECT_ROOT, "models", task, prompt_version, model)
@@ -121,8 +111,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                         model = conf["model"],
                         messages=messages,
                         options={
-                            "temperature": conf["temperature"]/2,
-                            "repeat_penalty": conf["frequency_penalty"],
+                            "temperature": conf["temperature"],
+                            "repeat_penalty": conf["frequency_penalty"] + 1,
                             "num_predict": conf["max_tokens"]
                         },
                         format=conf["response_format"],
@@ -133,8 +123,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                         model = conf["model"],
                         messages=messages,
                         options={
-                            "temperature": conf["temperature"]/2,
-                            "repeat_penalty": conf["frequency_penalty"],
+                            "temperature": conf["temperature"],
+                            "repeat_penalty": conf["frequency_penalty"] + 1,
                             "num_predict": conf["max_tokens"]
                         },
                         stream=False
@@ -161,8 +151,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                             model = conf["model"],
                             messages=messages,
                             options={
-                                "temperature": conf["temperature"]/2,
-                                "repeat_penalty": conf["frequency_penalty"],
+                                "temperature": conf["temperature"],
+                                "repeat_penalty": conf["frequency_penalty"] + 1,
                                 "num_predict": conf["max_tokens"]
                             },
                             format=conf["response_format"],
@@ -174,8 +164,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                             model = conf["model"],
                             messages=messages,
                             options={
-                                "temperature": conf["temperature"]/2,
-                                "repeat_penalty": conf["frequency_penalty"],
+                                "temperature": conf["temperature"],
+                                "repeat_penalty": conf["frequency_penalty"] + 1,
                                 "num_predict": conf["max_tokens"]
                             },
                             stream=False
@@ -261,6 +251,6 @@ if __name__ == '__main__':
     aparser = argparse.ArgumentParser()
     aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     aparser.add_argument('--experiment-id', type=str, help='Name of the experiment to run')
-    aparser.add_argument('--prompt-version', type=str, help='The version of the prompt to use')
     
-    main(aparser.parse_args())
+    args = aparser.parse_args()
+    main(args.prompt_version, args.experiment_id)
