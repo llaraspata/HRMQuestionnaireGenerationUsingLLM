@@ -143,12 +143,6 @@ class ModelResultVisualizer:
                 T_value = float(parts[3][:-1])
                 FP_value = float(parts[4][:-2])
 
-            if not exp_id.__contains__("gpt"):
-                if FP_value == 0.9:
-                    FP_value = 1
-                elif FP_value == 0.1:
-                    FP_value = 0
-
             metrics_dict[(FP_value, T_value)].append(metric)
 
         metrics_matrix = np.zeros((len(ModelResultVisualizer.FREQUENCY_PENALTY_VALUES), len(ModelResultVisualizer.TEMPERATURE_VALUES)))
