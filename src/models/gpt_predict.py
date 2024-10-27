@@ -149,18 +149,18 @@ def _run_experiment(client, dataset, conf, prompt_version, run_dir, log_filename
                         response = client.chat.completions.create(
                             model = conf["model"],
                             messages=messages,
-                            temperature=conf["temperature"],
+                            temperature=0,
                             max_tokens=conf["max_tokens"],
-                            frequency_penalty=conf["frequency_penalty"],
+                            frequency_penalty=0,
                             response_format=conf["response_format"]
                         )
                     else:
                         response = client.chat.completions.create(
                             model = conf["model"],
                             messages=messages,
-                            temperature=conf["temperature"],
+                            temperature=0,
                             max_tokens=conf["max_tokens"],
-                            frequency_penalty=conf["frequency_penalty"]
+                            frequency_penalty=0
                         )
 
                     end_time = time.time()
