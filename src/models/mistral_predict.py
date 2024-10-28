@@ -155,8 +155,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                             model = conf["model"],
                             messages=messages,
                             options={
-                                "temperature": conf["temperature"],
-                                "repeat_penalty": conf["frequency_penalty"] + 1,
+                                "temperature": 0,
+                                "repeat_penalty": 1,
                                 "num_predict": conf["max_tokens"]
                             },
                             format=conf["response_format"],
@@ -168,8 +168,8 @@ def _run_experiment(dataset, conf, prompt_version, run_dir, log_filename):
                             model = conf["model"],
                             messages=messages,
                             options={
-                                "temperature": conf["temperature"],
-                                "repeat_penalty": conf["frequency_penalty"] + 1,
+                                "temperature": 0,
+                                "repeat_penalty": 1,
                                 "num_predict": conf["max_tokens"]
                             },
                             stream=False
