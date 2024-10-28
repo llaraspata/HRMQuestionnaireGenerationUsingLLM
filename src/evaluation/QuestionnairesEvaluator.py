@@ -92,7 +92,6 @@ class QuestionnairesEvaluator:
     def __init__(self):
         self.experiment_id = None
         self.predictions = pd.DataFrame(columns=self.PREDICTION_COLUMNS)
-        self.log = pd.DataFrame()
 
         self.questionnaire_id = None
 
@@ -150,11 +149,6 @@ class QuestionnairesEvaluator:
 
         predictions_path = os.path.join(result_dir_path, self.PREDICTIONS_FILENAME)
         self.predictions = pd.read_pickle(predictions_path)
-
-        log_path = os.path.join(result_dir_path, self.LOG_FILENAME)
-        with open(log_path, 'r') as file:
-            log_data = file.read()
-        self.log = log_data
 
 
     def set_questionnaire_id(self, questionnaire_id):
