@@ -4,15 +4,17 @@ Model Card
 This work explores the capabilities of LLMs in the HR Questionnaire Generation task. Currently, we tested:
 - `GPT-3.5-Turbo`
 - `GPT-4-Turbo`
+- `LLaMA3-8B`
+- `Mixtral-8x7b`
 
 We employed them as is, thus no training was performed.
 
 > [!IMPORTANT]
-> In the adopted experiment naming convention, the models are identified by their deplument name on Azure.
+> In the adopted experiment naming convention, the GPT models are identified by their deplument name on Azure.
 
 ### Task definition
 
-This study explores the capabilities of GPT models in generating HR surveys, focusing on two task variants:
+This study explores the capabilities of LLMs models in generating HR surveys, focusing on two task variants:
 
 1. The user requests the model to generate a questionnaire by specifying the questionnaire topic and the number of questions.
 
@@ -26,13 +28,15 @@ These task definitions impose minimal constraints on the content to be generated
 
 ## Configuration
 
-The experiments utilized Azure OpenAI APIs to deploy these models. The specific configurations for GPT-3.5-Turbo and GPT-4-Turbo on Azure are summarized below:
-| Configuration                            | GPT-3.5-Turbo | GPT-4-Turbo  |
-| :---                                     | :---:         |    :---:     |
-| Version                                  | `0301`        |`1106-Preview`|
-| Tokens per minute rate limit (thousands) | 120           | 30           |
-| Rate limit (tokens per minute)           | 120,000       | 30,000       |
-| Rate limit (requests per minute)         | 720           | 180          |
+The experiments with GPT models utilized Azure OpenAI APIs to deploy these models. Instead, LLaMa and Mixtral were used through the [Ollama library](https://ollama.com/library). Below the specific configuration:
+| Configuration                            | GPT-3.5-Turbo | GPT-4-Turbo  | LLaMa3        | Mistral      |
+| :---                                     | :---:         |    :---:     | :---:         |    :---:     |
+| Version                                  | `0301`        |`1106-Preview`| `8b-instruct-q4_0`        |`8x7b-instruct-v0.1-q2_K`|
+| Tokens per minute rate limit (thousands) | 120           | 30           | - | - | 
+| Rate limit (tokens per minute)           | 120,000       | 30,000       | - | - |
+| Rate limit (requests per minute)         | 720           | 180          | - | - |
+
+                             
 
 We employed both zero-shot and one-shot techniques to prompt the GPT models.
 
@@ -40,19 +44,20 @@ We employed both zero-shot and one-shot techniques to prompt the GPT models.
 > In the adopted experiment naming convention, `Os` is used to denote experiments that used the zero-shot technique, while `1s` for those using the one-shot one.
 
 
-The experimental setup involved testing various hyperparameter configurations for the GPT models:
-- **Temperature**, whose tested values are {0, 0.25, 0.5}. 
-- **Frequency penalty**, whose tested values are {0, 0.5, 1}.
+The experimental setup involved testing various hyperparameter configurations for all the models:
 
-The followin figure outlines the tested combinations (green entries) and the discarded ones (red entries):
+| Settings          | GPT-3.5-Turbo  | GPT-4-Turbo    | LLaMa3         | Mistral        |
+| :---              | :---:          |    :---:       | :---:          |    :---:       |
+| Temperature       | {0, 0.25, 0.5} | {0, 0.25, 0.5} | {0, 0.25, 0.5} | {0, 0.25, 0.5} |
+| Frequency penalty | {0, 0.5, 1}    | {0, 0.5, 1}    | {0, 0.5, 1}    | {0, 0.5, 1}    |
+| Max tokens        | 6,000          | 4,000          | 4,000          | 4,000          |
+| Response type     | standard       | JSON           | standard       | standard       |
+
+The followin figure outlines the tested combinations (green entries) and the discarded ones (red entries) for temperature and frequency penalty params:
 
 <p align="center">
   <img src="/figures/params.png" alt="params">
 </p>
-
-Additionally, the following parameters were consistently configured across all experimental setups:
-- **Max tokens**: for GPT-3.5-Turbo, the limit was set at 6,000 tokens, and for GPT-4-Turbo, it was set at 4,000 tokens.
-- **Response format**, only available for GPT-4-Turbo, the response format was configured to output a valid JSON object.
 
 > [!IMPORTANT]
 > In the adopted experiment naming convention:
