@@ -6,7 +6,7 @@ This repository contains all the datasets, code, and supplementary materials to 
 At the moment we focued on Surveys, that typically lack right/wrong or scored answers. Specifically, survey questionnaires are instrumental in gathering continuous feedback and opinions from employees, enabling organizations to monitor and enhance various aspects such as employee satisfaction and potential assessment.
 
 Given the lack of adequate datasets, we built a new collection of HR Surveys. Details about the dataset can be found in the [Data Card](data/README.md).
-We tested two GPT models (GPT-3.5-Turbo and GPT-4-Turbo) with different setting, in order to catch which are the factors that most contribute to an higher survey quality. Such details can be found in the [Model Card](models/README.md).
+We tested two GPT-3.5-Turbo, GPT-4-Turbo, LLaMa3, and Mixtral with different setting, in order to catch which are the factors that most contribute to an higher survey quality. Such details can be found in the [Model Card](models/README.md).
 In our work, we designed a novel framework to automatically evaluate the generated content, due to the limitation of traditional metrics like raw ROUGE and BLEU. Thus, our metrics are able to estimate the quality of the surveys in terms of engagement, internal thematic variability, and flow. Further details are reported in the [Model Card](models/README.md).
 
 
@@ -78,11 +78,15 @@ python -W ignore <path_to_repo_folder>/src/data/convert_qst_to_json.py
 ## 🖋️ Citation
 
 ```bibtex
-@misc{laraspata2024SurveyGeneration4HCM,
-author = {Lucrezia Laraspata and Fabio Cardilli and Giovanna Castellano and Gennaro Vessio},
-title = {Enhancing human capital management through GPT-driven questionnaire generation},
-year = {2024},
-url = {https://github.com/llaraspata/HRMQuestionnaireGenerationUsingLLM}
+@inproceedings{laraspata2024qstgeneration,
+   title={{Enhancing human capital management through GPT-driven questionnaire generation}},
+   author={Laraspata, Lucrezia and Cardilli, Fabio and Castellano, Giovanna and Vessio, Gennaro},
+   booktitle={Proceedings of the Eighth Workshop on Natural Language
+    for Artificial Intelligence (NL4AI 2024) co-located with 23th
+    International Conference of the Italian Association for Artificial
+    Intelligence (AI*IA 2024)},
+   year={2024},
+   url = {https://uniroma2-my.sharepoint.com/:b:/g/personal/claudiudaniel_hromei_alumni_uniroma2_eu/EQn1_ibX2PRIiH9knF7fisUBYmTQpygq0MWaRKntADw6AA?e=Mjm5Ud}
 }
 ```
 
