@@ -1,6 +1,6 @@
-from src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
-from src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
-from src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
 
 class PredictionScenarioGenerator:
 
