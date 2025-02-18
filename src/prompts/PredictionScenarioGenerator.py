@@ -1,6 +1,6 @@
-from src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
-from src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
-from src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionAssistantPrompt import PredictionAssistantPrompt as AssistantPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionSystemPrompt import PredictionSystemPrompt as SystemPrompt
+from HRMQuestionnaireGenerationUsingLLM.src.prompts.PredictionUserPrompt import PredictionUserPrompt as UserPrompt
 
 class PredictionScenarioGenerator:
 
@@ -149,5 +149,5 @@ class PredictionScenarioGenerator:
         return system_prompt, all_sample_user_prompts, all_assistant_prompts, user_prompt, sample_questionnaires_ids
 
 
-    def generate_last_user(self, has_full_params):
-        return self.user_prompt.build_prompt(has_full_params=has_full_params, qst_types_df=self.question_types, prompt_task="CONVERT")
+    def generate_last_user(self):
+        return self.user_prompt.build_prompt(has_full_params=self.experiment_config["has_full_params"], qst_types_df=self.question_types, prompt_task="CONVERT")

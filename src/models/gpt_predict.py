@@ -179,7 +179,7 @@ def _run_experiment(client, dataset, conf, prompt_version, run_dir, log_filename
 
                 if VERSION_WITH_CONVERSATION.__contains__(prompt_version):
                     log_file.write(f"\n     - User: \n{user_prompt}")
-                    log_file.write(f"\n[LLM ANSWER] -> JSON \n{prediction}")
+                    log_file.write(f"\n[LLM ANSWER] -> JSON \n{prediction_json}")
 
                 log_file.write("\n-------------------")
     
