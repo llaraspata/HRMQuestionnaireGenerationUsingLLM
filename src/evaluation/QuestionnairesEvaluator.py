@@ -801,7 +801,10 @@ class QuestionnairesEvaluator:
                 # question_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, qst_text)
                 question_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, qst_text)
 
-                new_rows = self._compute_question_semantic_similarity(project_root, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
+                # Uncomment to use OpenAI embdedding model:
+                # new_rows = self.compute_question_semantic_similarity(project_root, self.client_emb, self.questionnaire_id, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
+                new_rows = QuestionnairesEvaluator.compute_question_semantic_similarity(project_root, self.sentence_emb, self.questionnaire_id, len(generated.questions), 
+                                                                     qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
 
                 self.question_semantic_scores = pd.concat([self.question_semantic_scores, new_rows], ignore_index=True)
 
@@ -830,24 +833,20 @@ class QuestionnairesEvaluator:
         return model.encode(text)
 
 
-    def _compute_question_semantic_similarity(self, project_root, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
-        df = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
+    def compute_question_semantic_similarity(project_root, sentence_emb, qst_id, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
+        df = pd.DataFrame(columns=QuestionnairesEvaluator.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         for j in range(len(ground_truth_questions)):
-            # Uncomment to use OpenAI embdedding model:
-            # ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, ground_truth_questions[j])
-            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, ground_truth_questions[j])
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(sentence_emb, ground_truth_questions[j])
             questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
             deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
             
-            topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, self.questionnaire_id)
-            # Uncomment to use OpenAI embdedding model:
-            # topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, topic)
-            topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, topic)
+            topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, qst_id)
+            topic_embedding = QuestionnairesEvaluator.get_text_embedding(sentence_emb, topic)
             topic_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, topic_embedding)
 
-            weight_sum = self.QUESTIONS_SIMILARITY_WEIGHT + self.TOPIC_SIMILARITY_WEIGHT
-            score = ((self.QUESTIONS_SIMILARITY_WEIGHT * questions_cosine) + (self.TOPIC_SIMILARITY_WEIGHT * topic_cosine)) / (weight_sum + deviation) 
+            weight_sum = QuestionnairesEvaluator.QUESTIONS_SIMILARITY_WEIGHT + QuestionnairesEvaluator.TOPIC_SIMILARITY_WEIGHT
+            score = ((QuestionnairesEvaluator.QUESTIONS_SIMILARITY_WEIGHT * questions_cosine) + (QuestionnairesEvaluator.TOPIC_SIMILARITY_WEIGHT * topic_cosine)) / (weight_sum + deviation) 
 
             new_row = pd.DataFrame({
                 "ID": [generated_question_id],
@@ -978,39 +977,33 @@ class QuestionnairesEvaluator:
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=generated)
             questions = generated.questions[generated.questions["NAME"].notna()]["NAME"]
             
-            self.serendipity_scores = pd.concat([self.serendipity_scores, self._compute_serendipity_scores(questions, dataset)], ignore_index=True)
+            self.serendipity_scores = pd.concat([self.serendipity_scores, QuestionnairesEvaluator.compute_serendipity_scores(self.sentence_emb, self.questionnaire_id, questions, dataset)], ignore_index=True)
         except Exception as e:
             print(e)
             return
     
 
-    def _compute_serendipity_scores(self, generated_questions, dataset):
+    def compute_serendipity_scores(sentence_emb, questionnaire_id, generated_questions, dataset):
         n = 0
         R = len(generated_questions)
-        subtopics = dataset.get_questionnaire_subtopics(self.questionnaire_id)
+        subtopics = dataset.get_questionnaire_subtopics(questionnaire_id)
         C = len(subtopics)
 
-        questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
+        questionnaire_topic = dataset.get_questionnaire_topic(questionnaire_id)
         subtopics.append(questionnaire_topic)
         
-        # Uncomment to use OpenAI embdedding model:
-        # subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
-        subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.sentence_emb, subtopics)
+        subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(sentence_emb, subtopics)
 
-        # Uncomment to use OpenAI embdedding model:
-        # generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.client_emb, generated_questions)
-        generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.sentence_emb, generated_questions)
+        generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(sentence_emb, generated_questions)
 
         for question in generated_questions:
-            question_topic = self.predict_question_topic(question)
+            question_topic = QuestionnairesEvaluator.predict_question_topic(question)
             
-            # Uncomment to use OpenAI embdedding model:
-            # question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
-            question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, question_topic)
+            question_topic_emb = QuestionnairesEvaluator.get_text_embedding(sentence_emb, question_topic)
 
             topic_similarity = QuestionnairesEvaluator.compute_most_similar_subtopic(question_topic_emb, subtopics_embs)
 
-            if topic_similarity >= self.SERENDIPITY_RELEVANCE_THRESHOLD:
+            if topic_similarity >= QuestionnairesEvaluator.SERENDIPITY_RELEVANCE_THRESHOLD:
                n += 1 
             else:
                continue
@@ -1056,7 +1049,7 @@ class QuestionnairesEvaluator:
     # 
     #     return response.choices[0].message.content
 
-    def predict_question_topic(self, question):
+    def predict_question_topic(question):
         scenario = TopicModelingScenarioGenerator()
         
         system_prompt, user_prompt = scenario.generate_scenario(question)
@@ -1066,12 +1059,12 @@ class QuestionnairesEvaluator:
         messages.append({"role": "user", "content": user_prompt})
         
         response = ollama.chat(
-                        model = self.TOPIC_MODEL_SERENDIPITY,
+                        model = QuestionnairesEvaluator.TOPIC_MODEL_SERENDIPITY,
                         messages=messages,
                         options={
-                            "temperature": self.TOPIC_TEMPERATURE_SERENDIPITY,
-                            "repeat_penalty": self.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
-                            "num_predict": self.TOPIC_MAX_TOKENS_SERENDIPITY
+                            "temperature": QuestionnairesEvaluator.TOPIC_TEMPERATURE_SERENDIPITY,
+                            "repeat_penalty": QuestionnairesEvaluator.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
+                            "num_predict": QuestionnairesEvaluator.TOPIC_MAX_TOKENS_SERENDIPITY
                         },
                         stream=False
                     )
