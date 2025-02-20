@@ -6,6 +6,8 @@ from rouge_score import rouge_scorer
 import numpy as np
 from openai import AzureOpenAI
 import json
+import ollama
+from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from src.prompts.TopicModelingScenarioGenerator import TopicModelingScenarioGenerator
 
@@ -77,7 +79,8 @@ class QuestionnairesEvaluator:
     SERENDIPITY_RELEVANCE_THRESHOLD = 0.5
     SERENDIPITY_DUPLICATE_THRESHOLD = 0.85
 
-    TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"
+    # TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"      # Uncomment to use GPT-3.5-tubro as topic extractor
+    TOPIC_MODEL_SERENDIPITY = "llama3:8b-instruct-q4_0"
     TOPIC_TEMPERATURE_SERENDIPITY = 0
     TOPIC_MAX_TOKENS_SERENDIPITY = 100
     TOPIC_FREQUENCY_PENALTY_SERENDIPITY = 0
@@ -123,15 +126,20 @@ class QuestionnairesEvaluator:
         self.serendipity_scores = pd.DataFrame(columns=self.SERENDIPITY_COLUMNS)
         
         self.qst_type_variability = pd.DataFrame(columns=self.QST_TYPE_VARIABILITY_COLUMNS)
+
+        self.sentence_emb = SentenceTransformer("all-mpnet-base-v2")
+
         self.client_emb = None
         self.client_gpt = None
-
+        # ------------
+        # Uncomment to use Azure OpenAI for GPT-3.5-tubro and text-embedding-3-large
+        # ------------
         # self.client_emb = AzureOpenAI(
         #     api_key = os.getenv("AZURE_OPENAI_KEY"),  
         #     api_version = "2024-02-01",
         #     azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/"
         # )
-# 
+        #
         # self.client_gpt = AzureOpenAI(
         #     azure_endpoint = "https://openai-hcm-dev-d06.openai.azure.com/", 
         #     api_key=os.getenv("AZURE_OPENAI_KEY"),  
@@ -789,7 +797,9 @@ class QuestionnairesEvaluator:
                 qst_id = generated.questions["ID"][i]
                 qst_text = generated.questions["NAME"][i]
 
-                question_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, qst_text)
+                # Uncomment to use OpenAI embdedding model:
+                # question_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, qst_text)
+                question_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, qst_text)
 
                 new_rows = self._compute_question_semantic_similarity(project_root, len(generated.questions), qst_id, i, qst_text, question_embedding, ground_truth.questions["NAME"])
 
@@ -799,27 +809,41 @@ class QuestionnairesEvaluator:
             return
         
 
-    def get_text_embedding(client, text):
-        response = client.embeddings.create(
-            input = text,
-            model= QuestionnairesEvaluator.EMBEDDING_MODEL
-        )
+    # ------------
+    # Uncomment to use text-embedding-3-large
+    # ------------
+    # def get_text_embedding(client, text):
+    #     response = client.embeddings.create(
+    #         input = text,
+    #         model= QuestionnairesEvaluator.EMBEDDING_MODEL
+    #     )
+    # 
+    #     response_json = json.loads(response.model_dump_json(indent=2))["data"]
+    #     
+    #     return response_json[0]["embedding"]
+    
 
-        response_json = json.loads(response.model_dump_json(indent=2))["data"]
-        
-        return response_json[0]["embedding"]
+    # ------------
+    # Comment to use text-embedding-3-large
+    # ------------  
+    def get_text_embedding(model, text):
+        return model.encode(text)
 
 
     def _compute_question_semantic_similarity(self, project_root, len_generated, generated_question_id, generated_question_pos, generated_question, generated_question_embedding, ground_truth_questions):
         df = pd.DataFrame(columns=self.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         for j in range(len(ground_truth_questions)):
-            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, ground_truth_questions[j])
+            # Uncomment to use OpenAI embdedding model:
+            # ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, ground_truth_questions[j])
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, ground_truth_questions[j])
             questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
             deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
             
             topic = TFQuestionnairesDataset.get_questionnaire_topic_by_id(project_root, self.questionnaire_id)
-            topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, topic)
+            # Uncomment to use OpenAI embdedding model:
+            # topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.client_emb, topic)
+            topic_embedding = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, topic)
             topic_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, topic_embedding)
 
             weight_sum = self.QUESTIONS_SIMILARITY_WEIGHT + self.TOPIC_SIMILARITY_WEIGHT
@@ -956,6 +980,7 @@ class QuestionnairesEvaluator:
             
             self.serendipity_scores = pd.concat([self.serendipity_scores, self._compute_serendipity_scores(questions, dataset)], ignore_index=True)
         except Exception as e:
+            print(e)
             return
     
 
@@ -968,14 +993,20 @@ class QuestionnairesEvaluator:
         questionnaire_topic = dataset.get_questionnaire_topic(self.questionnaire_id)
         subtopics.append(questionnaire_topic)
         
-        subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
+        # Uncomment to use OpenAI embdedding model:
+        # subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.client_emb, subtopics)
+        subtopics_embs = QuestionnairesEvaluator.get_subtopics_embeddings(self.sentence_emb, subtopics)
 
-        generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.client_emb, generated_questions)
+        # Uncomment to use OpenAI embdedding model:
+        # generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.client_emb, generated_questions)
+        generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(self.sentence_emb, generated_questions)
 
         for question in generated_questions:
             question_topic = self.predict_question_topic(question)
             
-            question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
+            # Uncomment to use OpenAI embdedding model:
+            # question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.client_emb, question_topic)
+            question_topic_emb = QuestionnairesEvaluator.get_text_embedding(self.sentence_emb, question_topic)
 
             topic_similarity = QuestionnairesEvaluator.compute_most_similar_subtopic(question_topic_emb, subtopics_embs)
 
@@ -1003,24 +1034,49 @@ class QuestionnairesEvaluator:
         return embeddings
 
 
+    # ------------
+    # Uncomment to use Azure OpenAI for GPT-3.5-tubro and text-embedding-3-large
+    # ------------
+    # def predict_question_topic(self, question):
+    #     scenario = TopicModelingScenarioGenerator()
+    #     
+    #     system_prompt, user_prompt = scenario.generate_scenario(question)
+    #
+    #     messages = []
+    #     messages.append({"role": "system", "content": system_prompt})
+    #     messages.append({"role": "user", "content": user_prompt})
+    # 
+    #     response = self.client_gpt.chat.completions.create(
+    #         model = self.TOPIC_MODEL_SERENDIPITY,
+    #         messages=messages,
+    #         temperature=self.TOPIC_TEMPERATURE_SERENDIPITY,
+    #         max_tokens=self.TOPIC_MAX_TOKENS_SERENDIPITY,
+    #         frequency_penalty=self.TOPIC_FREQUENCY_PENALTY_SERENDIPITY
+    #     )
+    # 
+    #     return response.choices[0].message.content
+
     def predict_question_topic(self, question):
         scenario = TopicModelingScenarioGenerator()
         
         system_prompt, user_prompt = scenario.generate_scenario(question)
-
+        
         messages = []
         messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": user_prompt})
-
-        response = self.client_gpt.chat.completions.create(
-            model = self.TOPIC_MODEL_SERENDIPITY,
-            messages=messages,
-            temperature=self.TOPIC_TEMPERATURE_SERENDIPITY,
-            max_tokens=self.TOPIC_MAX_TOKENS_SERENDIPITY,
-            frequency_penalty=self.TOPIC_FREQUENCY_PENALTY_SERENDIPITY
-        )
-
-        return response.choices[0].message.content
+        
+        response = ollama.chat(
+                        model = self.TOPIC_MODEL_SERENDIPITY,
+                        messages=messages,
+                        options={
+                            "temperature": self.TOPIC_TEMPERATURE_SERENDIPITY,
+                            "repeat_penalty": self.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
+                            "num_predict": self.TOPIC_MAX_TOKENS_SERENDIPITY
+                        },
+                        stream=False
+                    )
+         
+        return response['message']['content']
 
 
     def compute_most_similar_subtopic(question_topic, subtopics):

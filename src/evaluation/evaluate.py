@@ -66,11 +66,11 @@ def evaluate(task, prompt_version, model):
             print("\t 6. Computing Syntactic Similarity...")
             questionnaires_evaluator.compute_syntactic_similarities(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
-            # print("\t 7. Computing Semantic Similarity...")
-            # questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            print("\t 7. Computing Semantic Similarity...")
+            questionnaires_evaluator.compute_semantic_similarity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
-            # print("\t 8. Computing Serendipity...")
-            # questionnaires_evaluator.compute_serendipity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
+            print("\t 8. Computing Serendipity...")
+            questionnaires_evaluator.compute_serendipity(project_root=PROJECT_ROOT, results_dir=exp_results_path)
 
             print("\t 9. Computing Question Type Variability...")
             questionnaires_evaluator.compute_qst_type_variability(project_root=PROJECT_ROOT, results_dir=exp_results_path)
