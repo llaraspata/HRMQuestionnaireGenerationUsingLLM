@@ -43,8 +43,6 @@ def main(prompt_version, experiment_id):
         experiment_confs = json.load(f)
     f.close()
 
-    
-
     for conf in experiment_confs["configs"]:
         if experiment_id is not None and conf["id"] != experiment_id:
             continue
