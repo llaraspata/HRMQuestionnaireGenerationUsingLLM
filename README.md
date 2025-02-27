@@ -78,15 +78,12 @@ python -W ignore <path_to_repo_folder>/src/data/convert_qst_to_json.py
 ## 🖋️ Citation
 
 ```bibtex
-@inproceedings{laraspata2024qstgeneration,
-   title={{Enhancing human capital management through GPT-driven questionnaire generation}},
-   author={Laraspata, Lucrezia and Cardilli, Fabio and Castellano, Giovanna and Vessio, Gennaro},
-   booktitle={Proceedings of the Eighth Workshop on Natural Language
-    for Artificial Intelligence (NL4AI 2024) co-located with 23th
-    International Conference of the Italian Association for Artificial
-    Intelligence (AI*IA 2024)},
-   year={2024},
-   url = {https://uniroma2-my.sharepoint.com/:b:/g/personal/claudiudaniel_hromei_alumni_uniroma2_eu/EQn1_ibX2PRIiH9knF7fisUBYmTQpygq0MWaRKntADw6AA?e=Mjm5Ud}
+@inproceedings{laraspata2024enhancing,
+  title={Enhancing Human Capital Management through GPT-driven Questionnaire Generation},
+  author={Laraspata, Lucrezia and Cardilli, Fabio and Castellano, Giovanna and Vessio, Gennaro},
+  booktitle={Proceedings of the Eighth Workshop on Natural Language for Artificial Intelligence (NL4AI 2024) co-located with 23th International Conference of the Italian Association for Artificial Intelligence (AI* IA 2024), CEUR-WS. org},
+  url = {https://ceur-ws.org/Vol-3877/paper5.pdf},
+  year={2024}
 }
 ```
 
