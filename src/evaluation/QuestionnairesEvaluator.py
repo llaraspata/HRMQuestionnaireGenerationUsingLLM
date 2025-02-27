@@ -640,7 +640,7 @@ class QuestionnairesEvaluator:
         try:
             generated = TFQuestionnairesDataset.from_json(project_root=project_root, questionnaire_id=self.questionnaire_id, json_data=pred["PREDICTED_JSON"])
             bleu_score = QuestionnairesEvaluator._compute_bleu_intraquestionnaire(generated.questions["NAME"])
-            rouge_score = QuestionnairesEvaluator._compute_rouge_intraquestionnaire(generated.questions["NAME"])
+            rouge_score = QuestionnairesEvaluator.compute_rouge_intraquestionnaire(generated.questions["NAME"])
 
             return pd.DataFrame({
                 "QUESTIONNAIRE_ID": [self.questionnaire_id],
@@ -669,7 +669,7 @@ class QuestionnairesEvaluator:
         return np.mean(scores)
     
 
-    def _compute_rouge_intraquestionnaire(questions):
+    def compute_rouge_intraquestionnaire(questions):
         precisions = []
         recalls = []
         f1measures = []
