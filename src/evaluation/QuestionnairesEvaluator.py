@@ -1011,7 +1011,7 @@ class QuestionnairesEvaluator:
         serendipity_score = n / np.min([R, C])
 
         new_row = pd.DataFrame({
-            "QUESTIONNAIRE_ID": [self.questionnaire_id],
+            "QUESTIONNAIRE_ID": [questionnaire_id],
             "SERENDIPITY_SCORE": [serendipity_score]
         })
         
