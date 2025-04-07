@@ -859,9 +859,7 @@ class QuestionnairesEvaluator:
                 "FINAL_SCORE": [score]
             })
 
-            if not new_row.empty and not new_row.isna().all().all():
-                df = pd.concat([df, new_row], ignore_index=True)
-
+            df = pd.concat([df, new_row], ignore_index=True)
 
         return df
     
