@@ -4,6 +4,8 @@ import os
 import itertools
 import random
 import ast
+from sklearn.model_selection import train_test_split
+
 
 class TFQuestionnairesDataset:
     # ------------
@@ -328,3 +330,33 @@ class TFQuestionnairesDataset:
         return text
         
 
+    def train_val_test_split(dataset, train_size=0.7, test_size=0.3, val_size=0.2, random_state=42):
+        train_set = TFQuestionnairesDataset()
+        val_set = TFQuestionnairesDataset()
+        test_set = TFQuestionnairesDataset()
+
+        # Step 1: Split questionnaires df
+        train_set.questionnaires, test_set.questionnaires  = train_test_split(dataset.questionnaires, train_size=train_size, test_size=test_size, random_state=random_state)
+        train_set.questionnaires, val_set.questionnaires = train_test_split(dataset.questionnaires, test_size=val_size, random_state=random_state)
+
+        # Step 2: Fill questions df wrt splited questionnaires
+        train_set.questions = dataset.questions[dataset.questions["QUESTIONNAIRE_ID"].isin(train_set.questionnaires["ID"])]
+        val_set.questions = dataset.questions[dataset.questions["QUESTIONNAIRE_ID"].isin(val_set.questionnaires["ID"])]
+        test_set.questions = dataset.questions[dataset.questions["QUESTIONNAIRE_ID"].isin(test_set.questionnaires["ID"])]
+
+        # Step 3: Fill answers df wrt questions
+        train_set.answers = dataset.answers[dataset.answers["QUESTION_ID"].isin(train_set.questions["ID"])]
+        val_set.answers = dataset.answers[dataset.answers["QUESTION_ID"].isin(val_set.questions["ID"])]
+        test_set.answers = dataset.answers[dataset.answers["QUESTION_ID"].isin(test_set.questions["ID"])]
+
+        # Step 4: Copy common df
+        train_set.question_types = dataset.question_types
+        train_set.subtopics = dataset.subtopics
+
+        val_set.question_types = dataset.question_types
+        val_set.subtopics = dataset.subtopics
+
+        test_set.question_types = dataset.question_types
+        test_set.subtopics = dataset.subtopics
+
+        return train_set, val_set, test_set
