@@ -337,7 +337,7 @@ class TFQuestionnairesDataset:
 
         # Step 1: Split questionnaires df
         train_set.questionnaires, test_set.questionnaires  = train_test_split(dataset.questionnaires, train_size=train_size, test_size=test_size, random_state=random_state)
-        train_set.questionnaires, val_set.questionnaires = train_test_split(dataset.questionnaires, test_size=val_size, random_state=random_state)
+        train_set.questionnaires, val_set.questionnaires = train_test_split(train_set.questionnaires, test_size=val_size, random_state=random_state)
 
         # Step 2: Fill questions df wrt splited questionnaires
         train_set.questions = dataset.questions[dataset.questions["QUESTIONNAIRE_ID"].isin(train_set.questionnaires["ID"])]

@@ -837,7 +837,7 @@ class QuestionnairesEvaluator:
         df = pd.DataFrame(columns=QuestionnairesEvaluator.SEMANTIC_SIMILARITY_QUESTION_COLUMNS)
 
         for j in range(len(ground_truth_questions)):
-            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(sentence_emb, ground_truth_questions[j])
+            ground_truth_embedding = QuestionnairesEvaluator.get_text_embedding(sentence_emb, ground_truth_questions.iloc[j])
             questions_cosine = QuestionnairesEvaluator.compute_cosine_similarity(generated_question_embedding, ground_truth_embedding)
             deviation = QuestionnairesEvaluator.compute_position_deviation_normalized(generated_question_pos, j, len_generated, len(ground_truth_questions))
             
@@ -851,7 +851,7 @@ class QuestionnairesEvaluator:
             new_row = pd.DataFrame({
                 "ID": [generated_question_id],
                 "GENERATED": [generated_question],
-                "GROUND_TRUTH": [ground_truth_questions[j]],
+                "GROUND_TRUTH": [ground_truth_questions.iloc[j]],
                 "QUESTIONNAIRE_TOPIC": [topic],
                 "POSITION_DEVIATION": [deviation],
                 "COSINE_WITH_QUESTION": [questions_cosine],
