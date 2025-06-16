@@ -81,9 +81,9 @@ class QuestionnairesEvaluator:
 
     # TOPIC_MODEL_SERENDIPITY = "gpt-35-turbo-dev"      # Uncomment to use GPT-3.5-tubro as topic extractor
     TOPIC_MODEL_SERENDIPITY = "llama3:8b-instruct-q4_0"
-    TOPIC_TEMPERATURE_SERENDIPITY = 0
+    TOPIC_TEMPERATURE_SERENDIPITY = 0.0
     TOPIC_MAX_TOKENS_SERENDIPITY = 100
-    TOPIC_FREQUENCY_PENALTY_SERENDIPITY = 0
+    TOPIC_FREQUENCY_PENALTY_SERENDIPITY = 0.0
 
     QST_TYPE_VARIABILITY_COLUMNS = ["QUESTIONNAIRE_ID", "VARIABILITY"]
     QST_TYPE_VARIABILITY_FILENAME = "Question_Type_Variability.csv"
@@ -983,7 +983,7 @@ class QuestionnairesEvaluator:
             return
     
 
-    def compute_serendipity_scores(sentence_emb, questionnaire_id, generated_questions, dataset):
+    def compute_serendipity_scores(sentence_emb, questionnaire_id, generated_questions, dataset, use_hf_local_model=False, model=None, tokenizer=None):
         n = 0
         R = len(generated_questions)
         subtopics = dataset.get_questionnaire_subtopics(questionnaire_id)
@@ -997,7 +997,7 @@ class QuestionnairesEvaluator:
         generated_questions = QuestionnairesEvaluator.remove_duplicate_questions(sentence_emb, generated_questions)
 
         for question in generated_questions:
-            question_topic = QuestionnairesEvaluator.predict_question_topic(question)
+            question_topic = QuestionnairesEvaluator.predict_question_topic(question, use_hf_local_model=use_hf_local_model, model=model, tokenizer=tokenizer)
             
             question_topic_emb = QuestionnairesEvaluator.get_text_embedding(sentence_emb, question_topic)
 
@@ -1049,7 +1049,7 @@ class QuestionnairesEvaluator:
     # 
     #     return response.choices[0].message.content
 
-    def predict_question_topic(question):
+    def predict_question_topic(question, use_hf_local_model=False, model=None, tokenizer=None):
         scenario = TopicModelingScenarioGenerator()
         
         system_prompt, user_prompt = scenario.generate_scenario(question)
@@ -1058,16 +1058,39 @@ class QuestionnairesEvaluator:
         messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": user_prompt})
         
-        response = ollama.chat(
-                        model = QuestionnairesEvaluator.TOPIC_MODEL_SERENDIPITY,
-                        messages=messages,
-                        options={
-                            "temperature": QuestionnairesEvaluator.TOPIC_TEMPERATURE_SERENDIPITY,
-                            "repeat_penalty": QuestionnairesEvaluator.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
-                            "num_predict": QuestionnairesEvaluator.TOPIC_MAX_TOKENS_SERENDIPITY
-                        },
-                        stream=False
-                    )
+        if use_hf_local_model:
+            # Using Hugging Face local model
+            _messages = tokenizer.apply_chat_template(messages, tokenize=False)
+            tokens = tokenizer(_messages, return_tensors="pt")
+
+            model_input = tokens["input_ids"].to("cuda")
+            attention_mask = tokens["attention_mask"].to("cuda") if "attention_mask" in tokens else None
+
+            output = model.generate(
+                model_input,
+                attention_mask=attention_mask,
+                max_new_tokens=QuestionnairesEvaluator.TOPIC_MAX_TOKENS_SERENDIPITY,
+                temperature=QuestionnairesEvaluator.TOPIC_TEMPERATURE_SERENDIPITY, 
+                repetition_penalty=QuestionnairesEvaluator.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
+                pad_token_id=tokenizer.eos_token_id,
+                do_sample=False,
+                top_p = None,
+                return_dict_in_generate=True
+            )
+
+            return tokenizer.decode(output.sequences[0], skip_special_tokens=True).split("assistant\n\n")[-1].strip()
+        else:
+            # Using Ollama
+            response = ollama.chat(
+                model = QuestionnairesEvaluator.TOPIC_MODEL_SERENDIPITY,
+                messages=messages,
+                options={
+                    "temperature": QuestionnairesEvaluator.TOPIC_TEMPERATURE_SERENDIPITY,
+                    "repeat_penalty": QuestionnairesEvaluator.TOPIC_FREQUENCY_PENALTY_SERENDIPITY + 1,
+                    "num_predict": QuestionnairesEvaluator.TOPIC_MAX_TOKENS_SERENDIPITY
+                },
+                stream=False
+            )
          
         return response['message']['content']
 
@@ -1086,10 +1109,10 @@ class QuestionnairesEvaluator:
         final_questions = generated_questions.copy()
 
         for i in range(len(generated_questions)):
-            qst_emb_i = QuestionnairesEvaluator.get_text_embedding(client, generated_questions[i])
+            qst_emb_i = QuestionnairesEvaluator.get_text_embedding(client, generated_questions.iloc[i])
 
             for j in range(i + 1, len(generated_questions)):
-                qst_emb_j = QuestionnairesEvaluator.get_text_embedding(client, generated_questions[j])
+                qst_emb_j = QuestionnairesEvaluator.get_text_embedding(client, generated_questions.iloc[j])
 
                 sim = QuestionnairesEvaluator.compute_cosine_similarity(qst_emb_i, qst_emb_j)
                 if sim >= QuestionnairesEvaluator.SERENDIPITY_DUPLICATE_THRESHOLD:
