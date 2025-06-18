@@ -37,6 +37,7 @@ class TFQuestionnairesDataset:
         self.questions = None
         self.question_types = None
         self.answers = None
+        self.subtopics = None
 
     
     # ------------
