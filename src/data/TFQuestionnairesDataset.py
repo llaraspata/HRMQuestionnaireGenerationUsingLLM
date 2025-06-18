@@ -65,20 +65,19 @@ class TFQuestionnairesDataset:
         # Not included for now
         # question_types_path = os.path.join(data_dir_path, self.QUESTION_TYPES_FILENAME)
         answer_path = os.path.join(data_dir_path, self.ANSWERS_FILENAME)
-        # Not included for now
-        # subtopics_path = os.path.join(data_dir_path, self.SUBTOPICS_FILENAME)
+        subtopics_path = os.path.join(data_dir_path, self.SUBTOPICS_FILENAME)
 
         other_questionnaires = pd.read_csv(questionnaires_path, encoding='latin1')
         other_questions = pd.read_csv(questions_path, encoding='latin1')
         # Not included for now
         # self.question_types = pd.read_csv(question_types_path, encoding='latin1')
         other_answers = pd.read_csv(answer_path, encoding='latin1')
-        # Not included for now
-        # self.subtopics = pd.read_csv(subtopics_path, encoding='latin1')
+        other_subtopics = pd.read_csv(subtopics_path, encoding='latin1')
 
         self.questionnaires= pd.concat([self.questionnaires, other_questionnaires], ignore_index=True)
         self.questions= pd.concat([self.questions, other_questions], ignore_index=True)
         self.answers= pd.concat([self.answers, other_answers], ignore_index=True)
+        self.subtopics = pd.concat([self.subtopics, other_subtopics], ignore_index=True) 
 
 
     def load_question_types(self, project_root):
