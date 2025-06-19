@@ -43,8 +43,11 @@ class TFQuestionnairesDataset:
     # ------------
     # Methos
     # ------------
-    def load_data(self, project_root):
-        data_dir_path = os.path.join(project_root, "data", "processed")
+    def load_data(self, project_root, data_dir=None):
+        if data_dir is None:
+            data_dir_path = os.path.join(project_root, "data", "processed")
+        else:
+            data_dir_path = data_dir
 
         questionnaires_path = os.path.join(data_dir_path, self.QUESTIONNAIRES_FILENAME)
         questions_path = os.path.join(data_dir_path, self.QUESTIONS_FILENAME)
@@ -58,8 +61,12 @@ class TFQuestionnairesDataset:
         self.answers = pd.read_csv(answer_path, encoding='latin1')
         self.subtopics = pd.read_csv(subtopics_path, encoding='latin1')
 
-    def load_additional_data(self, project_root):
-        data_dir_path = os.path.join(project_root, "data", "processed")
+
+    def load_additional_data(self, project_root, data_dir=None):
+        if data_dir is None:
+            data_dir_path = os.path.join(project_root, "data", "processed")
+        else:
+            data_dir_path = data_dir
 
         questionnaires_path = os.path.join(data_dir_path, self.QUESTIONNAIRES_FILENAME)
         questions_path = os.path.join(data_dir_path, self.QUESTIONS_FILENAME)
