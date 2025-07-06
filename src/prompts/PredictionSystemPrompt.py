@@ -33,7 +33,7 @@ class PredictionSystemPrompt:
 
             if row[1]["CODE"] == "SINGLE_QUESTION_TYPE_DESCRIPTION":
                 for _, type_row in qst_types_df.iterrows():
-                    prompt += row[1]["PROMPT_PART"] % (type_row["ID"], type_row["DESCRIPTION"]) + "\n"
+                    prompt += row[1]["PROMPT_PART"] % (type_row["ID"], type_row["NAME"]) + "\n"
             else:        
                 prompt += row[1]["PROMPT_PART"] + "\n"
 
